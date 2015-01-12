@@ -15,11 +15,7 @@ tags:
 
 标题有点大，说是详解，其实就是对EditText的一些常用功能的介绍，包括密码框，电话框，空白提示文字等等的讲解，尽量的介绍详细一点，也就是所谓的详解了。。呵呵
 
-
-
-
 ## 一：新建HelloEditText工程
-
 
 新建一个Hello world详细步骤可以参见
 
@@ -27,45 +23,29 @@ tags:
 
 创建设置如下：
 
-
-
-	
-  1. Project name:HelloEditText
-
-	
-  2. Build Target :android 2.2
-
-	
-  3. Application name:HelloEditText
-
-	
-  4. Package name:com.flysnow
-
-	
-  5. create Activity:HelloEditText
-
-	
-  6. min SDK 8
-
+1.  Project name:HelloEditText
+2.  Build Target :android 2.2
+3.  Application name:HelloEditText
+4.  Package name:com.flysnow
+5.  create Activity:HelloEditText
+6.  min SDK 8
 
 这时候运行还看不到EditText，因为我们还没有加上,修改main.xml如下：
 
-    
-    <?xml version="1.0" encoding="utf-8"?>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        >
-    <EditText
-    	android:id="@+id/edit_text"  
-        android:layout_width="fill_parent" 
-        android:layout_height="wrap_content" 
-        android:text="这是一个EditText"/>
-    </LinearLayout>
-
-
-这里添加了一个id为"edit_text"的EditText，设置默认显示为本为“这是一个EditText”。。运行效果如下：
+	<?xml version="1.0" encoding="utf-8"?>
+		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			android:orientation="vertical"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			>
+		<EditText
+			android:id="@+id/edit_text"  
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content" 
+			android:text="这是一个EditText"/>
+	</LinearLayout>
+ 
+ 这里添加了一个id为"edit_text"的EditText，设置默认显示为本为“这是一个EditText”。。运行效果如下：
 
 ![](http://dl.iteye.com/upload/attachment/355666/8abc632a-3e6c-3c5f-9dc1-90aac6470f96.png)
 
