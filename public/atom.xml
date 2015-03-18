@@ -4,7 +4,7 @@
   <subtitle><![CDATA[专注于Android、Java、移动互联网、项目管理、软件架构]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.flysnow.org/"/>
-  <updated>2015-03-10T14:33:56.000Z</updated>
+  <updated>2015-03-18T15:37:46.000Z</updated>
   <id>http://www.flysnow.org/</id>
   
   <author>
@@ -19,11 +19,66 @@
     <link href="http://www.flysnow.org/2015/03/10/github-page-with-hexo.html"/>
     <id>http://www.flysnow.org/2015/03/10/github-page-with-hexo.html</id>
     <published>2015-03-10T14:30:04.000Z</published>
-    <updated>2015-03-10T14:33:56.000Z</updated>
-    <content type="html"></content>
+    <updated>2015-03-18T15:37:46.000Z</updated>
+    <content type="html"><![CDATA[<p>以前的博客是使用Jekyll托管在github上，后来用着越来越不方便，比如没有自动生成post，不能一键部署，文件结构和配置也是比较繁琐，更重要的是有时候用markdown写一篇文章，生成的静态文件很乱，应该是有些字符解析的问题。现在下决心换成了hexo</p>
+<h1 id="Nodejs安装">Nodejs安装</h1><p>因为hexo是基于nodejs的应用，所以要先安装nodejs才可以。我这里以ubuntu为例，因为我自己一直在使用ubuntu。使用如下命令即可：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install nodejs</span><br><span class="line">sudo apt-get install npm</span><br></pre></td></tr></table></figure>
+<h1 id="Hexo安装">Hexo安装</h1><p><a href="https://github.com/hexojs/hexo/" title="Hexo" target="_blank" rel="external">Hexo</a> 是一个功能强大的静态网站生成系统，快速、简洁、高效。Hexo 支持 GitHub Flavored Markdown 的所有功能，甚至可以整合 Octopress 的大多数插件。可以一键部署到github，还有丰富的插件和主题,还支持热部署哦。执行如下命令进行安装。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo npm install hexo-cli -g</span><br></pre></td></tr></table></figure>
+<h1 id="快速开始">快速开始</h1><p>安装Hexo安成后，使用如下命令快速新建一个博客系统，然后运行它</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hexo init blog</span><br><span class="line"><span class="built_in">cd</span> blog</span><br><span class="line">npm install</span><br><span class="line">hexo server</span><br></pre></td></tr></table></figure>
+<p>如果npm安装失败，请使用sudo安装。运行成功后，访问<a href="http://0.0.0.0:4000/就可以看到博客的样子的，对就是我现在的博客这个样子，o(∩∩)o...哈哈。" target="_blank" rel="external">http://0.0.0.0:4000/就可以看到博客的样子的，对就是我现在的博客这个样子，o(∩∩)o...哈哈。</a></p>
+<p>现在我们来看看Hexo 生成博客的目录结构</p>
+<pre><code>.
+├── _config<span class="class">.yml</span>
+├── db<span class="class">.json</span>
+├── node_modules
+├── package<span class="class">.json</span>
+├── public
+├── scaffolds
+├── source
+└── themes
+</code></pre><p>其中_config.yml是配置站点的文件，public是hexo生成的静态站点文件夹，scaffolds是模板文件夹，source是存在用户资源的文件夹，themes是主题文件夹。</p>
+<h1 id="站点配置">站点配置</h1><p>找到title，subtitle，author参数配置，分别配置站点的标题、副标题和作者,比如我这里是：</p>
+<pre><code><span class="label">title:</span> 飞雪无情的博客
+<span class="label">subtitle:</span> 专注于Android、Java、移动互联网、项目管理、软件架构
+<span class="label">description:</span>
+<span class="label">author:</span> 飞雪无情
+<span class="label">language:</span> <span class="built_in">zh</span>-CN
+</code></pre><p>然后配置站点的url和permalink，这两个分别是你的站点的url host地址以及文章的永久连接，我这里是：</p>
+<pre><code><span class="string">url:</span> <span class="string">http:</span><span class="comment">//www.flysnow.org</span>
+<span class="string">root:</span> /
+<span class="string">permalink:</span> :year<span class="regexp">/:month/</span>:day/:title.html
+<span class="string">permalink_defaults:</span>
+</code></pre><p>permalink 我配置的是年月日以及title，后缀是html，便于搜索收录。permalink详情参见： <a href="http://hexo.io/zh-cn/docs/permalinks.html" target="_blank" rel="external">http://hexo.io/zh-cn/docs/permalinks.html</a></p>
+<h1 id="新增一篇文章">新增一篇文章</h1><p>使用如下命令即可新增一篇md格式的文章</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new <span class="string">'github-page-with-hexo'</span></span><br></pre></td></tr></table></figure>
+<p>然后就会在sources/_posts生成一篇文件名为github-page-with-hexo.md的markdown文件。编辑该文件就可以写博客了。这里有一些Front-matter需要介绍，可以配置文章使用的模板、所属的分类和tag等。</p>
+<p>Front-matter 是文件最上方以 —- 分隔的区域，用于指定个别文件的变量，举例来说：</p>
+<pre><code>title: "使用Hexo在Github上搭建自己的博客"
+date: 2015-03-10 22:30:04
+tags:
+<span class="bullet">- </span>Hexo
+<span class="bullet">- </span>Github
+categories:
+<span class="header">- Hexo
+---</span>
+</code></pre><p>请注意，目前的categories只能有一个一级分类，如果填写多个，第二个会被解析为二级分类，以及类推。tags可以允许有多个。更多关于Front-matter请参考 <a href="http://hexo.io/zh-cn/docs/front-matter.html" target="_blank" rel="external">http://hexo.io/zh-cn/docs/front-matter.html</a></p>
+<h1 id="发布到github_page">发布到github page</h1><p>首先你已经创建好了你的github page对应的git库，没有创建的可以google相关博客。然后新建一个hexo分支，存放你现在hexo的所有文件。然后执行如下命令清理并生成发布的静态站点文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo generate</span><br></pre></td></tr></table></figure>
+<p>然后把生成的public目录下的文件放到你的master分支下即可。git commit后把这两个分支推送到你的github上。git库结构可以参见我的github page库 <a href="https://github.com/rujews/rujews.github.io" title="https://github.com/rujews/rujews.github.io" target="_blank" rel="external">https://github.com/rujews/rujews.github.io</a></p>
+<h1 id="最后">最后</h1><p>然后等个几分钟，访问你的域名就可以看到你的网站了。如<a href="http://www.flysnow.org/" title="http://www.flysnow.org/" target="_blank" rel="external">http://www.flysnow.org/</a> 。关于更多的Hexo请参考官方文档，以后有时间也会介绍 <a href="http://hexo.io/zh-cn/docs/" target="_blank" rel="external">http://hexo.io/zh-cn/docs/</a></p>
+]]></content>
     <summary type="html">
-    
+    <![CDATA[<p>以前的博客是使用Jekyll托管在github上，后来用着越来越不方便，比如没有自动生成post，不能一键部署，文件结构和配置也是比较繁琐，更重要的是有时候用markdown写一篇文章，生成的静态文件很乱，应该是有些字符解析的问题。现在下决心换成了hexo</p>
+<h1 ]]>
     </summary>
+    
+      <category term="Github" scheme="http://www.flysnow.org/tags/Github/"/>
+    
+      <category term="Hexo" scheme="http://www.flysnow.org/tags/Hexo/"/>
+    
+      <category term="Hexo" scheme="http://www.flysnow.org/categories/Hexo/"/>
     
   </entry>
   
@@ -32,7 +87,7 @@
     <link href="http://www.flysnow.org/2015/01/12/android-gradle-plugin-translate-done.html"/>
     <id>http://www.flysnow.org/2015/01/12/android-gradle-plugin-translate-done.html</id>
     <published>2015-01-12T07:33:16.000Z</published>
-    <updated>2015-03-10T15:16:52.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>最近想把Android项目从Eclipse迁到Android Studio上。原因呢，Eclipse太慢了，而且经常卡死，Android Studio由于Android的大力支持，已经有很多Eclipse没有的功能，比如AAR包，并且可以使用Gradle这个强大灵活的构建工具。</p>
 <p>要迁入到Android Studio上，Gradle打包要搞懂，最近看了下Android Gradle插件指南，并且抽时间做了翻译，托管在github上。大家访问</p>
 <p><a href="https://github.com/rujews/android-tech-docs/blob/master/new-build-system/user-guide/README.md" target="_blank" rel="external">https://github.com/rujews/android-tech-docs/blob/master/new-build-system/user-guide/README.md</a></p>
@@ -57,7 +112,7 @@
     <link href="http://www.flysnow.org/2014/07/13/effective-programming-more-than-writing-code.html"/>
     <id>http://www.flysnow.org/2014/07/13/effective-programming-more-than-writing-code.html</id>
     <published>2014-07-13T14:33:15.000Z</published>
-    <updated>2015-03-09T14:55:32.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<h2 id="入门须知">入门须知</h2><ul>
 <li>你想成为一个程序员</li>
 <li>程序员的八种境界</li>
@@ -186,7 +241,7 @@
     <link href="http://www.flysnow.org/2014/03/22/android-avd-not-launcher.html"/>
     <id>http://www.flysnow.org/2014/03/22/android-avd-not-launcher.html</id>
     <published>2014-03-22T05:29:02.000Z</published>
-    <updated>2015-03-09T14:55:46.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>新建的Android模拟器的分辨率超过一定大小的时候,就无法启动,比如超过1920<em>1080,就启动不了啦,更别说现在的2560</em>1440了.这时候只需要在新建AVD的时候,选择Use Host GPU选项然后即可正常启动..已经新建好的AVD也可以点击编辑,然后勾选Use Host GPU即可</p>
 ]]></content>
     <summary type="html">
@@ -204,7 +259,7 @@
     <link href="http://www.flysnow.org/2014/02/20/android-overlay-guide.html"/>
     <id>http://www.flysnow.org/2014/02/20/android-overlay-guide.html</id>
     <published>2014-02-20T06:14:29.000Z</published>
-    <updated>2014-11-15T12:52:27.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>我们在开发产品的时候,每次发版可能会有一些新的功能需要引导用户使用,以前大部分都是使用截图,然后让设计师把引导的问题修饰好放到图上,现在这张图片就是引导图片,我们只需要用这张图片放到界面上,这样基本上就可以满足引导的作用.</p>
 <p>但是这样的情况有个缺点,那就是,手机的分辨率太多,我们不可能每个分辨率都做一张图片,这样图片就会变形,有些引导操作的位置可能就不准确了,而且使用绘图的方式绘制在图片上的文字也会模糊不清.</p>
 <p>基于如上的方式,我们可以使用另外一种方式来做引导,这样方式就是使用覆盖式的方式,主要的实现方式是</p>
@@ -247,7 +302,7 @@ observer.addOnGlobalLayoutListener(<span class="keyword">new</span> ViewTreeObse
     <link href="http://www.flysnow.org/2013/12/27/linux-php-server-with-nginx.html"/>
     <id>http://www.flysnow.org/2013/12/27/linux-php-server-with-nginx.html</id>
     <published>2013-12-27T04:59:13.000Z</published>
-    <updated>2015-03-10T15:16:42.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>一般我们都是采用Apache 作为PHP的解析服务器，这次则是采用Nginx这个强大的反向代理服务器来搭建PHP服务器。下面就以Linux发行版Ubuntu为例搭建一个Nginx的PHP服务器。</p>
 <p>首先下载安装Nginx</p>
 <pre><code>sudo apt-<span class="keyword">get</span> install nginx
@@ -416,7 +471,7 @@ observer.addOnGlobalLayoutListener(<span class="keyword">new</span> ViewTreeObse
     <link href="http://www.flysnow.org/2013/12/14/open-source-project-in-android-app.html"/>
     <id>http://www.flysnow.org/2013/12/14/open-source-project-in-android-app.html</id>
     <published>2013-12-14T07:35:36.000Z</published>
-    <updated>2014-11-15T12:52:26.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>你在工作中可能会遇到同时给你说不要重复发明轮子，其实这个说的就是第一：不要做重复的事情，第二：站在巨人的肩膀上。现在有了互联网以及开源的精神，我们的很多在产品中需要实现的功能组件都可以在互联网上找到，我们可以直接拿来用，这样我们就不用重复做东西了，这得益于开源奉献精神。像Google、Facebook这类的大公司都在使用很多的开源产品，比如我们常见的Apache系列、我们使用的Eclipse IDE等等。</p>
 <p>在我自己的产品开发中，我也使用到了一些常用的开源项目，下面就介绍一下我使用的一些Android开源项目。</p>
 <h3 id="1-android-wheel">1.android-wheel</h3><p>还记得iPhone上经典的日期选择滑轮组件吗?这个就是android版本的实现，记得当时这种选择方式很风靡，可以用于时间、分类等一些具有选择类型功能的开发实现，非常方便。</p>
@@ -455,7 +510,7 @@ observer.addOnGlobalLayoutListener(<span class="keyword">new</span> ViewTreeObse
     <link href="http://www.flysnow.org/2013/11/21/android-httpclitent-session-keep.html"/>
     <id>http://www.flysnow.org/2013/11/21/android-httpclitent-session-keep.html</id>
     <published>2013-11-21T06:39:11.000Z</published>
-    <updated>2015-03-10T15:12:53.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>现在单机版本的App已经不多了，基本上都会和服务器进行通信。Android提供Http访问的方式有两种，一种是HttpClient，一种是UrlConnection.这里要说的是HttpClient。</p>
 <p>在Http访问中，我们可能会遇到一些这样的场景，比如服务端要求几次Http请求组成一次完整的客户端服务器通信，比如同步。现在的App很多有有账号系统，会提供把用户数据备份的功能，那么这么在线备份功能就是这样的一个场景，它包括登陆、数据上传，结果返回、提交确认或者终止等这样的顺序步骤，每一步都是一次Http访问请求。服务器的设计(负载均衡等)需要要求客户端在这依次完整的数据备份的几次Http访问请求中保持同一个Session.便于服务器的协调和操作，就和用户用浏览器打开网页去完整一件事情一样，这就需要我们在每次Http请求的时候保持Session。</p>
 <p>其实保持HttpClient的请求Session，就是保证在每次Http请求访问的请求头信息的Cookie参数中，携带同一个JSESSIONID，只要保证每次是一样的，服务器就认为是同一Session，这就保持了Seesion会话。那么这个JSESSIONID是怎么来的呢，是服务器通过响应头信息给的，服务器在给客户端设置Cookie时，会通过响应头信息中的Set-Cookie参数传递回来，只要有新设置的Cookie，就是通过这个传递过来，如果没有则是null，那么我们就可以在请求完之后返回的信息里读取这个Set-Cookie头信息，然后保存起来，在下次请求的时候给服务器发送过去，就实现了保持Seesion的目的。代码如下：</p>
@@ -520,7 +575,7 @@ observer.addOnGlobalLayoutListener(<span class="keyword">new</span> ViewTreeObse
     <link href="http://www.flysnow.org/2013/11/07/goagent-403-not-have-permiss.html"/>
     <id>http://www.flysnow.org/2013/11/07/goagent-403-not-have-permiss.html</id>
     <published>2013-11-07T06:48:52.000Z</published>
-    <updated>2014-11-15T12:52:26.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>今天上班，像往常一样打开Google，咦，竟然提示</p>
 <blockquote>403. That’s an error.<br>Your client does not have permission to get URL /2 from this server. That’s all we know.</blockquote>
 
@@ -555,7 +610,7 @@ observer.addOnGlobalLayoutListener(<span class="keyword">new</span> ViewTreeObse
     <link href="http://www.flysnow.org/2013/11/07/unsupportedoperationexception-gles20canvas-clippath.html"/>
     <id>http://www.flysnow.org/2013/11/07/unsupportedoperationexception-gles20canvas-clippath.html</id>
     <published>2013-11-07T06:27:21.000Z</published>
-    <updated>2014-11-15T12:52:27.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>今天自定义控件使用Canvas绘图的时候遇到的这个错误，看错误的描述，是不支持这个clipPath方法的。而且在2.3的机器上没有问题，是一部4.0的机器报了这个问题。查看这个Canvas的子类实现GLES20Canvas，发现这是在开启硬件加速时使用的。看来还是和硬件加速有关。打开手机的开发者选项，发现硬件加速没有被开启，应用里也没有开启，有点奇怪了，可能是手机优化自动开启了硬件加速。</p>
 <p>硬件加速这个特性是从API 11加入的，可以大大加快View的绘制，是个很不错的功能，所以我们不可能在我们的程序里直接关闭这个功能这样我们的应用就使用不了这个特性了，所以在Application标签里设置android:hardwareAccelerated=”false’不可行。所以可以在用到这个自定义View里的Activity里使用android:hardwareAccelerated=“false”来配置，这样其他的Activity可以继续使用同步加速的特性。不过你的自定义View用到的地方比较多，一个个Activity配置也不太方便，所以最好的办法是在你的自定义View里禁用View级别的硬件加速。可以通过以下代码来实现</p>
 <pre><code><span class="keyword">if</span><span class="comment">(Build.VERSION.SDK_INT&gt;=Build.VERSION_CODES.HONEYCOMB)</span>{<span class="comment">//API 11及其之上</span>
@@ -581,7 +636,7 @@ observer.addOnGlobalLayoutListener(<span class="keyword">new</span> ViewTreeObse
     <link href="http://www.flysnow.org/2013/11/02/android-4-4-alarm-manager-changed.html"/>
     <id>http://www.flysnow.org/2013/11/02/android-4-4-alarm-manager-changed.html</id>
     <published>2013-11-02T07:46:47.000Z</published>
-    <updated>2014-11-15T12:52:27.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>Android4.4在前天发布了，随着Android4.4的源代码的放出，相信会有更多的手机会慢慢的升级到Android4.4,作为苦逼的Android开发人员，我们需要保证我们的应用在Android4.4的兼容性，也就是可用性。现在这里就有一个比较大的更新会影响到我们的应用功能，他就是AlarmManager。</p>
 <p>Android宣称为了电源的使用效率，在Android4.4上位所有应用的Alarm服务使用批量启动的方式来处理相似的时间以激活设备。</p>
 <p>以前呢，是set一个Alarm，系统在到点的时候给你单独一个去激活设备启动你设置的服务;现在呢，不是这样了，而是按批的啦，一批激活那个时间点周围设置的差不多的Tigger Time的Alarm，比如你以前设置的是18：00准备自动备份数据，现在手机正好在18：05进行了一次批量的Alarm启动操作，而你设置的Alarm正好在这个时间点周围，那么你的Alarm也被启动了，比你预想的晚了5分钟。</p>
@@ -604,7 +659,7 @@ observer.addOnGlobalLayoutListener(<span class="keyword">new</span> ViewTreeObse
     <link href="http://www.flysnow.org/2013/10/11/android-bool-preferences-storage-optimization.html"/>
     <id>http://www.flysnow.org/2013/10/11/android-bool-preferences-storage-optimization.html</id>
     <published>2013-10-10T21:23:02.000Z</published>
-    <updated>2014-11-15T12:52:27.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>在Android开发的过程中，我们基本上都会遇到是否开启自动备份、是否保存账号、是否自动登陆、是否开启向导等这样的选项功能，对于这类功能，我们一般的做法是采用SharedPreferences类存储Boolean类型的配置文件来实现，比如是否第一次打开，我们会使用SharedPreferences存储Key为firset_time_open的Boolean值，在使用的时候我们取出该值进行判断即可。那么这么做有什么问题呢？问题就在于随着我们的Android产品越来越大，越来越复杂，你会发现我们使用了很多个这样的Boolean类型的配置，每一个配置对应一个key，会有很多个key值声明，并且存储的xml文件中也会有很多个bool的节点来保存我们的配置，这样一来我们会不太好维护，二来xml存储文件会越来越大，读写操作速度就会降低。</p>
 <p>其实Boolean值对于计算机来说就是0或者1,所以我们储存的boolean值就可以用位来表示，0代表false，1代表true。这样一个Long型的值就可以表示63个Boolean类型值的存储，而如果使用Boolean就需要63个Key，使用Long存储只需要1个Key就可以搞定。下面让我们看下Long最大值的二进制表示：</p>
 <pre><code><span class="comment">//最高位表示正负</span>
@@ -749,7 +804,7 @@ observer.addOnGlobalLayoutListener(<span class="keyword">new</span> ViewTreeObse
     <link href="http://www.flysnow.org/2013/10/07/ubuntu-sougou-pinyin-input-method.html"/>
     <id>http://www.flysnow.org/2013/10/07/ubuntu-sougou-pinyin-input-method.html</id>
     <published>2013-10-06T18:24:25.000Z</published>
-    <updated>2014-11-15T12:52:27.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>对于经常使用Ubuntu操作系统并且不会使用五笔输入法的屌丝来说，选择一种好的拼音输入法能让你事半功倍。在window下我们都知道搜狗的输入法比较好用，更有一些用习惯了搜狗输入法的朋友想在Ubuntu等其他Linux发行版下也想使用搜狗输入法，这是完全可行的，通过Fcitx这个输入法框架就可以实现。</p>
 <p>Fcitx [ˈfaɪtɪks] 是一个支持扩展的输入法框架。当前它支持 Linux 和 Unix 系统，例如 freebsd。它包括了三个内置的输入法引擎，拼音，区位和基于码表的输入法。详细介绍参见<a href="http://fcitx-im.org" target="_blank" rel="external">fcitx-im.org</a>。</p>
 <p>下面以Ubuntu为例介绍如何安装Fcitx，并且配置使用搜狗输入法，其他的Linux发行版的安装可以参考Fcitx官方网站。</p>
@@ -786,7 +841,7 @@ sudo apt-<span class="keyword">get</span> remove ibus
     <link href="http://www.flysnow.org/2013/10/06/resolve-android-sdk-manager-can-not-update.html"/>
     <id>http://www.flysnow.org/2013/10/06/resolve-android-sdk-manager-can-not-update.html</id>
     <published>2013-10-05T23:11:56.000Z</published>
-    <updated>2015-03-10T15:15:57.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>今天打算更新到Android4.3,看看里面的新的API，DOC什么的，但是打开Android SDK Manager后发现不能更新，fetching更新配置文件的时候，都不能获取最新的更新信息。以前还可以以呢，看来这个十一又屏蔽了google拉。</p>
 <p>针对这个情况，我第一反应就是使用代理，我本机做的有goagent,想直接用。点击Android SDK Manager的Tools，选中Options，配置里面的代理ip和端口，然后重新启动打开，这时候可以正常fetch了，但是在下载的提示<em>SSL hostname in certificate didn’t match: <dl-ssl.google.com> != <www.google.com> OR <www.google.com></www.google.com></www.google.com></dl-ssl.google.com></em>，看说明提示是ssl证书的hostname不匹配，不能用，这个情况不知道是怎么回事，应该是本机里的证书匹配不上，又没有dl-ssl.google.com的证书，所以不能使用https下载。</p>
 <p>不能使用https下载，我们还可以使用http下载。Android doc里也说了，如果使用https下载不了，可以选择使用http下载，只需要在Options里勾选Fore Https…那一个选项即可。。然后重新下载，发现还是下载不了。提示downloading interupt，下载被中断了，这个估计是google对goagent代理有些什么限制或者goagent配置的哪里不对。</p>
@@ -819,7 +874,7 @@ sudo apt-<span class="keyword">get</span> remove ibus
     <link href="http://www.flysnow.org/2013/03/29/ubuntu-saned-disabled.html"/>
     <id>http://www.flysnow.org/2013/03/29/ubuntu-saned-disabled.html</id>
     <published>2013-03-28T20:06:37.000Z</published>
-    <updated>2014-11-15T12:52:27.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>昨天Ubuntu 12.04LTS 64位版本升级内核后，发现图形界面启动不了。</p>
 <p>然后重启，按上下键查看启动信息，发现卡在了saned disabled edit /etc/default/saned。。</p>
 <p>Goole了一把，发现是没有gnome-shell.于是就使用CTRL+ALT+F1进入tty1，通过</p>
@@ -848,7 +903,7 @@ sudo apt-<span class="keyword">get</span> remove ibus
     <link href="http://www.flysnow.org/2013/02/22/android-holo-theme-cts.html"/>
     <id>http://www.flysnow.org/2013/02/22/android-holo-theme-cts.html</id>
     <published>2013-02-22T07:47:39.000Z</published>
-    <updated>2014-11-15T12:52:27.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<pre><code>Android曾经为了优化用户体验，把原生的Holo主题作为Android CTS兼容性测试的一部分，这样每家手机厂商在生产手机的时候都将保留该主题，便于开发者开发出在各个分辨率和机型上兼容的应用。。
 </code></pre><p>但是在我们最近产品的使用Holo主题的时候发现并非如此，有的用户的手机使用该主题后应用Crash，提示有个别资源找不到，还有的手机在使用后整个界面黑屏，还有的就是样式等搭配不合理无法使用。</p>
 <ol>
@@ -879,7 +934,7 @@ sudo apt-<span class="keyword">get</span> remove ibus
     <link href="http://www.flysnow.org/2013/01/28/android-layout-height-fail.html"/>
     <id>http://www.flysnow.org/2013/01/28/android-layout-height-fail.html</id>
     <published>2013-01-28T08:19:58.000Z</published>
-    <updated>2014-11-15T12:52:27.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<pre><code>  有的时候，我们配置好的布局文件，在加载完成添加到我们的Activity中后发现，并没有安装我们设置的属性来布局，比为我们设置了android:layout_marginTop=<span class="string">"100dip"</span>，但是运行程序后发现一点作用都没有，相似的还有layout_height等以android:layout_开头的属性设置都没有作用，这类问题以我们使用Adapter的作为数据源的时候作用居多，因为Adapter里有一个方法是getView,这个返回的VIew是一个从XML布局里加载的，一般如下：
 
 
@@ -977,7 +1032,7 @@ convertView=LayoutInflater.<span class="keyword">from</span>(mContext).inflate(R
     <link href="http://www.flysnow.org/2013/01/05/android-viewgroup-setdescendantfocusability.html"/>
     <id>http://www.flysnow.org/2013/01/05/android-viewgroup-setdescendantfocusability.html</id>
     <published>2013-01-04T20:15:14.000Z</published>
-    <updated>2014-11-15T12:52:27.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>这个函数是在ViewGroup里定义的，主要用于控制child View获取焦点的能力，比如是否阻止child View获取焦点。</p>
 <p>他有三个常量可供设置</p>
 <ol>
@@ -1056,7 +1111,7 @@ convertView=LayoutInflater.<span class="keyword">from</span>(mContext).inflate(R
     <link href="http://www.flysnow.org/2011/12/10/android-float-widget.html"/>
     <id>http://www.flysnow.org/2011/12/10/android-float-widget.html</id>
     <published>2011-12-10T01:12:00.000Z</published>
-    <updated>2014-11-15T12:52:27.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<h2 id="前言">前言</h2><p>在开发Android应用时,加新功能是必不可少的，我们加入了新的功能，有的一看界面就可以看出来，但是有的新功能就比较隐蔽，也就是用户很难知道你添加了这个新功能，这个时候就需要用户在打开我们的应用时给出一些提示，说明我们在哪里添加了新功能，点击哪里可以看到这个新功能。这时我们第一时间想到的可能是Toast，因为它用法简单，又不影响用户操作，但是它有个缺点，就是不能明确的指示是哪里添加了新功能，除非你用文字描述出来。为此，我基于Toast编写了一个小组件FloatTextToast（下面遇到的这个名字代替我写的这个组件），他和Toast的用法一样简单，并且弥补了Toast的缺点，也更显得更好看。</p>
 <h2 id="效果图">效果图</h2><p><img src="http://hi.csdn.net/attachment/201112/10/0_13234942045Irb.gif" alt=""></p>
 <h2 id="你可以学到">你可以学到</h2><ol>
@@ -1294,7 +1349,7 @@ convertView=LayoutInflater.<span class="keyword">from</span>(mContext).inflate(R
     <link href="http://www.flysnow.org/2011/11/15/android-4-0-api-arrange.html"/>
     <id>http://www.flysnow.org/2011/11/15/android-4-0-api-arrange.html</id>
     <published>2011-11-14T22:06:48.000Z</published>
-    <updated>2014-11-15T12:52:27.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>提取出的Android4.0 API 的源代码，也就是android.jar源代码，这样在Eclipse关联到该源代码，就可以在项目中查看Android API 的实现了。</p>
 <p>下载地址 <a href="http://download.csdn.net/detail/michael__li/3802305" target="_blank" rel="external">http://download.csdn.net/detail/michael__li/3802305</a></p>
 <p>Android4.0 全部源代码下载方法 ：<a href="http://blog.csdn.net/michael__li/article/details/6971765" target="_blank" rel="external">http://blog.csdn.net/michael__li/article/details/6971765</a></p>
@@ -1317,7 +1372,7 @@ convertView=LayoutInflater.<span class="keyword">from</span>(mContext).inflate(R
     <link href="http://www.flysnow.org/2011/11/15/download-android-4-0-sources.html"/>
     <id>http://www.flysnow.org/2011/11/15/download-android-4-0-sources.html</id>
     <published>2011-11-14T17:41:00.000Z</published>
-    <updated>2015-03-10T15:15:37.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>这时刚刚整理好的最新的，包含所有的API的源代码，第一次上传的那个Android4.0 API 源代码有部分API没有包含，请点击下面的链接下载最新的。</p>
 <p>附Android4.0 API 源代码下载<a href="http://download.csdn.net/detail/michael__li/3802305" target="_blank" rel="external">http://download.csdn.net/detail/michael__li/3802305</a></p>
 <p>昨日凌晨Android放出4.0源代码，已经托管到GoogleSource上，大家可以下载了，这次放出的branch为Android-4.0.0_r1。</p>
@@ -1355,7 +1410,7 @@ $ cdAndroid-<span class="number">4.0</span><span class="number">.0</span>_<span 
     <link href="http://www.flysnow.org/2011/11/11/android-asset-studio-integration.html"/>
     <id>http://www.flysnow.org/2011/11/11/android-asset-studio-integration.html</id>
     <published>2011-11-11T08:18:00.000Z</published>
-    <updated>2014-11-15T12:52:27.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p><a href="http://android-ui-utils.googlecode.com/hg/asset-studio/dist/index.html" target="_blank" rel="external">Android Asset Studio</a>Web版是一个非常好用的Andrid图标资源设计工具，它是由RomanNurik开发的。现在我们已经在ADT14里支持同样的功能。首先，你要打开新建向导（Ctrl-N）,选择Android分类，然后在其下找到名字为“Android Icon Set”的这一项：</p>
 <p><img src="http://hi.csdn.net/attachment/201111/10/0_13209351362229.gif" alt=""></p>
 <p>然后，将会弹出“资源选择器”（这些资源其实就是你在布局文件用到的那些图片，比如对于上下文菜单自定义的背景图片，就需要一个为“Background”属性设置一个@drawable的引用）对话框，该对话框里有个按钮(Create New Icon…)，点击它.</p>
@@ -1409,7 +1464,7 @@ $ cdAndroid-<span class="number">4.0</span><span class="number">.0</span>_<span 
     <link href="http://www.flysnow.org/2011/10/22/adsl-and-vpn-config-for-ubuntu.html"/>
     <id>http://www.flysnow.org/2011/10/22/adsl-and-vpn-config-for-ubuntu.html</id>
     <published>2011-10-22T08:06:17.000Z</published>
-    <updated>2014-11-15T12:52:27.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<h2 id="1-更新NetworkManager">1.更新NetworkManager</h2><p>添加更新源：deb <a href="http://ppa.launchpad.net/network-manager/trunk/ubuntu" target="_blank" rel="external">http://ppa.launchpad.net/network-manager/trunk/ubuntu</a> maverick main</p>
 <p>deb-src <a href="http://ppa.launchpad.net/network-manager/trunk/ubuntu" target="_blank" rel="external">http://ppa.launchpad.net/network-manager/trunk/ubuntu</a> maverick main</p>
 <p>执行sudo apt-get update更新，然后打开更新管理器进行更新软件。</p>
@@ -1431,7 +1486,7 @@ $ cdAndroid-<span class="number">4.0</span><span class="number">.0</span>_<span 
     <link href="http://www.flysnow.org/2011/07/19/android-send-email-intro.html"/>
     <id>http://www.flysnow.org/2011/07/19/android-send-email-intro.html</id>
     <published>2011-07-19T06:50:52.000Z</published>
-    <updated>2014-11-15T12:52:27.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>Android中我为什么发不了邮件？？？我手机里明明有邮件客户端的，可我为什么不能调用它发送邮件？？？相信这是很多人会问的问题，手机里有Email客户端，可是偏偏在自己的应用里调用不了，抑或是不知道怎么调用，还有的是一直认为自己写对了，可是偏偏不能调用，无奈之下只能却网上找段代码粘贴上，ok，可以了。。可是你知道别人的代码为什么可以？你知道调用Email是怎么工作的吗？如果你又像给多人发邮件，还想发送附件，怎么做？又迷糊了吧？所以需要搞懂原理才能一通百通，举一反三，而这就是这篇博文要写的，也是你可以在这篇博文中学到的。</p>
 <p>在这里你可以学到：</p>
 <ol>
@@ -1726,7 +1781,7 @@ startActivity(<span class="built_in">data</span>);
     <link href="http://www.flysnow.org/2011/07/17/practices-of-an-agile-developer.html"/>
     <id>http://www.flysnow.org/2011/07/17/practices-of-an-agile-developer.html</id>
     <published>2011-07-17T02:09:52.000Z</published>
-    <updated>2014-11-15T12:52:27.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>笔者 写道<br>在去年就在豆瓣上看到这本不错的书，近来才拿到这本书好好的研读一下。读了之后又对本书有了更深的认识。我如此推崇她，因为我觉得她不像有些书那样的长篇大论，讲的都是大道理，看了云里雾里的。而这本书呢，讲的都是我们项目开发中实实在在遇到的，只是平时不太注意，作者只是用更朴素易懂的语言组织总结出来的一个个好习惯。</p>
 <p>本书的文字言简意赅，写作方式采用坏习惯和好习惯的对比方式，当时也许你觉得这些习惯有点偏激，不过不要烦恼，因为每个习惯的最后作者都给出了中庸平衡之道。</p>
 <p>相信很多人都有这本书，但是也有没有的，或者还不知道这本书，为了加深我自己对这45个习惯的理解和为了让更多的人知道、了解这45个习惯，所以我在这篇博客中记录下这45个习惯。前面我也提了，这本书言简意赅，所以对于习惯的总结更是如此，让我们可以一看到习惯的标题，就知道这个习惯的精髓所在。</p>
@@ -1887,7 +1942,7 @@ startActivity(<span class="built_in">data</span>);
     <link href="http://www.flysnow.org/2011/05/21/android-thread-notice-item.html"/>
     <id>http://www.flysnow.org/2011/05/21/android-thread-notice-item.html</id>
     <published>2011-05-21T06:43:55.000Z</published>
-    <updated>2014-11-15T12:52:27.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>我们都知道Android是单线程模型，这意味着Android UI操作并不是线程安全的并且这些操作必须在UI线程中执行，所以你单纯的new一个Thrad并且start()不行的，因为这违背了Android的单线程模型。</p>
 <p>很幸运的是Android为我们提供了在其他线程中访问UI线程的方法，相信大家都见过，这几个就是Activity的runOnUiThread方法，View的post和postDelayed方法，以及最常用的Hanlder和AsyncTask，这里我推荐使用Hanlder和AsyncTask，尤其是AsyncTask，因为使用他们你会发现你的代码很容易被理解，因为他们都有一些具有特定职责的方法，尤其是AsyncTask，有预处理的方法onPreExecute，有后台执行任务的方法doInBackground，有更新进度的方法publishProgress，有返回结果的方法onPostExecute等等，这就不像post这些方法，把所有的操作都一大坨的写在一个Runnable里。</p>
 <p>有了Android为我们提供了这些方法我们就可以很好的解决一些长时间处理的任务了，但是在使用的时候我们还必须注意以下几点：</p>
@@ -1918,7 +1973,7 @@ startActivity(<span class="built_in">data</span>);
     <link href="http://www.flysnow.org/2011/03/29/android-intents-and-intent-filters-three.html"/>
     <id>http://www.flysnow.org/2011/03/29/android-intents-and-intent-filters-three.html</id>
     <published>2011-03-28T18:02:48.000Z</published>
-    <updated>2014-11-15T12:52:27.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<h2 id="数据(data)检测">数据(data)检测</h2><p>data标记也是在intent-filter中定义的，大致格式如下:</p>
 <pre><code><span class="tag">&lt;<span class="title">intent-filter</span>&gt;</span>
                 <span class="tag">&lt;<span class="title">action</span> <span class="attribute">android:name</span>=<span class="value">"android.intent.action.VIEW"</span>&gt;</span><span class="tag">&lt;/<span class="title">action</span>&gt;</span>
@@ -2128,7 +2183,7 @@ startActivity(<span class="built_in">data</span>);
     <link href="http://www.flysnow.org/2011/03/28/do-you-know-android-resource.html"/>
     <id>http://www.flysnow.org/2011/03/28/do-you-know-android-resource.html</id>
     <published>2011-03-27T19:22:31.000Z</published>
-    <updated>2014-11-15T12:52:26.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>如何访问平时APK文件Res目录下的内容呢? 如果直接访问Apk下的assets目录可以使用AssetManager类处理，而需要访问<br>res/raw这样的文件夹怎么办呢? 这里Android123可以告诉大家APK在安装时已经解压缩，部分资源存放在/data/data<br>/package_name/这里， 比如我们想访问res/raw/android123.cwj文件，可以使用android.resource:<br>//package_name/“ + R.raw.android123 这个Uri，其中package_name是你工程的包名。<br>完整的处理代码为 Uri uri = Uri.parse(“android.resource://com.android123.Sample/raw/android123.cwj”); 即可使用工程res/raw目录下的文件了。</p>
 <p>转自：<a href="http://www.android123.com.cn/androidkaifa/827.html" target="_blank" rel="external">http://www.android123.com.cn/androidkaifa/827.html</a></p>
 ]]></content>
@@ -2147,7 +2202,7 @@ startActivity(<span class="built_in">data</span>);
     <link href="http://www.flysnow.org/2011/03/17/android-intents-and-intent-filters-two.html"/>
     <id>http://www.flysnow.org/2011/03/17/android-intents-and-intent-filters-two.html</id>
     <published>2011-03-17T00:41:02.000Z</published>
-    <updated>2014-11-15T12:52:27.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<h2 id="Category（类别）检测">Category（类别）检测</h2><p>类别在中是通过标记定义的,Category和Action一样，他们的名字都是一个字符串定义，但是我们在代码中可以使用对应的类别常量，在xml文件定义中只能使用定义好的字符串。Android的Intent类中提供了很多内置的类别定义，一中类别代表一个意思，可以参考说明使用。。比如android.intent.category.LAUNCHER标表示你的应用会展示在启动列表页面，经常和android.intent.action.MAIN搭配使用</p>
 <p>下面通过一个例子来说明Category的检测,项目名为Intents,应用名为Intents and Filters，运行在Android2.2版本上.主启动Activity为IntentsTestList。</p>
 <p>IntentsTestList代码如下:</p>
@@ -2312,7 +2367,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
     <link href="http://www.flysnow.org/2011/03/14/android-intents-and-intent-filters-one.html"/>
     <id>http://www.flysnow.org/2011/03/14/android-intents-and-intent-filters-one.html</id>
     <published>2011-03-14T02:01:05.000Z</published>
-    <updated>2014-11-15T12:52:27.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>看过前面的几节教程的应该都会留意到一个很重要的东西，那就是Intent。Intent是什么呢？我们都知道Android有四大核心组件 Activity、Service、Broadcast Receiver和Content Provider，略去Content Provider不提，那么剩下的三个组件之间的通信考什么？这就是Intent！！它不仅可以在同一个应用中起传递信息的作用，还是可以在不同的应用进行传递信息。这就使得我们的应用和系统中的其他应用进行交互有了可能，进而使得整个Android开发变得更加精彩。想想吧，我们自己的应用可以调用系统中的通话应用进行拨号、可以调用短信应用发短信，这是多么美妙的一件事情啊！！！</p>
 <h2 id="在这里你将会学到：">在这里你将会学到：</h2><ol>
 <li>什么是Intent和Intent Filter</li>
@@ -2483,7 +2538,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
     <link href="http://www.flysnow.org/2011/03/08/android-bottom-tool-bar-demo.html"/>
     <id>http://www.flysnow.org/2011/03/08/android-bottom-tool-bar-demo.html</id>
     <published>2011-03-08T00:31:54.000Z</published>
-    <updated>2014-11-15T12:52:26.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>前几天看到一篇很好的文章《新浪微博布局学习——妙用TabHost》，已经转载到我的博客里<a href="/2011/03/02/sina-weibo-tool-bar-tabhost.html">新浪微博布局学习——妙用TabHost </a><br>里面详细的介绍了怎么妙用TabHost构建底部的工具栏，有兴趣的可以看一下。因为那边文章没有Demo，工作之余，我写了一个Demo，供朋友们参考，欢迎拍砖讨论。。附件中提供下载。</p>
 <p><img src="http://dl.iteye.com/upload/attachment/431685/f7fbcca0-7830-37a9-8caa-cfa908809cd4.png" alt=""><br>本文附件下载:</p>
 <p><a href="/uploads/2013/10/sina-weibo-tool-bar-demo.zip">sina-weibo-tool-bar-demo</a></p>
@@ -2503,7 +2558,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
     <link href="http://www.flysnow.org/2011/03/02/sina-weibo-tool-bar-tabhost.html"/>
     <id>http://www.flysnow.org/2011/03/02/sina-weibo-tool-bar-tabhost.html</id>
     <published>2011-03-01T23:44:21.000Z</published>
-    <updated>2014-11-15T12:52:27.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>前言</p>
 <p>为了更好的开发Android应用程序，除了熟练掌握基本的UI组件和API外，还需要掌握一些技巧，而这些技巧可以通过阅读一些代码来提高，本系列将与大家分享一些新浪微博布局方面的收获，欢迎交流！</p>
 <p>声明</p>
@@ -2688,7 +2743,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
     <link href="http://www.flysnow.org/2011/02/22/writing-efficient-android-code.html"/>
     <id>http://www.flysnow.org/2011/02/22/writing-efficient-android-code.html</id>
     <published>2011-02-21T18:38:51.000Z</published>
-    <updated>2014-11-15T12:52:27.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>毫无疑问，基于Android平台的设备一定是嵌入式设备。现代的手持设备不仅仅是一部电话那么简单，它还是一个小型的手持电脑，但是，即使是最快的最高端的手持设备也远远比不上一个中等性能的桌面机。</p>
 <p>这就是为什么在编写Android程序时要时刻考虑执行的效率，这些系统不是想象中的那么快，并且你还要考虑它电池的续航能力。这就意味着没有多少剩余空间给你去浪费了，因此，在你写Android程序的时候，要尽可能的使你的代码优化而提高效率。</p>
 <p>本页介绍了几种可以让开发者的Android程序运行的更加有效率的方法。通过下面的一些跳转的连接，你可以学会怎么让你的程序更加有效运行</p>
@@ -2945,7 +3000,7 @@ MyItem items = <span class="keyword">list</span>.items();
     <link href="http://www.flysnow.org/2011/02/15/android-icon-with-number.html"/>
     <id>http://www.flysnow.org/2011/02/15/android-icon-with-number.html</id>
     <published>2011-02-14T21:48:01.000Z</published>
-    <updated>2014-11-15T12:52:27.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>在我们开发一些如短消息、应用商店等应用时，会考虑在短消息的图标上加上未读短信的数量，在应用商店上加上可以升级的应用数量，这样不占太大空间还能达到提示的目的。</p>
 <p>本节就以一个展示手机内联系人数量的例子来演示怎么在一个图标的上面加上数字的例子，也就是一个数字overlay..做过google map开发的知道overlay这个东西。。</p>
 <h2 id="一：你可学到">一：你可学到</h2><ol>
@@ -3164,7 +3219,7 @@ MyItem items = <span class="keyword">list</span>.items();
     <link href="http://www.flysnow.org/2011/01/20/android-gridview-tutorial.html"/>
     <id>http://www.flysnow.org/2011/01/20/android-gridview-tutorial.html</id>
     <published>2011-01-20T01:41:53.000Z</published>
-    <updated>2014-11-15T12:52:27.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>GridView是一个网络布局的视图，他能让你的元素显示在一个个的格子里。我们的桌面就是一个GridView。。</p>
 <ol>
 <li>新建一个HelloGridView的工程</li>
@@ -3297,7 +3352,7 @@ MyItem items = <span class="keyword">list</span>.items();
     <link href="http://www.flysnow.org/2011/01/10/android-sources-directory-structure.html"/>
     <id>http://www.flysnow.org/2011/01/10/android-sources-directory-structure.html</id>
     <published>2011-01-10T01:11:57.000Z</published>
-    <updated>2014-11-15T12:52:27.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>这是Android2.1的源代码的目录结构，可以帮助我们研究Android的源代码。Android源代码的下载请参考官网</p>
 <p>Android 2.1<br>|— Makefile<br>|— bionic                        （bionic C库）</p>
 <p>|— bootable                （启动引导相关代码）<br>|— build<br>（存放系统编译规则及generic等基础开发包配置）<br>|— cts                        （Android兼容性测试套件标准）</p>
@@ -3613,7 +3668,7 @@ qcom                           （里面基本是空的）</code>— sample<br>�
     <link href="http://www.flysnow.org/2011/01/08/android-listview-tutorials.html"/>
     <id>http://www.flysnow.org/2011/01/08/android-listview-tutorials.html</id>
     <published>2011-01-08T00:59:56.000Z</published>
-    <updated>2014-11-15T12:52:27.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>ListView是Android开发中非常常用的组件，ListView可以用来显示一个列表，我们可以对这个列表操作，比如点击列表要做什么等等。这篇文章主要通过一个示例来展示ListView的用法。</p>
 <p>请加入，大家一块学习。</p>
 <h2 id="一、不使用xml布局文件创建一个ListView">一、不使用xml布局文件创建一个ListView</h2><ol>
@@ -3804,7 +3859,7 @@ qcom                           （里面基本是空的）</code>— sample<br>�
     <link href="http://www.flysnow.org/2010/11/29/android-edittext-tutorials.html"/>
     <id>http://www.flysnow.org/2010/11/29/android-edittext-tutorials.html</id>
     <published>2010-11-29T00:51:00.000Z</published>
-    <updated>2015-01-12T16:49:15.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>标题有点大，说是详解，其实就是对EditText的一些常用功能的介绍，包括密码框，电话框，空白提示文字等等的讲解，尽量的介绍详细一点，也就是所谓的详解了。。呵呵</p>
 <h2 id="一：新建HelloEditText工程">一：新建HelloEditText工程</h2><p>新建一个Hello world详细步骤可以参见</p>
 <p><a href="/2010/11/13/android-helloworld.html">Android 第一个Android应用，HelloWorld</a></p>
@@ -4163,7 +4218,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
     <link href="http://www.flysnow.org/2010/11/24/android-textview-tutorials.html"/>
     <id>http://www.flysnow.org/2010/11/24/android-textview-tutorials.html</id>
     <published>2010-11-24T08:19:03.000Z</published>
-    <updated>2014-11-15T12:52:26.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>这节主要介绍一下TextView的简单用法，以及超链接文本、跑马灯等实例。</p>
 <h2 id="一：新建HelloTextView_工程">一：新建HelloTextView 工程</h2><p>新建一个Hello world详细步骤可以参见</p>
 <h3 id="Android第一个Android应用，HelloWorld"><a href="/2010/11/13/android-helloworld.html">Android第一个Android应用，HelloWorld</a></h3><p>创建设置如下：</p>
@@ -4303,7 +4358,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
     <link href="http://www.flysnow.org/2010/11/17/android-activity-statement-cycle-tutorials.html"/>
     <id>http://www.flysnow.org/2010/11/17/android-activity-statement-cycle-tutorials.html</id>
     <published>2010-11-16T17:02:20.000Z</published>
-    <updated>2014-11-15T12:52:27.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>通过上一节“Android系列之四：Android项目的目录结构”我们已经知道了什么是Activity，那么为什么我们创建一个Activity的导出类的时候为什么都要覆盖Activity的onCreate方法呢，为什么会在onPause()方法中保存一些当前Activity中的变化，要弄明白这些就要先了解Activity的生命周期，也就是一个Activity才开始到结束都要经过那些状态，下面通过一个例子了解Activity的<br>声明周期.</p>
 <h2 id="一：Activity的生命周期方法">一：Activity的生命周期方法</h2><p>Android提供了很多Activity的生命周期方法，比如我们常用的onCreate、onPause、onResume等。这里主要介绍粗粒度的周期方法，诸如onPostCreate、onPostResume等这些细粒度的周期方法可以参考Android的API文档，在你需要更细层次的控制的时候可以使用这些细粒度的方法。粗粒度的周期方法有以下几个：onCreate()、onStart()、onResume()、onPause()、onStop()、onDestroy()，从名字上就可以看出来这些方法在什么时候执行。</p>
 <h2 id="二：测试Activity的生命周期方法的执行顺序">二：测试Activity的生命周期方法的执行顺序</h2><p>为了能更明白上这几个周期放的执行顺序，我们新建一个HelloWorld项目，在Activity中覆盖这几个方法，打印出日志就可以看出来执行顺序了</p>
@@ -4491,7 +4546,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
     <link href="http://www.flysnow.org/2010/11/16/android-project-directory-structure.html"/>
     <id>http://www.flysnow.org/2010/11/16/android-project-directory-structure.html</id>
     <published>2010-11-15T17:12:19.000Z</published>
-    <updated>2014-11-15T12:52:27.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>这两天家里晚上断网，不能晚上写了，请各位读官见谅。上一次我们使用ADT创建了一个Android的HelloWorld项目，并且介绍了模拟器以及模拟器的配置，这节就重点讲讲Android项目的目录结构，看看和我们常见的Java项目的目录结构有什么不同。</p>
 <h2 id="一：Android项目的目录结构">一：Android项目的目录结构</h2><ol>
 <li>Android项目结构概览。其实Android项目的目录结构和Java的差不多，没有太大变化，如下图：<br><img src="http://dl.iteye.com/upload/attachment/348966/4a17123a-21bf-335f-8d0a-3e81b69531b1.png" alt=""></li>
@@ -4618,7 +4673,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
     <link href="http://www.flysnow.org/2010/11/13/android-helloworld.html"/>
     <id>http://www.flysnow.org/2010/11/13/android-helloworld.html</id>
     <published>2010-11-13T06:01:04.000Z</published>
-    <updated>2014-11-15T12:52:27.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>这节主要内容是使用ADT创建一个Helloword实例，并进行概要分析，中间会有AVD的创建。</p>
 <h2 id="一：使用ADT创建Helloword应用">一：使用ADT创建Helloword应用</h2><p>使用ADT我们能很方便的创建一个Android的Helloworld应用，关于ADT的配置请看<a href="/2010/11/11/setup-android-for-window.html">
 </a></p>
@@ -4674,7 +4729,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
     <link href="http://www.flysnow.org/2010/11/12/android-setup-config-for-linux.html"/>
     <id>http://www.flysnow.org/2010/11/12/android-setup-config-for-linux.html</id>
     <published>2010-11-12T01:26:54.000Z</published>
-    <updated>2014-11-15T12:52:27.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<p>上一次说到在window下搭建Android开发环境，总体比较简单。这一次就说说在Linux搭建Android开发环境，这里主要以很流行的Ubuntu 操作系统为例，其他的大同小异。</p>
 <h2 id="一：准备工作">一：准备工作</h2><pre><code>其实准备工作和上一篇的window下搭建的差不多，这里不再进行说明，请参见[<span class="link_label">Window下搭建Android开发环境</span>](<span class="link_url">/2010/11/11/setup-android-for-window.html</span>)
 </code></pre><p>需要注意的是JDK以及Eclipse要下载Linux版本的.</p>
@@ -4733,7 +4788,7 @@ export PATH JAVA_HOME ANDROID_HOME JRE_HOME CLASSPATH
     <link href="http://www.flysnow.org/2010/11/11/setup-android-for-window.html"/>
     <id>http://www.flysnow.org/2010/11/11/setup-android-for-window.html</id>
     <published>2010-11-10T22:41:25.000Z</published>
-    <updated>2014-11-15T12:52:27.000Z</updated>
+    <updated>2015-03-18T14:19:36.000Z</updated>
     <content type="html"><![CDATA[<blockquote>自2007年Google发布Android后，Android是越来越火，甚至有超越IPhone的势头。Android的推出，对于我们java开发人员无疑是一件值得庆幸的事情，因为Android的应用是由java开发的，因此，我们java开发人员入门Android比其他语言开发者有很大的优势。本系列教程将有浅到深系统的学习Android，这是我学习的过程，相信也会对你们有所帮助。该系列教程尽量保证每日一更。</blockquote>
 
 
