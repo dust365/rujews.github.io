@@ -2,13 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://www.flysnow.org/2015/03/10/github-page-with-hexo.html</loc>
-    <lastmod>2015-03-18T15:37:46.000Z</lastmod>
+    <loc>http://www.flysnow.org/baidu_verify_8kkhILkime.html</loc>
+    <lastmod>2015-03-18T15:39:49.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://www.flysnow.org/about/index.html</loc>
-    <lastmod>2015-03-18T14:19:36.000Z</lastmod>
+    <loc>http://www.flysnow.org/2015/03/10/github-page-with-hexo.html</loc>
+    <lastmod>2015-03-18T15:37:46.000Z</lastmod>
   </url>
   
   <url>
@@ -223,6 +223,11 @@
   
   <url>
     <loc>http://www.flysnow.org/404.html</loc>
+    <lastmod>2015-03-18T14:19:36.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.flysnow.org/about/index.html</loc>
     <lastmod>2015-03-18T14:19:36.000Z</lastmod>
   </url>
   

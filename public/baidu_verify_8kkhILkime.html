@@ -3,20 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>使用AlarmManager设置的定时服务在Android4.4上可能不准确了 | 飞雪无情的博客</title>
+  <title>飞雪无情的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Android4.4在前天发布了，随着Android4.4的源代码的放出，相信会有更多的手机会慢慢的升级到Android4.4,作为苦逼的Android开发人员，我们需要保证我们的应用在Android4.4的兼容性，也就是可用性。现在这里就有一个比较大的更新会影响到我们的应用功能，他就是AlarmManager。
-Android宣称为了电源的使用效率，在Android4.4上位所有应用的Alarm">
-<meta property="og:type" content="article">
-<meta property="og:title" content="使用AlarmManager设置的定时服务在Android4.4上可能不准确了">
-<meta property="og:url" content="http://www.flysnow.org/2013/11/02/android-4-4-alarm-manager-changed.html">
+  <meta name="description" content="8kkhILkime">
+<meta property="og:type" content="website">
+<meta property="og:title" content="飞雪无情的博客">
+<meta property="og:url" content="http://www.flysnow.org/baidu_verify_8kkhILkime.html">
 <meta property="og:site_name" content="飞雪无情的博客">
-<meta property="og:description" content="Android4.4在前天发布了，随着Android4.4的源代码的放出，相信会有更多的手机会慢慢的升级到Android4.4,作为苦逼的Android开发人员，我们需要保证我们的应用在Android4.4的兼容性，也就是可用性。现在这里就有一个比较大的更新会影响到我们的应用功能，他就是AlarmManager。
-Android宣称为了电源的使用效率，在Android4.4上位所有应用的Alarm">
+<meta property="og:description" content="8kkhILkime">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用AlarmManager设置的定时服务在Android4.4上可能不准确了">
-<meta name="twitter:description" content="Android4.4在前天发布了，随着Android4.4的源代码的放出，相信会有更多的手机会慢慢的升级到Android4.4,作为苦逼的Android开发人员，我们需要保证我们的应用在Android4.4的兼容性，也就是可用性。现在这里就有一个比较大的更新会影响到我们的应用功能，他就是AlarmManager。
-Android宣称为了电源的使用效率，在Android4.4上位所有应用的Alarm">
+<meta name="twitter:title" content="飞雪无情的博客">
+<meta name="twitter:description" content="8kkhILkime">
   
     <link rel="alternative" href="/atom.xml" title="飞雪无情的博客" type="application/atom+xml">
   
@@ -81,75 +78,36 @@ ga('send', 'pageview');
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-android-4-4-alarm-manager-changed" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="page-undefined" class="article article-type-page" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2013/11/02/android-4-4-alarm-manager-changed.html" class="article-date">
-  <time datetime="2013-11-02T07:46:47.000Z" itemprop="datePublished">2013-11-02</time>
+    <a href="/baidu_verify_8kkhILkime.html" class="article-date">
+  <time datetime="2015-03-18T15:39:49.000Z" itemprop="datePublished">2015-03-18</time>
 </a>
     
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Android/">Android</a>
-  </div>
-
   </div>
   <div class="article-inner">
     
     
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      使用AlarmManager设置的定时服务在Android4.4上可能不准确了
-    </h1>
-  
-
-      </header>
-    
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Android4.4在前天发布了，随着Android4.4的源代码的放出，相信会有更多的手机会慢慢的升级到Android4.4,作为苦逼的Android开发人员，我们需要保证我们的应用在Android4.4的兼容性，也就是可用性。现在这里就有一个比较大的更新会影响到我们的应用功能，他就是AlarmManager。</p>
-<p>Android宣称为了电源的使用效率，在Android4.4上位所有应用的Alarm服务使用批量启动的方式来处理相似的时间以激活设备。</p>
-<p>以前呢，是set一个Alarm，系统在到点的时候给你单独一个去激活设备启动你设置的服务;现在呢，不是这样了，而是按批的啦，一批激活那个时间点周围设置的差不多的Tigger Time的Alarm，比如你以前设置的是18：00准备自动备份数据，现在手机正好在18：05进行了一次批量的Alarm启动操作，而你设置的Alarm正好在这个时间点周围，那么你的Alarm也被启动了，比你预想的晚了5分钟。</p>
-<p>很多人想，这太不合理了啊，那我们根本就没有使用到Android4.4的新东西，只是用户的手机是Android4.4的系统，不能这么武断的就这么处理吧。所以Android还是给了我们兼容的方案的，只要你的App的targetSdkVersion<19,那么你以前设置的alarm时间还是精准的，和以前一样使用。如果你想使用android4.4及其以后版本的新功能，必须把targetsdkversion设置成>=19,而又想要求Alarm的设置精准，那么怎么办呢，Android在4.4给我们提供了新的方法setExact来设置精准的时间。</19,那么你以前设置的alarm时间还是精准的，和以前一样使用。如果你想使用android4.4及其以后版本的新功能，必须把targetsdkversion设置成></p>
-
+        8kkhILkime
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.flysnow.org/2013/11/02/android-4-4-alarm-manager-changed.html" data-id="ci7ewbgqn001ygun1dwewbpyj" class="article-share-link">Share</a>
+      <a data-url="http://www.flysnow.org/baidu_verify_8kkhILkime.html" data-id="ci7ewbgoh0001gun17d21pueb" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/API/">API</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
-
     </footer>
   </div>
   
     
-<nav id="article-nav">
-  
-    <a href="/2013/11/07/unsupportedoperationexception-gles20canvas-clippath.html" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          java.lang.UnsupportedOperationException android.view.GLES20Canvas.clipPath
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2013/10/11/android-bool-preferences-storage-optimization.html" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Android布尔型配置存储优化</div>
-    </a>
-  
-</nav>
-
   
 </article>
 
   
   <section id="comments">
     <!-- 多说评论框 start -->
-    <div class="ds-thread" data-thread-key="post-android-4-4-alarm-manager-changed" data-title="使用AlarmManager设置的定时服务在Android4.4上可能不准确了" data-url="http://www.flysnow.org/2013/11/02/android-4-4-alarm-manager-changed.html"></div>
+    <div class="ds-thread" data-thread-key="page-undefined" data-title="" data-url="http://www.flysnow.org/baidu_verify_8kkhILkime.html"></div>
     <!-- 多说评论框 end -->
     <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
     <script type="text/javascript">
