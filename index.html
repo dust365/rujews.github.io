@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>飞雪无情的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description">
+<meta property="og:type" content="website">
+<meta property="og:title" content="飞雪无情的博客">
+<meta property="og:url" content="http://www.flysnow.org/index.html">
+<meta property="og:site_name" content="飞雪无情的博客">
+<meta property="og:description">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="飞雪无情的博客">
+<meta name="twitter:description">
+  
+    <link rel="alternative" href="/atom.xml" title="飞雪无情的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-44570956-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">飞雪无情的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">专注于Android、Java、移动互联网、项目管理、软件架构</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+          <a class="main-nav-link" href="/about">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="q" value="site:http://www.flysnow.org"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-android-process-application-init-databases-problem" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/03/19/android-process-application-init-databases-problem.html" class="article-date">
+  <time datetime="2015-03-19T13:58:45.000Z" itemprop="datePublished">2015-03-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/19/android-process-application-init-databases-problem.html">Android多进程的数据库访问问题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在Android开发中，我们可能会使用单独的进程来做一些事情，比如推送服务，心跳服务等，这些不需要主应用启动，只需要一个独立的进程即可。这时候我们一般都会采用启动一个后台Service，这个Service运行在一个独立的进程中，比如在Androidmainfest.xml中配置Service的android:process=”:push”指定该Service运行在:push进程中。</p>
+<p>一般情况下这样做是没有任何问题的，但是如果你在你的Application的onCreate方法里有对数据库的操作，或者该Service里有对数据库的操作，就会有可能会有两个进程同时操作一个数据库的情况，一个是你的主应用的进程，进程名为你的包名例如org.flysnow;一个是你的Service所在的进程，进程名为你的包名+”:push”,即org.flysnow:push。这两个进程可能在同一时间访问同一个数据，同一个配置文件等。这就可能造成资源的竞争访问，造成的问题就不可预料了，比如数据库损坏，数据丢失等。</p>
+<p>多进程其实和多线程一样，并发访问的时候产生的问题很难预料，在多线程的时候我们有锁等机制控制资源的访问，但是在多进程中比较难，虽然有文件锁、排队等机制，但是在Android里很难实现，毕竟在Android里一个进程就是一个VM虚拟机，底层的东西控制不了，Java层又没有办法控制，所以在多进程中一定不要有并发增删改文件的操作。</p>
+<p>解决问题的核心就是不并发访问同一个文件，多线程时就使用Lock机制；多进程的时候就避免进行数据库的访问，比如只做一些心跳、激活、消息抓取等操作，涉及到把消息存储到数据库，访问配置文件等操作还是调用主进程进程操作。还一个要注意的就是Application的oncreate方法里要避免多进程访问同一文件，因为没一个进程初始化都会执行该方法，可以在一些进程初始化的时候不需要文件操作的时候不要进行文件操作，比如在onCreate里获取当前的进程，不等于包名的就不进行文件的访问操作，获取进程可以使用android.os.Process.myUid()方法。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.flysnow.org/2015/03/19/android-process-application-init-databases-problem.html" data-id="ci7g9uvjd0003z1n1afzyl632" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据库/">数据库</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+  
+
+  
+    <article id="post-github-page-with-hexo" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/03/10/github-page-with-hexo.html" class="article-date">
+  <time datetime="2015-03-10T14:30:04.000Z" itemprop="datePublished">2015-03-10</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Hexo/">Hexo</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/10/github-page-with-hexo.html">使用Hexo在Github上搭建自己的博客</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>以前的博客是使用Jekyll托管在github上，后来用着越来越不方便，比如没有自动生成post，不能一键部署，文件结构和配置也是比较繁琐，更重要的是有时候用markdown写一篇文章，生成的静态文件很乱，应该是有些字符解析的问题。现在下决心换成了hexo</p>
+<h1 id="Nodejs安装">Nodejs安装</h1><p>因为hexo是基于nodejs的应用，所以要先安装nodejs才可以。我这里以ubuntu为例，因为我自己一直在使用ubuntu。使用如下命令即可：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install nodejs</span><br><span class="line">sudo apt-get install npm</span><br></pre></td></tr></table></figure>
+<h1 id="Hexo安装">Hexo安装</h1><p><a href="https://github.com/hexojs/hexo/" title="Hexo" target="_blank" rel="external">Hexo</a> 是一个功能强大的静态网站生成系统，快速、简洁、高效。Hexo 支持 GitHub Flavored Markdown 的所有功能，甚至可以整合 Octopress 的大多数插件。可以一键部署到github，还有丰富的插件和主题,还支持热部署哦。执行如下命令进行安装。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo npm install hexo-cli -g</span><br></pre></td></tr></table></figure>
+<h1 id="快速开始">快速开始</h1><p>安装Hexo安成后，使用如下命令快速新建一个博客系统，然后运行它</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hexo init blog</span><br><span class="line"><span class="built_in">cd</span> blog</span><br><span class="line">npm install</span><br><span class="line">hexo server</span><br></pre></td></tr></table></figure>
+<p>如果npm安装失败，请使用sudo安装。运行成功后，访问<a href="http://0.0.0.0:4000/就可以看到博客的样子的，对就是我现在的博客这个样子，o(∩∩)o...哈哈。" target="_blank" rel="external">http://0.0.0.0:4000/就可以看到博客的样子的，对就是我现在的博客这个样子，o(∩∩)o...哈哈。</a></p>
+<p>现在我们来看看Hexo 生成博客的目录结构</p>
+<pre><code>.
+├── _config<span class="class">.yml</span>
+├── db<span class="class">.json</span>
+├── node_modules
+├── package<span class="class">.json</span>
+├── public
+├── scaffolds
+├── source
+└── themes
+</code></pre><p>其中_config.yml是配置站点的文件，public是hexo生成的静态站点文件夹，scaffolds是模板文件夹，source是存在用户资源的文件夹，themes是主题文件夹。</p>
+<h1 id="站点配置">站点配置</h1><p>找到title，subtitle，author参数配置，分别配置站点的标题、副标题和作者,比如我这里是：</p>
+<pre><code><span class="label">title:</span> 飞雪无情的博客
+<span class="label">subtitle:</span> 专注于Android、Java、移动互联网、项目管理、软件架构
+<span class="label">description:</span>
+<span class="label">author:</span> 飞雪无情
+<span class="label">language:</span> <span class="built_in">zh</span>-CN
+</code></pre><p>然后配置站点的url和permalink，这两个分别是你的站点的url host地址以及文章的永久连接，我这里是：</p>
+<pre><code><span class="string">url:</span> <span class="string">http:</span><span class="comment">//www.flysnow.org</span>
+<span class="string">root:</span> /
+<span class="string">permalink:</span> :year<span class="regexp">/:month/</span>:day/:title.html
+<span class="string">permalink_defaults:</span>
+</code></pre><p>permalink 我配置的是年月日以及title，后缀是html，便于搜索收录。permalink详情参见： <a href="http://hexo.io/zh-cn/docs/permalinks.html" target="_blank" rel="external">http://hexo.io/zh-cn/docs/permalinks.html</a></p>
+<h1 id="新增一篇文章">新增一篇文章</h1><p>使用如下命令即可新增一篇md格式的文章</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new <span class="string">'github-page-with-hexo'</span></span><br></pre></td></tr></table></figure>
+<p>然后就会在sources/_posts生成一篇文件名为github-page-with-hexo.md的markdown文件。编辑该文件就可以写博客了。这里有一些Front-matter需要介绍，可以配置文章使用的模板、所属的分类和tag等。</p>
+<p>Front-matter 是文件最上方以 —- 分隔的区域，用于指定个别文件的变量，举例来说：</p>
+<pre><code>title: "使用Hexo在Github上搭建自己的博客"
+date: 2015-03-10 22:30:04
+tags:
+<span class="bullet">- </span>Hexo
+<span class="bullet">- </span>Github
+categories:
+<span class="header">- Hexo
+---</span>
+</code></pre><p>请注意，目前的categories只能有一个一级分类，如果填写多个，第二个会被解析为二级分类，以及类推。tags可以允许有多个。更多关于Front-matter请参考 <a href="http://hexo.io/zh-cn/docs/front-matter.html" target="_blank" rel="external">http://hexo.io/zh-cn/docs/front-matter.html</a></p>
+<h1 id="发布到github_page">发布到github page</h1><p>首先你已经创建好了你的github page对应的git库，没有创建的可以google相关博客。然后新建一个hexo分支，存放你现在hexo的所有文件。然后执行如下命令清理并生成发布的静态站点文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo generate</span><br></pre></td></tr></table></figure>
+<p>然后把生成的public目录下的文件放到你的master分支下即可。git commit后把这两个分支推送到你的github上。git库结构可以参见我的github page库 <a href="https://github.com/rujews/rujews.github.io" title="https://github.com/rujews/rujews.github.io" target="_blank" rel="external">https://github.com/rujews/rujews.github.io</a></p>
+<h1 id="最后">最后</h1><p>然后等个几分钟，访问你的域名就可以看到你的网站了。如<a href="http://www.flysnow.org/" title="http://www.flysnow.org/" target="_blank" rel="external">http://www.flysnow.org/</a> 。关于更多的Hexo请参考官方文档，以后有时间也会介绍 <a href="http://hexo.io/zh-cn/docs/" target="_blank" rel="external">http://hexo.io/zh-cn/docs/</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.flysnow.org/2015/03/10/github-page-with-hexo.html" data-id="ci7g9uvjj000az1n1j5aahwgg" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Github/">Github</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/">Hexo</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+  
+
+  
+    <article id="post-android-gradle-plugin-translate-done" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/01/12/android-gradle-plugin-translate-done.html" class="article-date">
+  <time datetime="2015-01-12T07:33:16.000Z" itemprop="datePublished">2015-01-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/12/android-gradle-plugin-translate-done.html">Android Gradle插件中文指南</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近想把Android项目从Eclipse迁到Android Studio上。原因呢，Eclipse太慢了，而且经常卡死，Android Studio由于Android的大力支持，已经有很多Eclipse没有的功能，比如AAR包，并且可以使用Gradle这个强大灵活的构建工具。</p>
+<p>要迁入到Android Studio上，Gradle打包要搞懂，最近看了下Android Gradle插件指南，并且抽时间做了翻译，托管在github上。大家访问</p>
+<p><a href="https://github.com/rujews/android-tech-docs/blob/master/new-build-system/user-guide/README.md" target="_blank" rel="external">https://github.com/rujews/android-tech-docs/blob/master/new-build-system/user-guide/README.md</a></p>
+<p>随时查看，翻译错误的地方也请多指正。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.flysnow.org/2015/01/12/android-gradle-plugin-translate-done.html" data-id="ci7g9uvjm000hz1n1jliwrvqp" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gradle/">gradle</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/翻译/">翻译</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+  
+
+  
+    <article id="post-effective-programming-more-than-writing-code" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/07/13/effective-programming-more-than-writing-code.html" class="article-date">
+  <time datetime="2014-07-13T14:33:15.000Z" itemprop="datePublished">2014-07-13</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/软件开发/">软件开发</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/07/13/effective-programming-more-than-writing-code.html">高效能程序员的修炼</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="入门须知">入门须知</h2><ul>
+<li>你想成为一个程序员</li>
+<li>程序员的八种境界</li>
+<li>如何培养写作习惯</li>
+</ul>
+<h2 id="把一堆烂事搞定的艺术">把一堆烂事搞定的艺术</h2><ul>
+<li>学海无边</li>
+<li>磨刀不误砍柴工</li>
+<li>一路向前冲</li>
+<li>关于多任务的神话</li>
+</ul>
+<h2 id="高效编程之原则">高效编程之原则</h2><ul>
+<li>第一条法则：永远都是你的错</li>
+<li>大道至简</li>
+<li>避免写注释</li>
+<li>学会读源代码</li>
+<li>像橡皮鸭求助</li>
+<li>创新以人为本</li>
+<li>你的团队能通过电梯测试吗</li>
+<li>性能制胜</li>
+</ul>
+<h2 id="招聘程序员须得其法">招聘程序员须得其法</h2><ul>
+<li>为什么程序员不会编程</li>
+<li>怎样招聘程序员</li>
+<li>如何做好电话面试筛选</li>
+<li>工作经验数年之神话</li>
+<li>与程序员面谈</li>
+<li>史上最难的面试谜题</li>
+</ul>
+<h2 id="促使团队紧密协作">促使团队紧密协作</h2><ul>
+<li>不管怎么说，那总是人的问题</li>
+<li>领导需以身作则</li>
+<li>程序员与系统管理员的黑夜传说</li>
+<li>结对编程与代码评审</li>
+<li>会议是浪费工作时间的最佳去处</li>
+<li>处理坏苹果</li>
+<li>坏苹果是团队的毒药</li>
+<li>关于远程办公</li>
+</ul>
+<h2 id="蝙蝠洞：程序员的高效工作场所">蝙蝠洞：程序员的高效工作场所</h2><ul>
+<li>程序员的《权利法案》</li>
+<li>电脑工作站的人体工程学</li>
+<li>多显示器能提高生产力吗</li>
+<li>购置优质的电脑椅</li>
+<li>背景光的功效</li>
+</ul>
+<h2 id="设计时要把用户放在心上">设计时要把用户放在心上</h2><ul>
+<li>你永远不会有足够的奶酪</li>
+<li>细节决定成败</li>
+<li>用户界面代表了软件</li>
+<li>用户界面须优先设计</li>
+<li>分页显示该休矣</li>
+<li>对待弱视的用户</li>
+<li>再谈浏览器底栏</li>
+<li>费茨定律与无限宽度</li>
+<li>单元测试的终极失败</li>
+<li>第一版做的不好，但照样发布</li>
+</ul>
+<h2 id="安全基础：保护用户数据">安全基础：保护用户数据</h2><ul>
+<li>所有的网络通信都因该加密码</li>
+<li>防范字典式攻击</li>
+<li>快速哈希</li>
+<li>关于网络密码的可怕真相</li>
+</ul>
+<h2 id="加强代码测试，别让它太差劲">加强代码测试，别让它太差劲</h2><ul>
+<li>与客户患难与共</li>
+<li>结交 “混世魔猴”</li>
+<li>代码评审：说做就做</li>
+<li>加大测试力度</li>
+<li>我同情那些不写单元测试的傻瓜</li>
+<li>单元测试与Beta测试的对比</li>
+<li>低保真的可用性测试</li>
+<li>比程序崩溃更糟糕的是什么</li>
+</ul>
+<h2 id="创建并管理社区，同时从中受益">创建并管理社区，同时从中受益</h2><ul>
+<li>倾听社区的声音，但是别被它们牵着鼻子走</li>
+<li>我重申：别盲目听从你的用户</li>
+<li>游戏化</li>
+<li>暂停、禁止、或者打入地狱</li>
+</ul>
+<h2 id="揭露营销伎俩，以及如何规避">揭露营销伎俩，以及如何规避</h2><ul>
+<li>谨防九种营销诡计</li>
+<li>网络广告该休矣</li>
+<li>从《偷天情缘》看A/B测试的问题</li>
+<li>如果流于俗套，请即刻改变</li>
+<li>软件定价：我们深谙其道吗</li>
+</ul>
+<h2 id="轻重缓急，了然于心">轻重缓急，了然于心</h2><ul>
+<li>程序员，你幸福吗</li>
+<li>来也匆匆，去也匆匆，到头来两手空空</li>
+</ul>
+<h2 id="程序员必读之书">程序员必读之书</h2><ul>
+<li>代码大全</li>
+<li>人月神话</li>
+<li>Don’t Make Me Think</li>
+<li>快速软件开发</li>
+<li>人件</li>
+<li>设计心理学</li>
+<li>About Face 3:交互设计精髓</li>
+<li>交互设计之路—让高科技产品回归人性</li>
+<li>GUI设计禁忌</li>
+<li>编程珠玑</li>
+<li>程序员修炼之道：从小工到专家</li>
+<li>Web可用性设计</li>
+<li>精通正则表达式</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.flysnow.org/2014/07/13/effective-programming-more-than-writing-code.html" data-id="ci7g9uvjp000oz1n11kclrvc1" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/软件开发/">软件开发</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+  
+
+  
+    <article id="post-android-avd-not-launcher" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/03/22/android-avd-not-launcher.html" class="article-date">
+  <time datetime="2014-03-22T05:29:02.000Z" itemprop="datePublished">2014-03-22</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/03/22/android-avd-not-launcher.html">android新建大分辨率模拟器不能启动的问题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>新建的Android模拟器的分辨率超过一定大小的时候,就无法启动,比如超过1920<em>1080,就启动不了啦,更别说现在的2560</em>1440了.这时候只需要在新建AVD的时候,选择Use Host GPU选项然后即可正常启动..已经新建好的AVD也可以点击编辑,然后勾选Use Host GPU即可</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.flysnow.org/2014/03/22/android-avd-not-launcher.html" data-id="ci7g9uvjs000tz1n1738coi0m" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+  
+
+  
+    <article id="post-android-overlay-guide" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/02/20/android-overlay-guide.html" class="article-date">
+  <time datetime="2014-02-20T06:14:29.000Z" itemprop="datePublished">2014-02-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/02/20/android-overlay-guide.html">android覆盖式引导</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>我们在开发产品的时候,每次发版可能会有一些新的功能需要引导用户使用,以前大部分都是使用截图,然后让设计师把引导的问题修饰好放到图上,现在这张图片就是引导图片,我们只需要用这张图片放到界面上,这样基本上就可以满足引导的作用.</p>
+<p>但是这样的情况有个缺点,那就是,手机的分辨率太多,我们不可能每个分辨率都做一张图片,这样图片就会变形,有些引导操作的位置可能就不准确了,而且使用绘图的方式绘制在图片上的文字也会模糊不清.</p>
+<p>基于如上的方式,我们可以使用另外一种方式来做引导,这样方式就是使用覆盖式的方式,主要的实现方式是</p>
+<ol>
+<li>使用一个透明并且全屏的PopuWindow,这样我们就有一个可以显示向导</li>
+</ol>
+<ol>
+<li>获取需要引导的View元素在屏幕上的位置,这样我们就可以准确的给这个View绘制引导信息</li>
+</ol>
+<ol>
+<li>然后让PopuWindow显示出来,这样就可以看到我们的引导正好指向需要引导的位置</li>
+</ol>
+<p>可以看下如下图的效果,这是实现的示例图.</p>
+<p><a href="/uploads/2014/02/device-2014-02-20-213148.png"><img src="/uploads/2014/02/device-2014-02-20-213148-500x209.png" alt=""></a></p>
+<p>可以看到,”查看帮助,了解更多”正好指向我们?图片操作按钮,位置很准确,文字也很清晰,并且这种方式实现的在所有分辨率上的手机上位置都是准确的,因为我们准确的获得了目标View的位置.</p>
+<p>从上面的描述和效果图中我们也看到了一些关键点,比如全屏背景透明的PopuWindow,这个相信比较简单,宽高FILL_PARENT,背景设置为透明背景就好了.第二个就是目标View的位置,这个是比较难的,一般的引导我们都会在用户打开界面的时候显示,按说在Activity onCreate方法里调用最合适,但是这个时候我们的ContentVIew还没有测量绘制,所以我们根本不知道目标的位置.另外一个办法就是监听View层级的变化.</p>
+<pre><code>ViewTreeObserver <span class="function">observer view.<span class="title">getViewTreeObserver</span><span class="params">()</span></span>;
+observer.addOnGlobalLayoutListener(<span class="keyword">new</span> ViewTreeObserver.OnGlobalLayoutListener(){
+    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onGlobalLayout</span><span class="params">()</span></span>{
+    <span class="comment">//开始显示向导</span>
+  }
+});
+</code></pre><p>注册监听后,就可以在收到通知后进行显示向导,这时候每个View都已经测量布局好,可以获得他们的准确位置,获取View在屏幕上的位置通过public void getLocationOnScreen (int[] location)获取其在屏幕上的位置.</p>
+<p>获取到这些VIew的位置后,就需要显示我们的引导了,PopuWindow可以设置一个ContentView,我们可以AbsoluteLayout作为ContentView,在这里绝对布局是最好的选择,因为我们获取的目标View的位置都是绝对的,所以使用绝对位置,通过x,y坐标就可以确定引导的位置.</p>
+<p>接下来的事情就简单了,我们只需要显示PopuWindow就可以啦,然后控制好事件,比如用户点击的时候收起该引导,让用户继续正常使用产品.引导不能无休止的显示,我们可以通过配置来控制引导是否显示以及显示的次数等等.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.flysnow.org/2014/02/20/android-overlay-guide.html" data-id="ci7g9uvju000wz1n18g7athjq" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+  
+
+  
+    <article id="post-linux-php-server-with-nginx" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/12/27/linux-php-server-with-nginx.html" class="article-date">
+  <time datetime="2013-12-27T04:59:13.000Z" itemprop="datePublished">2013-12-27</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Linux/">Linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2013/12/27/linux-php-server-with-nginx.html">使用Nginx搭建PHP服务器</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一般我们都是采用Apache 作为PHP的解析服务器，这次则是采用Nginx这个强大的反向代理服务器来搭建PHP服务器。下面就以Linux发行版Ubuntu为例搭建一个Nginx的PHP服务器。</p>
+<p>首先下载安装Nginx</p>
+<pre><code>sudo apt-<span class="keyword">get</span> install nginx
+</code></pre><p>安装完成后，启动Nginx</p>
+<pre><code>sudo /etc/init.d/nginx <span class="built_in">start</span>
+</code></pre><p>这时候打开浏览器里输入<a href="http://localhost/就可以看到Welcome" target="_blank" rel="external">http://localhost/就可以看到Welcome</a> to nginx!的页面了，说明我们的Nginx服务器安装成功</p>
+<p>接下来安装PHP5</p>
+<pre><code>sudo apt-<span class="keyword">get</span> install php5-fpm
+</code></pre><p>安装成功后，我们要修改Nginx的虚拟机配置，让浏览器请求的php文件可以被php cgi解析。编辑Nginx虚拟机配置文件/etc/nginx/sites-available/default</p>
+<pre><code>sudo vim <span class="regexp">/etc/</span>nginx<span class="regexp">/sites-available/</span><span class="keyword">default</span>
+</code></pre><p>然后把里面的配置修改为如下配置内容：</p>
+<pre><code><span class="comment"># You may add here your</span>
+<span class="comment"># server {</span>
+<span class="comment">#    ...</span>
+<span class="comment"># }</span>
+<span class="comment"># statements for each of your virtual hosts to this file</span>
+
+<span class="comment">##</span>
+<span class="comment"># You should look at the following URL's in order to grasp a solid understanding</span>
+<span class="comment"># of Nginx configuration files in order to fully unleash the power of Nginx.</span>
+<span class="comment"># http://wiki.nginx.org/Pitfalls</span>
+<span class="comment"># http://wiki.nginx.org/QuickStart</span>
+<span class="comment"># http://wiki.nginx.org/Configuration</span>
+<span class="comment">#</span>
+<span class="comment"># Generally, you will want to move this file somewhere, and start with a clean</span>
+<span class="comment"># file but keep this around for reference. Or just disable in sites-enabled.</span>
+<span class="comment">#</span>
+<span class="comment"># Please see /usr/share/doc/nginx-doc/examples/ for more detailed examples.</span>
+<span class="comment">##</span>
+
+<span class="title">server</span> {
+    <span class="title">listen</span>   <span class="number">80</span>; <span class="comment">## listen for ipv4; this line is default and implied</span>
+    <span class="comment">#listen   [::]:80 default ipv6only=on; ## listen for ipv6</span>
+
+    <span class="title">root</span> /usr/share/nginx/www;
+    <span class="title">index</span> index.html index.htm index.php;
+
+    <span class="comment"># Make site accessible from http://localhost/</span>
+    <span class="title">server_name</span> localhost;
+
+    <span class="title">location</span> / {
+        <span class="comment"># First attempt to serve request as file, then</span>
+        <span class="comment"># as directory, then fall back to index.html</span>
+        <span class="title">try_files</span> <span class="variable">$uri</span> <span class="variable">$uri</span>/ /index.html;
+        <span class="comment"># Uncomment to enable naxsi on this location</span>
+        <span class="comment"># include /etc/nginx/naxsi.rules</span>
+    }
+
+    <span class="title">location</span> /doc/ {
+        <span class="title">alias</span> /usr/share/doc/;
+        <span class="title">autoindex</span> <span class="built_in">on</span>;
+        <span class="title">allow</span> <span class="number">127.0.0.1</span>;
+        <span class="title">deny</span> all;
+    }
+
+    <span class="comment"># Only for nginx-naxsi : process denied requests</span>
+    <span class="comment">#location /RequestDenied {</span>
+        <span class="comment"># For example, return an error code</span>
+        <span class="comment">#return 418;</span>
+    <span class="comment"># }</span>
+
+    <span class="title">error_page</span> <span class="number">404</span> /<span class="number">404</span>.html;
+
+    <span class="comment"># redirect server error pages to the static page /50x.html</span>
+    <span class="comment">#</span>
+    <span class="title">error_page</span> <span class="number">500</span> <span class="number">502</span> <span class="number">503</span> <span class="number">504</span> /50x.html;
+    <span class="title">location</span> = /50x.html {
+        <span class="title">root</span> /usr/share/nginx/www;
+    }
+
+    <span class="comment"># pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000</span>
+    <span class="comment">#</span>
+    <span class="title">location</span> <span class="regexp">~ \.php$</span> {
+        <span class="title">fastcgi_split_path_info</span><span class="regexp"> ^(.+\.php)(/.+)$</span>;
+        <span class="comment"># NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini</span>
+
+        <span class="comment"># With php5-cgi alone:</span>
+        <span class="title">fastcgi_pass</span> <span class="number">127.0.0.1:9000</span>;
+        <span class="comment"># With php5-fpm:</span>
+        <span class="comment">#fastcgi_pass unix:/var/run/php5-fpm.sock;</span>
+        <span class="title">fastcgi_index</span> index.php;
+        <span class="title">include</span> fastcgi_params;
+    }
+
+    <span class="comment"># deny access to .htaccess files, if Apache's document root</span>
+    <span class="comment"># concurs with nginx's one</span>
+    <span class="comment">#</span>
+    <span class="title">location</span> <span class="regexp">~ /\.ht</span> {
+        <span class="title">deny</span> all;
+    }
+}
+
+<span class="comment"># another virtual host using mix of IP-, name-, and port-based configuration</span>
+<span class="comment">#</span>
+<span class="comment">#server {</span>
+<span class="comment">#    listen 8000;</span>
+<span class="comment">#    listen somename:8080;</span>
+<span class="comment">#    server_name somename alias another.alias;</span>
+<span class="comment">#    root html;</span>
+<span class="comment">#    index index.html index.htm;</span>
+<span class="comment">#</span>
+<span class="comment">#    location / {</span>
+<span class="comment">#        try_files $uri $uri/ /index.html;</span>
+<span class="comment">#    }</span>
+<span class="comment"># }</span>
+
+<span class="comment"># HTTPS server</span>
+<span class="comment">#</span>
+<span class="comment">#server {</span>
+<span class="comment">#    listen 443;</span>
+<span class="comment">#    server_name localhost;</span>
+<span class="comment">#</span>
+<span class="comment">#    root html;</span>
+<span class="comment">#    index index.html index.htm;</span>
+<span class="comment">#</span>
+<span class="comment">#    ssl on;</span>
+<span class="comment">#    ssl_certificate cert.pem;</span>
+<span class="comment">#    ssl_certificate_key cert.key;</span>
+<span class="comment">#</span>
+<span class="comment">#    ssl_session_timeout 5m;</span>
+<span class="comment">#</span>
+<span class="comment">#    ssl_protocols SSLv3 TLSv1;</span>
+<span class="comment">#    ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv3:+EXP;</span>
+<span class="comment">#    ssl_prefer_server_ciphers on;</span>
+<span class="comment">#</span>
+<span class="comment">#    location / {</span>
+<span class="comment">#        try_files $uri $uri/ /index.html;</span>
+<span class="comment">#    }</span>
+<span class="comment"># }</span>
+</code></pre><p>重新加载我们刚刚更改的Nginx配置</p>
+<pre><code>sudo <span class="regexp">/etc/i</span>nit.d<span class="regexp">/nginx reload</span>
+</code></pre><p>然后我们在/usr/share/nginx/www/目录下新建一个phpinfo.php文件，可以查看php的配置和环境信息</p>
+<pre><code>sudo vim <span class="regexp">/usr/</span>share<span class="regexp">/nginx/</span>www<span class="regexp">/phpinfo.php</span>
+</code></pre><p>在phpinfo.php中录入如下内容:</p>
+<pre><code><span class="php"><span class="preprocessor">&lt;?php</span>
+  phpinfo();
+<span class="preprocessor">?&gt;</span></span>
+</code></pre><p>我们在浏览器里输入<a href="http://localhost/phpinfo.php就可以看到PHP的信息页了，有版本等信息。" target="_blank" rel="external">http://localhost/phpinfo.php就可以看到PHP的信息页了，有版本等信息。</a></p>
+<p>PHP5还有很多支持的模块，如果需要的话可以选择安装，一般这些模块都是php5-开头，比如php5-mysql，在Ubuntu里安装他只需</p>
+<pre><code>sudo apt-<span class="keyword">get</span> install php5-mysql
+</code></pre><p>PHP的模块安装后别忘记重启PHP5哦，执行如下命令可以重启</p>
+<pre><code>sudo <span class="regexp">/etc/i</span>nit.d<span class="regexp">/php5-fpm restart</span>
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.flysnow.org/2013/12/27/linux-php-server-with-nginx.html" data-id="ci7g9uvjw000zz1n12f1oddhx" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Apache/">Apache</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nginx/">Nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ubuntu/">Ubuntu</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+  
+
+  
+    <article id="post-open-source-project-in-android-app" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/12/14/open-source-project-in-android-app.html" class="article-date">
+  <time datetime="2013-12-14T07:35:36.000Z" itemprop="datePublished">2013-12-14</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2013/12/14/open-source-project-in-android-app.html">Android产品开发中常用的一些开源项目</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>你在工作中可能会遇到同时给你说不要重复发明轮子，其实这个说的就是第一：不要做重复的事情，第二：站在巨人的肩膀上。现在有了互联网以及开源的精神，我们的很多在产品中需要实现的功能组件都可以在互联网上找到，我们可以直接拿来用，这样我们就不用重复做东西了，这得益于开源奉献精神。像Google、Facebook这类的大公司都在使用很多的开源产品，比如我们常见的Apache系列、我们使用的Eclipse IDE等等。</p>
+<p>在我自己的产品开发中，我也使用到了一些常用的开源项目，下面就介绍一下我使用的一些Android开源项目。</p>
+<h3 id="1-android-wheel">1.android-wheel</h3><p>还记得iPhone上经典的日期选择滑轮组件吗?这个就是android版本的实现，记得当时这种选择方式很风靡，可以用于时间、分类等一些具有选择类型功能的开发实现，非常方便。</p>
+<p>开源项目地址：<a href="https://code.google.com/p/android-wheel/" target="_blank" rel="external">https://code.google.com/p/android-wheel/</a></p>
+<h3 id="2-achartengine"><a href="/uploads/2013/12/android-wheel-cities.png"><img src="/uploads/2013/12/android-wheel-cities.png" alt="android-wheel-cities"></a>2.achartengine</h3><p>这个是android上用于报表类的组件，可以实现条形图、饼图、柱状图、折线图等等。可以在产品中用于一些报表统计类的功能，通过这些图形报表给用户一个直观的统计，比如用户的收支走势图、分类支出对比图等等。</p>
+<p>开源项目地址：<a href="https://code.google.com/p/achartengine/" target="_blank" rel="external">https://code.google.com/p/achartengine/</a></p>
+<h3 id="3-Satellite_Menu"><a href="/uploads/2013/12/android-wheel-cities.png"><img src="/uploads/2013/12/android-wheel-cities.png" alt="android-wheel-cities"></a> <a href="/uploads/2013/12/combined_chart.png"><img src="/uploads/2013/12/combined_chart-300x500.png" alt="combined_chart"></a>3.Satellite Menu</h3><p>还记得Path的弧形弹出式菜单吗？当时太风靡了，大家都在抄啊，一时间市场上所有的App的功能和菜单键全被这个设计代替了。不多说，给出地址。</p>
+<p>开源项目地址：<a href="https://github.com/siyamed/android-satellite-menu" target="_blank" rel="external">https://github.com/siyamed/android-satellite-menu</a></p>
+<h3 id="4-drag-sort-listview"><a href="/uploads/2013/12/687474703a2f2f692e696d6775722e636f6d2f3049676b6b74642e706e67.png"><img src="/uploads/2013/12/687474703a2f2f692e696d6775722e636f6d2f3049676b6b74642e706e67-489x500.png" alt="687474703a2f2f692e696d6775722e636f6d2f3049676b6b74642e706e67"></a>4.drag-sort-listview</h3><p>Android产品中ListView相信大家都用的不少，用于展示用户的数据是很不错的，不过有的时候用户需要调整一下列表项的顺序，比如用户想把好听的因为放在上面，便于选择，这时候这个组件就派上用场了，可以让用户拖动着某一项进行上下排序。</p>
+<p>开源项目地址：<a href="https://github.com/bauerca/drag-sort-listview" target="_blank" rel="external">https://github.com/bauerca/drag-sort-listview</a></p>
+<h3 id="5-SlidingMenu">5.SlidingMenu</h3><p>不知道从什么时候起侧滑又成了App设计的一个风向标，一时间全是侧滑啊，就是感觉不用侧滑这个产品就不好意思发布似的。这是一个非常经典的侧滑开源项目，都多种方式、可以灵活配置和定制。</p>
+<p>开源项目地址：<a href="https://github.com/jfeinstein10/SlidingMenu" target="_blank" rel="external">https://github.com/jfeinstein10/SlidingMenu</a></p>
+<h3 id="6-NineOldAndroids"><a href="/uploads/2013/12/2012110712582439.png"><img src="/uploads/2013/12/2012110712582439.png" alt="2012110712582439"></a>6.NineOldAndroids</h3><p>Android3.0增加了一套属性动画的框架，让开发者能更容易的完成更复杂的动画，但是为了兼容低版本的手机，我们又不能把应用升级到Android3.0,不过幸好有NineOldAndroids，我们可以在低系统版本的手机上也可以使用属性动画</p>
+<p>开源项目地址：<a href="https://github.com/JakeWharton/NineOldAndroids" target="_blank" rel="external">https://github.com/JakeWharton/NineOldAndroids</a></p>
+<h3 id="7-Android-PullToRefresh">7.Android-PullToRefresh</h3><p>下拉列表刷新，上拉加载，下拉。。。，上下拉可以做很多事情，上下拉又成了时髦的设计。这是一个非常NB的组件，可以把任何View变成具有可上下拉功能的View，并且不会对原来的View造成污染。</p>
+<p>开源项目地址：<a href="https://github.com/chrisbanes/Android-PullToRefresh" target="_blank" rel="external">https://github.com/chrisbanes/Android-PullToRefresh</a></p>
+<h3 id="8-ActionBarSherlock"><a href="/uploads/2013/12/header_graphic.png"><img src="/uploads/2013/12/header_graphic-500x254.png" alt="header_graphic"></a>8.ActionBarSherlock</h3><p>从 Android3.0开始增加了ActionBar，它能帮助开发者定制菜单，导航等，非常方便，但是低版本的用不了，所以ActionBarSherlock就出世了，它能让我们在低版本的手机上也可以使用ActionBar</p>
+<p>开源项目地址：<a href="https://github.com/JakeWharton/ActionBarSherlock" target="_blank" rel="external">https://github.com/JakeWharton/ActionBarSherlock</a></p>
+<p><a href="/uploads/2013/12/687474703a2f2f616374696f6e626172736865726c6f636b2e636f6d2f7374617469632f666561747572652e706e67.png"><img src="/uploads/2013/12/687474703a2f2f616374696f6e626172736865726c6f636b2e636f6d2f7374617469632f666561747572652e706e67-500x236.png" alt="687474703a2f2f616374696f6e626172736865726c6f636b2e636f6d2f7374617469632f666561747572652e706e67"></a></p>
+<p>开源项目林林总总很多，今天说的都是我常用的，多去一些注入GitHub，GoogleCode等网站，可以发现很多开源的优秀项目，这些我们可以先了解收集起来，等我们产品中有类似的功能了，可以拿来使用，帮你更快的完成工作。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.flysnow.org/2013/12/14/open-source-project-in-android-app.html" data-id="ci7g9uvk1001cz1n1zplojahy" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/开源/">开源</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+  
+
+  
+    <article id="post-android-httpclitent-session-keep" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/11/21/android-httpclitent-session-keep.html" class="article-date">
+  <time datetime="2013-11-21T06:39:11.000Z" itemprop="datePublished">2013-11-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2013/11/21/android-httpclitent-session-keep.html">Android HttpClient Session保持</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>现在单机版本的App已经不多了，基本上都会和服务器进行通信。Android提供Http访问的方式有两种，一种是HttpClient，一种是UrlConnection.这里要说的是HttpClient。</p>
+<p>在Http访问中，我们可能会遇到一些这样的场景，比如服务端要求几次Http请求组成一次完整的客户端服务器通信，比如同步。现在的App很多有有账号系统，会提供把用户数据备份的功能，那么这么在线备份功能就是这样的一个场景，它包括登陆、数据上传，结果返回、提交确认或者终止等这样的顺序步骤，每一步都是一次Http访问请求。服务器的设计(负载均衡等)需要要求客户端在这依次完整的数据备份的几次Http访问请求中保持同一个Session.便于服务器的协调和操作，就和用户用浏览器打开网页去完整一件事情一样，这就需要我们在每次Http请求的时候保持Session。</p>
+<p>其实保持HttpClient的请求Session，就是保证在每次Http请求访问的请求头信息的Cookie参数中，携带同一个JSESSIONID，只要保证每次是一样的，服务器就认为是同一Session，这就保持了Seesion会话。那么这个JSESSIONID是怎么来的呢，是服务器通过响应头信息给的，服务器在给客户端设置Cookie时，会通过响应头信息中的Set-Cookie参数传递回来，只要有新设置的Cookie，就是通过这个传递过来，如果没有则是null，那么我们就可以在请求完之后返回的信息里读取这个Set-Cookie头信息，然后保存起来，在下次请求的时候给服务器发送过去，就实现了保持Seesion的目的。代码如下：</p>
+<pre><code><span class="comment">//定义储存Cookie信息</span>
+<span class="keyword">private</span> String cookies;
+
+<span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">executeGet</span><span class="params">(String url)</span> <span class="keyword">throws</span> ClientProtocolException, IOException</span>{
+    HttpClient httpClient=<span class="keyword">new</span> DefaultHttpClient();
+
+    HttpGet httpGet=<span class="keyword">new</span> HttpGet(url);
+    setRequestCookies(httpGet);
+
+    HttpResponse response=httpClient.execute(httpGet);
+    appendCookies(response);
+}
+<span class="javadoc">/**
+ * 设置请求的Cookie头信息
+ *<span class="javadoctag"> @param</span> reqMsg
+ */</span>
+<span class="keyword">private</span> <span class="function"><span class="keyword">void</span> <span class="title">setRequestCookies</span><span class="params">(HttpMessage reqMsg)</span> </span>{
+    <span class="keyword">if</span>(!TextUtils.isEmpty(cookies)){
+        reqMsg.setHeader(<span class="string">"Cookie"</span>, cookies);
+    }
+}
+<span class="javadoc">/**
+ * 把新的Cookie头信息附加到旧的Cookie后面
+ * 用于下次Http请求发送
+ *<span class="javadoctag"> @param</span> resMsg
+ */</span>
+<span class="keyword">private</span> <span class="function"><span class="keyword">void</span> <span class="title">appendCookies</span><span class="params">(HttpMessage resMsg)</span> </span>{
+    Header setCookieHeader=resMsg.getFirstHeader(<span class="string">"Set-Cookie"</span>);
+    <span class="keyword">if</span> (setCookieHeader != <span class="keyword">null</span>
+            &amp;&amp; TextUtils.isEmpty(setCookieHeader.getValue())) {
+        String setCookie=setCookieHeader.getValue();
+        <span class="keyword">if</span>(TextUtils.isEmpty(cookies)){
+            cookies=setCookie;
+        }<span class="keyword">else</span>{
+            cookies=cookies+<span class="string">"; "</span>+setCookie;
+        }
+    }
+}
+</code></pre><p>上面的代码就是一个简单的例子，我们在发送我们的请求之前，把现存的Cookie通过请求头信息发送给服务器，然后再服务器返回的头信息中解析，看是否有需要的更新的Cookie即可，这样我们就达到了保持Seession目的。</p>
+<p>当我们需要重新设置Seesion的时候，请求我们保存的cookie即可，这样代码就会重新获取。如果都有个账号并发备份，那么一个账号分配一个cookie变量存储即可，也就是把上面的代码放到一个如HttpManager管理的类里，每个账号的备份都可以new个HttpManager实例，这样每个账号都可以单独处理自己的Cookie，互不干扰。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.flysnow.org/2013/11/21/android-httpclitent-session-keep.html" data-id="ci7g9uvk4001hz1n17qlg2u3i" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Http/">Http</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HttpClitent/">HttpClitent</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+  
+
+  
+    <article id="post-goagent-403-not-have-permiss" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/11/07/goagent-403-not-have-permiss.html" class="article-date">
+  <time datetime="2013-11-07T06:48:52.000Z" itemprop="datePublished">2013-11-07</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Linux/">Linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2013/11/07/goagent-403-not-have-permiss.html">goagent 403  not have permiss</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>今天上班，像往常一样打开Google，咦，竟然提示</p>
+<blockquote>403. That’s an error.<br>Your client does not have permission to get URL /2 from this server. That’s all we know.</blockquote>
+
+
+<p>奇怪了，因为我使用goagent翻墙上网，第一反应就是又被禁了。赶紧去<a href="https://code.google.com/p/goagent/" target="_blank" rel="external">goagent网站</a>去看，发现好多人反馈这个bug。看了一圈，发现有人给出了解决办法，修改goagent客户端中的proxy.ini里的profile 为 google_hk，以前的默认配置是profile = google_cn，现在改成profile = google_hk就好了。也就是换个配置。。改了后重启goagent，发现果然好了。。继续使用。</p>
+<p>刚刚又去Goagent网站，发现发布了一则公布，这个倒没留意是什么时候发布的。公告如下</p>
+<ol>
+<li>403 情况请改成 profile = google_hk 或者更新到最新版(不需要上传服务端也可用） [2013-11-07 19:25 更新]。</li>
+</ol>
+<ol>
+<li>速度慢的话，建议重新部署并使用新的 appid</li>
+</ol>
+<p>goagent是个好东西，翻墙必备，还可以看youtube视频，喜欢的朋友可以参考官网教程架设<a href="https://code.google.com/p/goagent/wiki/InstallGuide" target="_blank" rel="external">https://code.google.com/p/goagent/wiki/InstallGuide</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.flysnow.org/2013/11/07/goagent-403-not-have-permiss.html" data-id="ci7g9uvlb001vz1n1bznlwrmt" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/goagent/">goagent</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/代理/">代理</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/翻墙/">翻墙</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+  
+
+  
+  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    </nav>
+  
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a><span class="category-list-count">37</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Hexo/">Hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/软件开发/">软件开发</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/API/">API</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">37</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Apache/">Apache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Email/">Email</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github/">Github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Http/">Http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HttpClitent/">HttpClitent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intent/">Intent</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/">Nginx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/">PHP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/">Ubuntu</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Widget/">Widget</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/goagent/">goagent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gradle/">gradle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/代理/">代理</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/开源/">开源</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/敏捷/">敏捷</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库/">数据库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻墙/">翻墙</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻译/">翻译</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/软件工程/">软件工程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/软件开发/">软件开发</a><span class="tag-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/API/" style="font-size: 13.33px;">API</a><a href="/tags/Android/" style="font-size: 20px;">Android</a><a href="/tags/Apache/" style="font-size: 10px;">Apache</a><a href="/tags/Email/" style="font-size: 10px;">Email</a><a href="/tags/Github/" style="font-size: 10px;">Github</a><a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a><a href="/tags/Http/" style="font-size: 10px;">Http</a><a href="/tags/HttpClitent/" style="font-size: 10px;">HttpClitent</a><a href="/tags/Intent/" style="font-size: 13.33px;">Intent</a><a href="/tags/Linux/" style="font-size: 15px;">Linux</a><a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a><a href="/tags/PHP/" style="font-size: 10px;">PHP</a><a href="/tags/Ubuntu/" style="font-size: 18.33px;">Ubuntu</a><a href="/tags/Widget/" style="font-size: 16.67px;">Widget</a><a href="/tags/goagent/" style="font-size: 10px;">goagent</a><a href="/tags/gradle/" style="font-size: 10px;">gradle</a><a href="/tags/代理/" style="font-size: 10px;">代理</a><a href="/tags/开源/" style="font-size: 10px;">开源</a><a href="/tags/敏捷/" style="font-size: 10px;">敏捷</a><a href="/tags/数据库/" style="font-size: 10px;">数据库</a><a href="/tags/翻墙/" style="font-size: 10px;">翻墙</a><a href="/tags/翻译/" style="font-size: 10px;">翻译</a><a href="/tags/软件工程/" style="font-size: 10px;">软件工程</a><a href="/tags/软件开发/" style="font-size: 11.67px;">软件开发</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">十一月 2013</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">二月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">一月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/12/">十二月 2011</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/11/">十一月 2011</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/10/">十月 2011</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/07/">七月 2011</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/05/">五月 2011</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/03/">三月 2011</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/02/">二月 2011</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/01/">一月 2011</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2010/11/">十一月 2010</a><span class="archive-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/03/19/android-process-application-init-databases-problem.html">Android多进程的数据库访问问题</a>
+          </li>
+        
+          <li>
+            <a href="/2015/03/10/github-page-with-hexo.html">使用Hexo在Github上搭建自己的博客</a>
+          </li>
+        
+          <li>
+            <a href="/2015/01/12/android-gradle-plugin-translate-done.html">Android Gradle插件中文指南</a>
+          </li>
+        
+          <li>
+            <a href="/2014/07/13/effective-programming-more-than-writing-code.html">高效能程序员的修炼</a>
+          </li>
+        
+          <li>
+            <a href="/2014/03/22/android-avd-not-launcher.html">android新建大分辨率模拟器不能启动的问题</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 飞雪无情<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+    <a href="/about" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Android Intents and Intent Filters(二) | 飞雪无情的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Category（类别）检测类别在中是通过标记定义的,Category和Action一样，他们的名字都是一个字符串定义，但是我们在代码中可以使用对应的类别常量，在xml文件定义中只能使用定义好的字符串。Android的Intent类中提供了很多内置的类别定义，一中类别代表一个意思，可以参考说明使用。。比如android.intent.category.LAUNCHER标表示你的应用会展示在启动列表">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android Intents and Intent Filters(二)">
+<meta property="og:url" content="http://www.flysnow.org/2011/03/17/android-intents-and-intent-filters-two.html">
+<meta property="og:site_name" content="飞雪无情的博客">
+<meta property="og:description" content="Category（类别）检测类别在中是通过标记定义的,Category和Action一样，他们的名字都是一个字符串定义，但是我们在代码中可以使用对应的类别常量，在xml文件定义中只能使用定义好的字符串。Android的Intent类中提供了很多内置的类别定义，一中类别代表一个意思，可以参考说明使用。。比如android.intent.category.LAUNCHER标表示你的应用会展示在启动列表">
+<meta property="og:image" content="http://dl.iteye.com/upload/attachment/439568/21480d9b-d2fb-35cd-a240-5b045eacc7bd.png">
+<meta property="og:image" content="http://dl.iteye.com/upload/attachment/439572/ccf8c038-7289-3d78-aa21-fecdbe95497c.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android Intents and Intent Filters(二)">
+<meta name="twitter:description" content="Category（类别）检测类别在中是通过标记定义的,Category和Action一样，他们的名字都是一个字符串定义，但是我们在代码中可以使用对应的类别常量，在xml文件定义中只能使用定义好的字符串。Android的Intent类中提供了很多内置的类别定义，一中类别代表一个意思，可以参考说明使用。。比如android.intent.category.LAUNCHER标表示你的应用会展示在启动列表">
+  
+    <link rel="alternative" href="/atom.xml" title="飞雪无情的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-44570956-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">飞雪无情的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">专注于Android、Java、移动互联网、项目管理、软件架构</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+          <a class="main-nav-link" href="/about">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="q" value="site:http://www.flysnow.org"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-android-intents-and-intent-filters-two" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2011/03/17/android-intents-and-intent-filters-two.html" class="article-date">
+  <time datetime="2011-03-17T00:41:02.000Z" itemprop="datePublished">2011-03-17</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android Intents and Intent Filters(二)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Category（类别）检测">Category（类别）检测</h2><p>类别在中是通过标记定义的,Category和Action一样，他们的名字都是一个字符串定义，但是我们在代码中可以使用对应的类别常量，在xml文件定义中只能使用定义好的字符串。Android的Intent类中提供了很多内置的类别定义，一中类别代表一个意思，可以参考说明使用。。比如android.intent.category.LAUNCHER标表示你的应用会展示在启动列表页面，经常和android.intent.action.MAIN搭配使用</p>
+<p>下面通过一个例子来说明Category的检测,项目名为Intents,应用名为Intents and Filters，运行在Android2.2版本上.主启动Activity为IntentsTestList。</p>
+<p>IntentsTestList代码如下:</p>
+<pre><code><span class="comment">/**
+ * Intents测试列表类
+ * @author 飞雪无情
+ * @since 2011-3-14
+ */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title">IntentsTestList</span> <span class="title">extends</span> <span class="title">ListActivity</span> {
+    <span class="keyword">private</span> String ACTION_VIEW=<span class="string">"com.flysnow.intent.ACTION_VIEW"</span>;
+    <span class="keyword">private</span> String CATEGORY_MAN=<span class="string">"com.flysnow.intent.CATEGORY_MAN"</span>;
+    <span class="keyword">private</span> String CATEGORY_SHOP=<span class="string">"com.flysnow.intent.CATEGORY_SHOP"</span>;
+    <span class="comment">/** Called when the activity is first created. */</span>
+    @<span class="function">Override
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>{
+        super.onCreate(savedInstanceState);
+      <span class="comment">//定义ListAdapter</span>
+        setListAdapter(<span class="keyword">new</span> SimpleAdapter(<span class="keyword">this</span>, getData(),
+                android.R.layout.simple_list_item_1, <span class="keyword">new</span> String[] { <span class="string">"title"</span> },<span class="keyword">new</span> <span class="keyword">int</span>[] {android.R.id.text1}));
+        getListView().setTextFilterEnabled(<span class="keyword">true</span>);
+
+        filter.addCategory(CATEGORY_MAN);
+        <span class="comment">//注册一个广播</span>
+        super.registerReceiver(<span class="keyword">new</span> BroadcastReceiver() {
+
+            @<span class="function">Override
+            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Context context, Intent intent)</span> </span>{
+                Toast.makeText(context, <span class="string">"该Broadcast的Intent Filter设置了Category和Action"</span>, Toast.LENGTH_SHORT).show();
+            }
+        },filter);
+    }
+    @<span class="function">Override
+    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onListItemClick</span><span class="params">(ListView l, View v, <span class="keyword">int</span> position, <span class="keyword">long</span> id)</span> </span>{
+        Intent intent=(Intent)getData().<span class="keyword">get</span>(position).<span class="keyword">get</span>(<span class="string">"intent"</span>);
+        Boolean isActivity=(Boolean)getData().<span class="keyword">get</span>(position).<span class="keyword">get</span>(<span class="string">"isActivity"</span>);
+        <span class="keyword">if</span>(isActivity){
+            startActivity(intent);
+        }<span class="keyword">else</span>{
+            sendBroadcast(intent);
+        }
+
+    }
+
+    <span class="comment">/**
+     * 返回ListView需要的数据
+     * @return ListView需要的数据
+     */</span>
+    <span class="keyword">private</span> List&lt;map&lt;<span class="keyword">string</span>,<span class="keyword">object</span>&gt;&gt; getData() {
+        List&lt;map&lt;<span class="keyword">string</span>,<span class="keyword">object</span>&gt;&gt; data=<span class="keyword">new</span> ArrayList&lt;map&lt;<span class="keyword">string</span>,<span class="keyword">object</span>&gt;&gt;();
+        addItem(data, <span class="string">"1个Category检测-Activity"</span>, <span class="keyword">new</span> Intent(ACTION_VIEW).addCategory(CATEGORY_MAN),<span class="keyword">true</span>);
+        addItem(data, <span class="string">"1个Category检测-Broadcast"</span>, <span class="keyword">new</span> Intent(ACTION_VIEW).addCategory(CATEGORY_MAN),<span class="keyword">false</span>);
+        addItem(data, <span class="string">"2个Category检测-Activity"</span>, <span class="keyword">new</span> Intent(ACTION_VIEW).addCategory(CATEGORY_MAN).addCategory(CATEGORY_SHOP),<span class="keyword">true</span>);
+        <span class="keyword">return</span> data;
+    }
+    <span class="comment">/**
+     * 给ListView添加数据
+     * @param data 存储数据的List
+     * @param name 要显示的Title
+     * @param intent 单击某一项时要启动的Activity
+     * @param isActivity 启动的是否是Activity，true是，false为广播
+     */</span>
+    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">addItem</span><span class="params">(List&lt;map&lt;<span class="keyword">string</span>,<span class="keyword">object</span>&gt;&gt; data, String name, Intent intent,boolean isActivity)</span> </span>{
+        Map&lt;<span class="keyword">string</span>, <span class="keyword">object</span>=<span class="string">""</span>&gt; temp = <span class="keyword">new</span> HashMap&lt;<span class="keyword">string</span>, <span class="keyword">object</span>=<span class="string">""</span>&gt;();
+        temp.put(<span class="string">"title"</span>, name);
+        temp.put(<span class="string">"intent"</span>, intent);
+        temp.put(<span class="string">"isActivity"</span>, isActivity);
+        data.add(temp);
+    }
+    <span class="keyword">private</span> IntentFilter filter=<span class="keyword">new</span> IntentFilter(ACTION_VIEW);
+
+}
+</code></pre><p>以上代码主要是一个ListView，列出了三个测试项，1个Category的测试和2个Category的测试，注册了一个广播.<br>为了测试新建了2个Activity，分别是CategoryActivity和Category2Activity,代码如下：</p>
+<pre><code><span class="comment">/**
+ * @author 飞雪无情
+ * @since 2011-3-14
+ */</span>
+public <span class="class"><span class="keyword">class</span> <span class="title">CategoryActivity</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Activity</span> {</span>
+
+    <span class="annotation">@Override</span>
+    <span class="keyword">protected</span> void onCreate(<span class="type">Bundle</span> savedInstanceState) {
+        <span class="keyword">super</span>.onCreate(savedInstanceState);
+        <span class="type">TextView</span> text=<span class="keyword">new</span> <span class="type">TextView</span>(<span class="keyword">this</span>);
+        text.setText(<span class="string">"该Activity的Intent Filter值设置了Action和1个Category，不包含android.intent.category.DEFAULT"</span>);
+        setContentView(text);
+    }
+
+}
+
+
+
+
+<span class="comment">/**
+ * @author 飞雪无情
+ * @since 2011-3-14
+ */</span>
+public <span class="class"><span class="keyword">class</span> <span class="title">Category2Activity</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Activity</span> {</span>
+
+    <span class="annotation">@Override</span>
+    <span class="keyword">protected</span> void onCreate(<span class="type">Bundle</span> savedInstanceState) {
+        <span class="keyword">super</span>.onCreate(savedInstanceState);
+        <span class="type">TextView</span> text=<span class="keyword">new</span> <span class="type">TextView</span>(<span class="keyword">this</span>);
+        text.setText(<span class="string">"该Activity的Intent Filter值设置了Action和2个Category，不包含android.intent.category.DEFAULT"</span>);
+        setContentView(text);
+    }
+
+}
+</code></pre><p>很简单只是一段文字的说明</p>
+<p>AndroidManiftest.xml修改如下：</p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="tag">&lt;<span class="title">manifest</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>
+      <span class="attribute">package</span>=<span class="value">"com.flysnow.intent"</span>
+      <span class="attribute">android:versionCode</span>=<span class="value">"1"</span>
+      <span class="attribute">android:versionName</span>=<span class="value">"1.0"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">uses-sdk</span> <span class="attribute">android:minSdkVersion</span>=<span class="value">"8"</span> /&gt;</span>
+
+    <span class="tag">&lt;<span class="title">application</span> <span class="attribute">android:icon</span>=<span class="value">"@drawable/icon"</span> <span class="attribute">android:label</span>=<span class="value">"@string/app_name"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">activity</span> <span class="attribute">android:name</span>=<span class="value">".IntentsTestList"</span>
+                  <span class="attribute">android:label</span>=<span class="value">"@string/app_name"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">intent-filter</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">action</span> <span class="attribute">android:name</span>=<span class="value">"android.intent.action.MAIN"</span> /&gt;</span>
+                <span class="tag">&lt;<span class="title">category</span> <span class="attribute">android:name</span>=<span class="value">"android.intent.category.LAUNCHER"</span> /&gt;</span>
+            <span class="tag">&lt;/<span class="title">intent-filter</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">activity</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">activity</span> <span class="attribute">android:name</span>=<span class="value">".CategoryActivity"</span> <span class="attribute">android:label</span>=<span class="value">"1个Category检测"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">intent-filter</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">action</span> <span class="attribute">android:name</span>=<span class="value">"com.flysnow.intent.ACTION_VIEW"</span>&gt;</span><span class="tag">&lt;/<span class="title">action</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">category</span> <span class="attribute">android:name</span>=<span class="value">"android.intent.category.DEFAULT"</span>&gt;</span><span class="tag">&lt;/<span class="title">category</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">category</span> <span class="attribute">android:name</span>=<span class="value">"com.flysnow.intent.CATEGORY_MAN"</span>&gt;</span><span class="tag">&lt;/<span class="title">category</span>&gt;</span>
+            <span class="tag">&lt;/<span class="title">intent-filter</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">activity</span>&gt;</span>
+         <span class="tag">&lt;<span class="title">activity</span> <span class="attribute">android:name</span>=<span class="value">".Category2Activity"</span> <span class="attribute">android:label</span>=<span class="value">"2个Category检测"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">intent-filter</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">action</span> <span class="attribute">android:name</span>=<span class="value">"com.flysnow.intent.ACTION_VIEW"</span>&gt;</span><span class="tag">&lt;/<span class="title">action</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">category</span> <span class="attribute">android:name</span>=<span class="value">"android.intent.category.DEFAULT"</span>&gt;</span><span class="tag">&lt;/<span class="title">category</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">category</span> <span class="attribute">android:name</span>=<span class="value">"com.flysnow.intent.CATEGORY_MAN"</span>&gt;</span><span class="tag">&lt;/<span class="title">category</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">category</span> <span class="attribute">android:name</span>=<span class="value">"com.flysnow.intent.CATEGORY_SHOP"</span>&gt;</span><span class="tag">&lt;/<span class="title">category</span>&gt;</span>
+            <span class="tag">&lt;/<span class="title">intent-filter</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">activity</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">application</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">manifest</span>&gt;</span>
+</code></pre><p>为CategoryActivity添加了2个Category，一个是默认的（隐式Intent必须），一个是自定义的。而相应的Category2Activity则有三个Category。</p>
+<p>我们运行测试，效果图如下：<img src="http://dl.iteye.com/upload/attachment/439568/21480d9b-d2fb-35cd-a240-5b045eacc7bd.png" alt=""><br>当点击“1个Category检测-Activity”的时候，会弹出</p>
+<p><img src="http://dl.iteye.com/upload/attachment/439572/ccf8c038-7289-3d78-aa21-fecdbe95497c.png" alt=""><br>这是，因为我们的Intent定义了一个Category，这个Category在CategoryActivity和Category2Activity里都有，都能匹配上，所以就会弹出这两个Activity供我们选择，而当我们单击《2个Category检测-Activity》的时候就会直接打开Category2Activity，这是因为这个选项里的Intent有2个Category，只有Category2Activity才能匹配上。。。通过例子我们可以总结到：Intent中所包含的所有Category必须在一个组件的intent-filter中有定义，一个都不能少，否则不能通过检测。。但是intent-filter的可以有额外的Category<br>.再次提醒：</p>
+<p>Android对所有传递给</p>
+<p>Context.startActivity()的隐式intent至少包含”android.intent.category.DEFAULT”</p>
+<p>未完待续</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.flysnow.org/2011/03/17/android-intents-and-intent-filters-two.html" data-id="ci7g9uvmo003zz1n1my78cbfv" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Intent/">Intent</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2011/03/28/do-you-know-android-resource.html" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          android.resource://这个Uri你知道吗
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2011/03/14/android-intents-and-intent-filters-one.html" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Android Intents and Intent Filters(一)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+  
+  <section id="comments">
+    <!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="post-android-intents-and-intent-filters-two" data-title="Android Intents and Intent Filters(二)" data-url="http://www.flysnow.org/2011/03/17/android-intents-and-intent-filters-two.html"></div>
+    <!-- 多说评论框 end -->
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'flysnow'};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+    <!-- 多说公共JS代码 end -->
+  </section>
+  
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a><span class="category-list-count">37</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Hexo/">Hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/软件开发/">软件开发</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/API/">API</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">37</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Apache/">Apache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Email/">Email</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github/">Github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Http/">Http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HttpClitent/">HttpClitent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intent/">Intent</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/">Nginx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/">PHP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/">Ubuntu</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Widget/">Widget</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/goagent/">goagent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gradle/">gradle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/代理/">代理</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/开源/">开源</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/敏捷/">敏捷</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库/">数据库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻墙/">翻墙</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻译/">翻译</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/软件工程/">软件工程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/软件开发/">软件开发</a><span class="tag-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/API/" style="font-size: 13.33px;">API</a><a href="/tags/Android/" style="font-size: 20px;">Android</a><a href="/tags/Apache/" style="font-size: 10px;">Apache</a><a href="/tags/Email/" style="font-size: 10px;">Email</a><a href="/tags/Github/" style="font-size: 10px;">Github</a><a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a><a href="/tags/Http/" style="font-size: 10px;">Http</a><a href="/tags/HttpClitent/" style="font-size: 10px;">HttpClitent</a><a href="/tags/Intent/" style="font-size: 13.33px;">Intent</a><a href="/tags/Linux/" style="font-size: 15px;">Linux</a><a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a><a href="/tags/PHP/" style="font-size: 10px;">PHP</a><a href="/tags/Ubuntu/" style="font-size: 18.33px;">Ubuntu</a><a href="/tags/Widget/" style="font-size: 16.67px;">Widget</a><a href="/tags/goagent/" style="font-size: 10px;">goagent</a><a href="/tags/gradle/" style="font-size: 10px;">gradle</a><a href="/tags/代理/" style="font-size: 10px;">代理</a><a href="/tags/开源/" style="font-size: 10px;">开源</a><a href="/tags/敏捷/" style="font-size: 10px;">敏捷</a><a href="/tags/数据库/" style="font-size: 10px;">数据库</a><a href="/tags/翻墙/" style="font-size: 10px;">翻墙</a><a href="/tags/翻译/" style="font-size: 10px;">翻译</a><a href="/tags/软件工程/" style="font-size: 10px;">软件工程</a><a href="/tags/软件开发/" style="font-size: 11.67px;">软件开发</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">十一月 2013</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">二月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">一月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/12/">十二月 2011</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/11/">十一月 2011</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/10/">十月 2011</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/07/">七月 2011</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/05/">五月 2011</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/03/">三月 2011</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/02/">二月 2011</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/01/">一月 2011</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2010/11/">十一月 2010</a><span class="archive-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/03/19/android-process-application-init-databases-problem.html">Android多进程的数据库访问问题</a>
+          </li>
+        
+          <li>
+            <a href="/2015/03/10/github-page-with-hexo.html">使用Hexo在Github上搭建自己的博客</a>
+          </li>
+        
+          <li>
+            <a href="/2015/01/12/android-gradle-plugin-translate-done.html">Android Gradle插件中文指南</a>
+          </li>
+        
+          <li>
+            <a href="/2014/07/13/effective-programming-more-than-writing-code.html">高效能程序员的修炼</a>
+          </li>
+        
+          <li>
+            <a href="/2014/03/22/android-avd-not-launcher.html">android新建大分辨率模拟器不能启动的问题</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 飞雪无情<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+    <a href="/about" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>

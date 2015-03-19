@@ -1,0 +1,2416 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>飞雪无情的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description">
+<meta property="og:type" content="website">
+<meta property="og:title" content="飞雪无情的博客">
+<meta property="og:url" content="http://www.flysnow.org/page/4/index.html">
+<meta property="og:site_name" content="飞雪无情的博客">
+<meta property="og:description">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="飞雪无情的博客">
+<meta name="twitter:description">
+  
+    <link rel="alternative" href="/atom.xml" title="飞雪无情的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-44570956-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">飞雪无情的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">专注于Android、Java、移动互联网、项目管理、软件架构</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+          <a class="main-nav-link" href="/about">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="q" value="site:http://www.flysnow.org"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-android-intents-and-intent-filters-one" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2011/03/14/android-intents-and-intent-filters-one.html" class="article-date">
+  <time datetime="2011-03-14T02:01:05.000Z" itemprop="datePublished">2011-03-14</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2011/03/14/android-intents-and-intent-filters-one.html">Android Intents and Intent Filters(一)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>看过前面的几节教程的应该都会留意到一个很重要的东西，那就是Intent。Intent是什么呢？我们都知道Android有四大核心组件 Activity、Service、Broadcast Receiver和Content Provider，略去Content Provider不提，那么剩下的三个组件之间的通信考什么？这就是Intent！！它不仅可以在同一个应用中起传递信息的作用，还是可以在不同的应用进行传递信息。这就使得我们的应用和系统中的其他应用进行交互有了可能，进而使得整个Android开发变得更加精彩。想想吧，我们自己的应用可以调用系统中的通话应用进行拨号、可以调用短信应用发短信，这是多么美妙的一件事情啊！！！</p>
+<h2 id="在这里你将会学到：">在这里你将会学到：</h2><ol>
+<li>什么是Intent和Intent Filter</li>
+</ol>
+<ol>
+<li>Intent和Intent Filter有什么用</li>
+</ol>
+<ol>
+<li>怎么启动（传递）一个Intent</li>
+</ol>
+<ol>
+<li>Intent里包含什么</li>
+</ol>
+<ol>
+<li>什么是显式Intent以及什么隐式Intent</li>
+</ol>
+<ol>
+<li>Intent是怎样匹配的</li>
+</ol>
+<h2 id="一：前言">一：前言</h2><p>在正式介绍Intent之前，我们先看下上面说的Activity、Service和Broadcast Receiver是怎样传递Intent。对于这三个组件而言，他们都有自己独立的传递Intent的机制：</p>
+<ol>
+<li>Activity:对于Activity来说，它主要是通过Context.startActivity()或Activity.startActivityForRestult()来启动一个存在的Activity做一些事情。当使用Activity.startActivityForResult()启动一个Activity时，可以使用Activity.setResult()返回一些结果信息，可以在Activity.onActivityResult()<br>中得到返回的结果.</li>
+</ol>
+<ol>
+<li>Service:对于Service来说，它主要是通过Context.startService()初始化一个Service或者传递消息给正在运行的Service。同样，也可以通过Context.bindService()建立一个调用组件和目标服务之间的连接。</li>
+</ol>
+<ol>
+<li>Broadcast Receiver:我们可以通过Context.sendBroadcast()Context.sendOrderedBroadcast()以及Context.sendStickyBroadcast()这些方法，传递Intent给感兴趣的广播。</li>
+</ol>
+<p>消息之间的传递是没有重叠的，比如调用startActivity()传播一个Intent，只会传播给Activity，而不会传播给Service和Broadcast Receiver，反过来也是这样的。</p>
+<h2 id="二：Intent对象">二：Intent对象</h2><p>一个Intent对象包含了很多数据的信息，比如要执行的动作，类别，数据，附加信息等等，下面就一一列列出一个Intent中包含的信息。</p>
+<h3 id="组件名称">组件名称</h3><p>这个组件名称字段其实就是一个ComponentName类，它包含了一个目标组件的全限定名，比如com.flysnow.intent.Activity1，这就是一个全限定名的Activity。组件名字可以通过setComponent()、setClass()或者setClassName()设置，如果设置了Intent目标组件的名字，那么这个Intent就会被传递给特定的组件，也就是我们说的显式Intent.如果不设置，则是隐式的Intent，Android系统将根据Intent Filter中的信息进行匹配.</p>
+<h3 id="Action(动作)">Action(动作)</h3><p>一个Intent的Action在很大程度上说明这个Intent要做什么，是查看(View)、删除(Delete)、编辑(Edit)等等。Action一个字符串命名的动作，Android中预定义了很多Action，可以参考Intent类查看,下面是文档中的几个动作</p>
+<p><img src="http://dl.iteye.com/upload/attachment/435153/de61628d-7112-32f4-a6b2-902e1eb72ea1.png" alt=""><br>当然，我们也可以自定义Action，比如com.flysnow.intent.ACTION_ADD,定义Action的时候最好能表明意思，要做什么，这样我们的Intent中的数据才好填充。Intent对象的getAction()可以获取动作，使用setAction()可以设置动作。</p>
+<h3 id="Data（数据）">Data（数据）</h3><p>Data，其实就是一个URI，用于执行一个Action时所用到的数据的URI和MIME。不同的Action有不同的数据规格，比如ACTION_EDIT动作，数据就可以能包含一个用于编辑文档的URI,如果是一个ACTION_CALL动作，那么数据就是一个包含了tel:6546541的数据字段，所以上面提到的自定义Action时要规范命名。数据的URI和类型对于Intent的匹配是很重要的，Android往往根据数据的URI和MIME找到能处理该Intent的最佳目标组件。</p>
+<h3 id="Category(类别)">Category(类别)</h3><p>Category指定了用于处理Intent的组件的类型信息，一个Intent可以添加多个Category，使用addCategory()方法即可，使用removeCategory()删除一个已经添加的类别。Android的Intent类里定义了很多常用的类别，可以参考使用。</p>
+<h3 id="Extras(附加信息)">Extras(附加信息)</h3><p>有些用于处理Intent的目标组件需要一些额外的信息，那么就可以通过Intent的put..()方法把额外的信息塞入到Intent对象中，用于目标组件的使用，一个附件信息就是一个key-value的键值对..Intent有一系列的put和get方法用于处理附加信息的塞入和取出。</p>
+<h3 id="Flag(标识)">Flag(标识)</h3><p>Android有很多标识，用于标记如何启动一个活动，是NEW_TASK还是其他等等，以及启动后怎么对待这个活动。。可以参考Intent类中的FLAG常量字段。</p>
+<h2 id="三：Intent的解析">三：Intent的解析</h2><p>介绍完了Intent对象的构成，就要介绍Android系统是怎样解析Intent的，Android是怎么传递Intent到目标组件的呢？</p>
+<h3 id="Intent分类">Intent分类</h3><p>Intent可以分为两类，一类是显式的Intent，一类是隐式的Intent，上面有过提及。显示的Intent就是指定了组件名字的，隐式的就是没有指定Intent的组件名字，需要Android根据Intent中的Action、data、Category等来解析匹配。而目标组件（Activity、Service、Broadcast Receiver）怎通过设置他们的Intent Filter来界定其处理的Intent。如果一个组件没有定义Intent Filter，那么它只能接受处理显示的Intent，只有定义了Intent Filter的组件才能同时处理隐式和显示的Intent。</p>
+<h3 id="Action检测">Action检测</h3><p>为了对Action的作用进行检测，我们使用一个例子来演示Action的作用。项目名为Intents,应用名为Intents and Filters，运行在Android2.2版本上.主启动Activity为IntentsTestList</p>
+<p>IntentsTestList代码如下：</p>
+<pre><code><span class="comment">/**
+ * Intents测试列表类
+ * @author 飞雪无情
+ * @since 2011-3-14
+ */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title">IntentsTestList</span> <span class="title">extends</span> <span class="title">ListActivity</span> {
+    <span class="keyword">private</span> String ACTION_VIEW=<span class="string">"com.flysnow.intent.ACTION_VIEW"</span>;
+    <span class="comment">/** Called when the activity is first created. */</span>
+    @<span class="function">Override
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>{
+        super.onCreate(savedInstanceState);
+      <span class="comment">//定义ListAdapter</span>
+        setListAdapter(<span class="keyword">new</span> SimpleAdapter(<span class="keyword">this</span>, getData(),
+                android.R.layout.simple_list_item_1, <span class="keyword">new</span> String[] { <span class="string">"title"</span> },<span class="keyword">new</span> <span class="keyword">int</span>[] {android.R.id.text1}));
+        getListView().setTextFilterEnabled(<span class="keyword">true</span>);
+
+        <span class="comment">//注册一个广播</span>
+        super.registerReceiver(<span class="keyword">new</span> BroadcastReceiver() {
+
+            @<span class="function">Override
+            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Context context, Intent intent)</span> </span>{
+                Toast.makeText(context, <span class="string">"该Broadcast的Intent Filter值只设置了Action"</span>, Toast.LENGTH_SHORT).show();
+            }
+        },<span class="keyword">new</span> IntentFilter(ACTION_VIEW));
+    }
+    @<span class="function">Override
+    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onListItemClick</span><span class="params">(ListView l, View v, <span class="keyword">int</span> position, <span class="keyword">long</span> id)</span> </span>{
+        Intent intent=(Intent)getData().<span class="keyword">get</span>(position).<span class="keyword">get</span>(<span class="string">"intent"</span>);
+        Boolean isActivity=(Boolean)getData().<span class="keyword">get</span>(position).<span class="keyword">get</span>(<span class="string">"isActivity"</span>);
+        <span class="keyword">if</span>(isActivity){
+            startActivity(intent);
+        }<span class="keyword">else</span>{
+            sendBroadcast(intent);
+        }
+
+    }
+
+    <span class="comment">/**
+     * 返回ListView需要的数据
+     * @return ListView需要的数据
+     */</span>
+    <span class="keyword">private</span> List&lt;map&lt;<span class="keyword">string</span>,<span class="keyword">object</span>&gt;&gt; getData() {
+        List&lt;map&lt;<span class="keyword">string</span>,<span class="keyword">object</span>&gt;&gt; data=<span class="keyword">new</span> ArrayList&lt;map&lt;<span class="keyword">string</span>,<span class="keyword">object</span>&gt;&gt;();
+        addItem(data, <span class="string">"空Action的Activity"</span>, <span class="keyword">new</span> Intent(),<span class="keyword">true</span>);
+        addItem(data, <span class="string">"Action检测-Activity"</span>, <span class="keyword">new</span> Intent(ACTION_VIEW),<span class="keyword">true</span>);
+        addItem(data, <span class="string">"Action检测-Broadcast"</span>, <span class="keyword">new</span> Intent(ACTION_VIEW),<span class="keyword">false</span>);
+        <span class="keyword">return</span> data;
+    }
+    <span class="comment">/**
+     * 给ListView添加数据
+     * @param data 存储数据的List
+     * @param name 要显示的Title
+     * @param intent 单击某一项时要启动的Activity
+     * @param isActivity 启动的是否是Activity，true是，false为广播
+     */</span>
+    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">addItem</span><span class="params">(List&lt;map&lt;<span class="keyword">string</span>,<span class="keyword">object</span>&gt;&gt; data, String name, Intent intent,boolean isActivity)</span> </span>{
+        Map&lt;<span class="keyword">string</span>, <span class="keyword">object</span>=<span class="string">""</span>&gt; temp = <span class="keyword">new</span> HashMap&lt;<span class="keyword">string</span>, <span class="keyword">object</span>=<span class="string">""</span>&gt;();
+        temp.put(<span class="string">"title"</span>, name);
+        temp.put(<span class="string">"intent"</span>, intent);
+        temp.put(<span class="string">"isActivity"</span>, isActivity);
+        data.add(temp);
+    }
+}
+</code></pre><p>这里主要是使用ListActivity列出3个测试，一个测试空的Intent,一个测试只有Action的Intent—Activity版，一个测试只有Action的Intent—Broadcast版。。。</p>
+<p>为了测试startActivity()，我们新建一个Activity名字为ActionActivity代码如下：</p>
+<pre><code><span class="comment">/**
+ * @author 飞雪无情
+ * @since 2011-3-14
+ */</span>
+public <span class="class"><span class="keyword">class</span> <span class="title">ActionActivity</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Activity</span> {</span>
+
+    <span class="annotation">@Override</span>
+    <span class="keyword">protected</span> void onCreate(<span class="type">Bundle</span> savedInstanceState) {
+        <span class="keyword">super</span>.onCreate(savedInstanceState);
+        <span class="type">TextView</span> text=<span class="keyword">new</span> <span class="type">TextView</span>(<span class="keyword">this</span>);
+        text.setText(<span class="string">"该Activity的Intent Filter值只设置了Action"</span>);
+        setContentView(text);
+    }
+
+}
+</code></pre><p>很简单，只有一段文本的展示。</p>
+<p>AndroidManifest.xml修改如下:</p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="tag">&lt;<span class="title">manifest</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>
+      <span class="attribute">package</span>=<span class="value">"com.flysnow.intent"</span>
+      <span class="attribute">android:versionCode</span>=<span class="value">"1"</span>
+      <span class="attribute">android:versionName</span>=<span class="value">"1.0"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">uses-sdk</span> <span class="attribute">android:minSdkVersion</span>=<span class="value">"8"</span> /&gt;</span>
+
+    <span class="tag">&lt;<span class="title">application</span> <span class="attribute">android:icon</span>=<span class="value">"@drawable/icon"</span> <span class="attribute">android:label</span>=<span class="value">"@string/app_name"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">activity</span> <span class="attribute">android:name</span>=<span class="value">".IntentsTestList"</span>
+                  <span class="attribute">android:label</span>=<span class="value">"@string/app_name"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">intent-filter</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">action</span> <span class="attribute">android:name</span>=<span class="value">"android.intent.action.MAIN"</span> /&gt;</span>
+                <span class="tag">&lt;<span class="title">category</span> <span class="attribute">android:name</span>=<span class="value">"android.intent.category.LAUNCHER"</span> /&gt;</span>
+            <span class="tag">&lt;/<span class="title">intent-filter</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">activity</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">activity</span> <span class="attribute">android:name</span>=<span class="value">".ActionActivity"</span> <span class="attribute">android:label</span>=<span class="value">"Action检测"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">intent-filter</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">action</span> <span class="attribute">android:name</span>=<span class="value">"com.flysnow.intent.ACTION_VIEW"</span>&gt;</span><span class="tag">&lt;/<span class="title">action</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">action</span> <span class="attribute">android:name</span>=<span class="value">"android.intent.action.VIEW"</span>&gt;</span><span class="tag">&lt;/<span class="title">action</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">category</span> <span class="attribute">android:name</span>=<span class="value">"android.intent.category.DEFAULT"</span>&gt;</span><span class="tag">&lt;/<span class="title">category</span>&gt;</span>
+            <span class="tag">&lt;/<span class="title">intent-filter</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">activity</span>&gt;</span>
+
+    <span class="tag">&lt;/<span class="title">application</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">manifest</span>&gt;</span>
+</code></pre><p>很简单，为我们的ActionContext加上了两个action标签和一个category标签,加category标签设置成android.intent.category.DEFAULT是为了让这个Activity可以接收隐式的Intent请求，这是Android规定的，对于Activity，使用Context.startActivity()传递隐式Intent，默认是包含了android.intent.category.DEFAULT的，所以定义的Activity要想接收，必须在Intent Filter里添加android.intent.category.DEFAULT这个Category。</p>
+<p>运行入下图：<br><img src="http://dl.iteye.com/upload/attachment/435312/5a7c0913-7b0f-3035-8b65-abe0a68dd21f.png" alt=""><br>当点击“空Action的Activity”的时候，会报异常，因为Intent什么都没有设置，没有任何的Activity能处理它<br>。当点击“Action检测-Activity”的时候会打开我们的ActionActivity这个Activity，点击“Action检测-Broadcast”会弹出Toast提示，说明已经被接收到。。从上面我们可以看出，当Intent设置了Action时，只要对应的组件的Intent Filter中包含该Action的定义，那么这个组件就会接收该Intent。。。</p>
+<p>因为内容较多，，所以进行了分节。。。这样也会使得看本章带的Demo的时候不至于迷糊，因为这个Demo就只是实现了这一个功能。如果多个功能测试的话，就会在Demo改来改去，导致Demo代码不清晰了。未完待续，敬请期待！！！</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.flysnow.org/2011/03/14/android-intents-and-intent-filters-one.html" data-id="ci7g9uvmr0043z1n11xqf467x" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Intent/">Intent</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+  
+
+  
+    <article id="post-android-bottom-tool-bar-demo" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2011/03/08/android-bottom-tool-bar-demo.html" class="article-date">
+  <time datetime="2011-03-08T00:31:54.000Z" itemprop="datePublished">2011-03-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2011/03/08/android-bottom-tool-bar-demo.html">新浪微博布局学习--新浪微博Android版底部工具栏的Demo</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>前几天看到一篇很好的文章《新浪微博布局学习——妙用TabHost》，已经转载到我的博客里<a href="/2011/03/02/sina-weibo-tool-bar-tabhost.html">新浪微博布局学习——妙用TabHost </a><br>里面详细的介绍了怎么妙用TabHost构建底部的工具栏，有兴趣的可以看一下。因为那边文章没有Demo，工作之余，我写了一个Demo，供朋友们参考，欢迎拍砖讨论。。附件中提供下载。</p>
+<p><img src="http://dl.iteye.com/upload/attachment/431685/f7fbcca0-7830-37a9-8caa-cfa908809cd4.png" alt=""><br>本文附件下载:</p>
+<p><a href="/uploads/2013/10/sina-weibo-tool-bar-demo.zip">sina-weibo-tool-bar-demo</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.flysnow.org/2011/03/08/android-bottom-tool-bar-demo.html" data-id="ci7g9uvms0047z1n1715yq8am" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+  
+
+  
+    <article id="post-sina-weibo-tool-bar-tabhost" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2011/03/02/sina-weibo-tool-bar-tabhost.html" class="article-date">
+  <time datetime="2011-03-01T23:44:21.000Z" itemprop="datePublished">2011-03-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2011/03/02/sina-weibo-tool-bar-tabhost.html">新浪微博布局学习——妙用TabHost</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>前言</p>
+<p>为了更好的开发Android应用程序，除了熟练掌握基本的UI组件和API外，还需要掌握一些技巧，而这些技巧可以通过阅读一些代码来提高，本系列将与大家分享一些新浪微博布局方面的收获，欢迎交流！</p>
+<p>声明</p>
+<p>欢迎转载，但请保留文章原始出处:)</p>
+<p>博客园：<a href="http://www.cnblogs.com" target="_blank" rel="external">http://www.cnblogs.com</a></p>
+<p>农民伯伯： <a href="http://www.cnblogs.com/over140" target="_blank" rel="external">http://www.cnblogs.com/over140</a></p>
+<p>版本</p>
+<p>新浪微博 weibo_10235010.apk</p>
+<p>正文</p>
+<p>一、效果图</p>
+<p><img src="http://images.cnblogs.com/cnblogs_com/over140/2011/3/2011-3-1_1.png" alt=""></p>
+<p>红色部分是本文要实现的目标。</p>
+<p>二、实现maintabs.xml</p>
+<pre><code>&lt;?xml <span class="variable">version=</span><span class="string">"1.0"</span> <span class="variable">encoding=</span><span class="string">"UTF-8"</span>?&gt;
+&lt;TabHost android:<span class="variable">id=</span><span class="string">"@android:id/tabhost"</span> android:<span class="variable">layout_width=</span><span class="string">"fill_parent"</span> android:<span class="variable">layout_height=</span><span class="string">"fill_parent"</span>
+  xmlns:<span class="variable">android=</span><span class="string">"http://schemas.android.com/apk/res/android"</span>&gt;
+    &lt;LinearLayout android:<span class="variable">orientation=</span><span class="string">"vertical"</span> android:<span class="variable">layout_width=</span><span class="string">"fill_parent"</span> android:<span class="variable">layout_height=</span><span class="string">"fill_parent"</span>&gt;
+        &lt;FrameLayout android:<span class="variable">id=</span><span class="string">"@android:id/tabcontent"</span> android:<span class="variable">layout_width=</span><span class="string">"fill_parent"</span> android:<span class="variable">layout_height=</span><span class="string">"0.0dip"</span> android:<span class="variable">layout_weight=</span><span class="string">"1.0"</span> /&gt;
+        &lt;TabWidget android:<span class="variable">id=</span><span class="string">"@android:id/tabs"</span> android:<span class="variable">visibility=</span><span class="string">"gone"</span> android:<span class="variable">layout_width=</span><span class="string">"fill_parent"</span> android:<span class="variable">layout_height=</span><span class="string">"wrap_content"</span> android:<span class="variable">layout_weight=</span><span class="string">"0.0"</span> /&gt;
+        &lt;RadioGroup android:<span class="variable">gravity=</span><span class="string">"center_vertical"</span> android:<span class="variable">layout_gravity=</span><span class="string">"bottom"</span> android:<span class="variable">orientation=</span><span class="string">"horizontal"</span> android:<span class="variable">id=</span><span class="string">"@id/main_radio"</span> android:<span class="variable">background=</span><span class="string">"@drawable/maintab_toolbar_bg"</span> android:<span class="variable">layout_width=</span><span class="string">"fill_parent"</span> android:<span class="variable">layout_height=</span><span class="string">"wrap_content"</span>&gt;
+            &lt;RadioButton   android:<span class="variable">text=</span><span class="string">"@string/main_home"</span> android:<span class="variable">checked=</span><span class="string">"true"</span> android:<span class="variable">id=</span><span class="string">"@+id/radio_button0"</span> android:<span class="variable">layout_marginTop=</span><span class="string">"2.0dip"</span> android:<span class="variable">drawableTop=</span><span class="string">"@drawable/icon_1_n"</span> <span class="variable">style=</span><span class="string">"@style/main_tab_bottom"</span> /&gt;
+            &lt;RadioButton android:<span class="variable">id=</span><span class="string">"@+id/radio_button1"</span> android:<span class="variable">layout_marginTop=</span><span class="string">"2.0dip"</span> android:<span class="variable">text=</span><span class="string">"@string/main_news"</span> android:<span class="variable">drawableTop=</span><span class="string">"@drawable/icon_2_n"</span> <span class="variable">style=</span><span class="string">"@style/main_tab_bottom"</span> /&gt;
+            &lt;RadioButton android:<span class="variable">id=</span><span class="string">"@+id/radio_button2"</span> android:<span class="variable">layout_marginTop=</span><span class="string">"2.0dip"</span> android:<span class="variable">text=</span><span class="string">"@string/main_my_info"</span> android:<span class="variable">drawableTop=</span><span class="string">"@drawable/icon_3_n"</span> <span class="variable">style=</span><span class="string">"@style/main_tab_bottom"</span> /&gt;
+            &lt;RadioButton android:<span class="variable">id=</span><span class="string">"@+id/radio_button3"</span> android:<span class="variable">layout_marginTop=</span><span class="string">"2.0dip"</span> android:<span class="variable">text=</span><span class="string">"@string/menu_search"</span> android:<span class="variable">drawableTop=</span><span class="string">"@drawable/icon_4_n"</span> <span class="variable">style=</span><span class="string">"@style/main_tab_bottom"</span> /&gt;
+            &lt;RadioButton android:<span class="variable">id=</span><span class="string">"@+id/radio_button4"</span> android:<span class="variable">layout_marginTop=</span><span class="string">"2.0dip"</span> android:<span class="variable">text=</span><span class="string">"@string/more"</span> android:<span class="variable">drawableTop=</span><span class="string">"@drawable/icon_5_n"</span> <span class="variable">style=</span><span class="string">"@style/main_tab_bottom"</span> /&gt;
+        &lt;/RadioGroup&gt;
+    &lt;/LinearLayout&gt;
+&lt;/TabHost&gt;
+</code></pre><p>styles.xml</p>
+<pre><code>&lt;style <span class="property">name</span>=<span class="string">"main_tab_bottom"</span>&gt;
+       &lt;<span class="property">item</span> <span class="property">name</span>=<span class="string">"android:textSize"</span>&gt;@dimen/bottom_tab_font_size&lt;/<span class="property">item</span>&gt;
+       &lt;<span class="property">item</span> <span class="property">name</span>=<span class="string">"android:textColor"</span>&gt;<span class="comment">#ffffffff&lt;/item&gt;</span>
+       &lt;<span class="property">item</span> <span class="property">name</span>=<span class="string">"android:ellipsize"</span>&gt;marquee&lt;/<span class="property">item</span>&gt;
+       &lt;<span class="property">item</span> <span class="property">name</span>=<span class="string">"android:gravity"</span>&gt;center_horizontal&lt;/<span class="property">item</span>&gt;
+       &lt;<span class="property">item</span> <span class="property">name</span>=<span class="string">"android:background"</span>&gt;@drawable/home_btn_bg&lt;/<span class="property">item</span>&gt;
+       &lt;<span class="property">item</span> <span class="property">name</span>=<span class="string">"android:paddingTop"</span>&gt;@dimen/bottom_tab_padding_up&lt;/<span class="property">item</span>&gt;
+       &lt;<span class="property">item</span> <span class="property">name</span>=<span class="string">"android:layout_width"</span>&gt;fill_parent&lt;/<span class="property">item</span>&gt;
+       &lt;<span class="property">item</span> <span class="property">name</span>=<span class="string">"android:layout_height"</span>&gt;wrap_content&lt;/<span class="property">item</span>&gt;
+       &lt;<span class="property">item</span> <span class="property">name</span>=<span class="string">"android:button"</span>&gt;@null&lt;/<span class="property">item</span>&gt;
+       &lt;<span class="property">item</span> <span class="property">name</span>=<span class="string">"android:singleLine"</span>&gt;<span class="constant">true</span>&lt;/<span class="property">item</span>&gt;
+       &lt;<span class="property">item</span> <span class="property">name</span>=<span class="string">"android:drawablePadding"</span>&gt;@dimen/bottom_tab_padding_drawable&lt;/<span class="property">item</span>&gt;
+       &lt;<span class="property">item</span> <span class="property">name</span>=<span class="string">"android:layout_weight"</span>&gt;<span class="number">1.0</span>&lt;/<span class="property">item</span>&gt;
+   &lt;/style&gt;
+</code></pre><p>home_btn_bg.xml</p>
+<pre><code>&lt;selector
+         xmlns:<span class="variable">android=</span><span class="string">"http://schemas.android.com/apk/res/android"</span>&gt;
+           &lt;item android:<span class="variable">state_focused=</span><span class="string">"true"</span> android:<span class="variable">state_enabled=</span><span class="string">"true"</span> android:<span class="variable">state_pressed=</span><span class="string">"false"</span> android:<span class="variable">drawable=</span><span class="string">"@drawable/home_btn_bg_s"</span> /&gt;
+           &lt;item android:<span class="variable">state_enabled=</span><span class="string">"true"</span> android:<span class="variable">state_pressed=</span><span class="string">"true"</span> android:<span class="variable">drawable=</span><span class="string">"@drawable/home_btn_bg_s"</span> /&gt;
+           &lt;item android:<span class="variable">state_enabled=</span><span class="string">"true"</span> android:<span class="variable">state_checked=</span><span class="string">"true"</span> android:<span class="variable">drawable=</span><span class="string">"@drawable/home_btn_bg_d"</span> /&gt;
+           &lt;item android:<span class="variable">drawable=</span><span class="string">"@drawable/transparent"</span> /&gt;
+       &lt;/selector&gt;
+</code></pre><p>代码说明：</p>
+<ol>
+<li>需要注意的是他这里把TabWidget的Visibility设置成了gone!也就是默认难看的风格不见了：<img src="http://images.cnblogs.com/cnblogs_com/over140/2011/3/2011-3-1_2.jpg" alt=""> ，取而代之的是5个带风格的单选按钮.</li>
+</ol>
+<ol>
+<li>注意为单选按钮设置的style，其中最重要的是为其background设置了home_btn_bg.xml，也就是自定义了选中效果。</li>
+</ol>
+<p>Java文件</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainTabActivity</span> <span class="keyword">extends</span> <span class="title">TabActivity</span> <span class="keyword">implements</span>
+        <span class="title">OnCheckedChangeListener</span> {</span>
+
+    <span class="keyword">private</span> TabHost mHost;
+    <span class="keyword">private</span> Intent mMBlogIntent;
+    <span class="keyword">private</span> Intent mMoreIntent;
+    <span class="keyword">private</span> Intent mInfoIntent;
+    <span class="keyword">private</span> Intent mSearchIntent;
+    <span class="keyword">private</span> Intent mUserInfoIntent;
+
+    <span class="annotation">@Override</span>
+    <span class="keyword">protected</span> <span class="typename">void</span> onCreate(Bundle savedInstanceState) {
+        <span class="keyword">super</span>.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.maintabs);
+
+        <span class="comment">// ~~~~~~~~~~~~ 初始化</span>
+        <span class="keyword">this</span>.mMBlogIntent = <span class="keyword">new</span> Intent(<span class="keyword">this</span>, HomeListActivity.<span class="keyword">class</span>);
+        <span class="keyword">this</span>.mSearchIntent = <span class="keyword">new</span> Intent(<span class="keyword">this</span>, SearchSquareActivity.<span class="keyword">class</span>);
+        <span class="keyword">this</span>.mInfoIntent = <span class="keyword">new</span> Intent(<span class="keyword">this</span>, MessageGroup.<span class="keyword">class</span>);
+        <span class="keyword">this</span>.mUserInfoIntent = <span class="keyword">new</span> Intent(<span class="keyword">this</span>, MyInfoActivity.<span class="keyword">class</span>);
+        <span class="keyword">this</span>.mMoreIntent = <span class="keyword">new</span> Intent(<span class="keyword">this</span>, MoreItemsActivity.<span class="keyword">class</span>);
+
+        initRadios();
+
+        setupIntent();
+    }
+
+    <span class="javadoc">/**
+     * 初始化底部按钮
+     */</span>
+    <span class="keyword">private</span> <span class="typename">void</span> initRadios() {
+         ((RadioButton) findViewById(R.id.radio_button0)).setOnCheckedChangeListener(<span class="keyword">this</span>);
+         ((RadioButton) findViewById(R.id.radio_button1)).setOnCheckedChangeListener(<span class="keyword">this</span>);
+         ((RadioButton) findViewById(R.id.radio_button2)).setOnCheckedChangeListener(<span class="keyword">this</span>);
+         ((RadioButton) findViewById(R.id.radio_button3)).setOnCheckedChangeListener(<span class="keyword">this</span>);
+         ((RadioButton) findViewById(R.id.radio_button4)).setOnCheckedChangeListener(<span class="keyword">this</span>);
+    }
+
+    <span class="javadoc">/**
+     * 切换模块
+     */</span>
+    <span class="annotation">@Override</span>
+    <span class="keyword">public</span> <span class="typename">void</span> onCheckedChanged(CompoundButton buttonView, <span class="typename">boolean</span> isChecked) {
+        <span class="keyword">if</span> (isChecked) {
+            <span class="keyword">switch</span> (buttonView.getId()) {
+            <span class="keyword">case</span> R.id.<span class="string">radio_button0:</span>
+                <span class="keyword">this</span>.mHost.setCurrentTabByTag(<span class="string">"mblog_tab"</span>);
+                <span class="keyword">break</span>;
+            <span class="keyword">case</span> R.id.<span class="string">radio_button1:</span>
+                <span class="keyword">this</span>.mHost.setCurrentTabByTag(<span class="string">"message_tab"</span>);
+                <span class="keyword">break</span>;
+            <span class="keyword">case</span> R.id.<span class="string">radio_button2:</span>
+                <span class="keyword">this</span>.mHost.setCurrentTabByTag(<span class="string">"userinfo_tab"</span>);
+                <span class="keyword">break</span>;
+            <span class="keyword">case</span> R.id.<span class="string">radio_button3:</span>
+                <span class="keyword">this</span>.mHost.setCurrentTabByTag(<span class="string">"search_tab"</span>);
+                <span class="keyword">break</span>;
+            <span class="keyword">case</span> R.id.<span class="string">radio_button4:</span>
+                <span class="keyword">this</span>.mHost.setCurrentTabByTag(<span class="string">"more_tab"</span>);
+                <span class="keyword">break</span>;
+            }
+        }
+    }
+
+    <span class="keyword">private</span> <span class="typename">void</span> setupIntent() {
+        <span class="keyword">this</span>.mHost = getTabHost();
+        TabHost localTabHost = <span class="keyword">this</span>.mHost;
+
+        localTabHost.addTab(buildTabSpec(<span class="string">"mblog_tab"</span>, R.string.main_home,
+                R.drawable.icon_1_n, <span class="keyword">this</span>.mMBlogIntent));
+
+        localTabHost.addTab(buildTabSpec(<span class="string">"message_tab"</span>, R.string.main_news,
+                R.drawable.icon_2_n, <span class="keyword">this</span>.mInfoIntent));
+
+        localTabHost.addTab(buildTabSpec(<span class="string">"userinfo_tab"</span>, R.string.main_my_info,
+                R.drawable.icon_3_n, <span class="keyword">this</span>.mUserInfoIntent));
+
+        localTabHost.addTab(buildTabSpec(<span class="string">"search_tab"</span>, R.string.menu_search,
+                R.drawable.icon_4_n, <span class="keyword">this</span>.mSearchIntent));
+
+        localTabHost.addTab(buildTabSpec(<span class="string">"more_tab"</span>, R.string.more,
+                R.drawable.icon_5_n, <span class="keyword">this</span>.mMoreIntent));
+
+    }
+
+    <span class="keyword">private</span> TabHost.TabSpec buildTabSpec(String tag, <span class="typename">int</span> resLabel, <span class="typename">int</span> resIcon,
+            <span class="keyword">final</span> Intent content) {
+        <span class="keyword">return</span> <span class="keyword">this</span>.mHost
+                .newTabSpec(tag)
+                .setIndicator(getString(resLabel),
+                        getResources().getDrawable(resIcon))
+                .setContent(content);
+    }
+</code></pre><p>代码说明</p>
+<ol>
+<li>由于TabWidget被隐藏，所以相关的事件也会无效，这里取巧用RadioGroup与RadioButton的特性来处理切换，然后监听事件调用setCurrentTabByTag来切换Activity。</li>
+</ol>
+<ol>
+<li>注意即使TabWidget被隐藏，也要为其设置indicator，否则会保持。</li>
+</ol>
+<p>三、总结<br>在这之前如果要做这种效果我恐怕第一时间就会想到用ActivityGroup来做，主要是因为TabHost的TabWidget非常难看，用起<br>来也不方便。其实从源码可以看出，TabActivity也是继承自ActivityGroup，这里结合了单选按钮和TabHost，各取其长，有时间<br>可以专门写一个这样的自定义控件:)</p>
+<p>四、相关文章</p>
+<p><a href="http://www.cnblogs.com/over140/archive/2010/09/07/1820876.html" target="_blank" rel="external">[Android]使用ActivityGroup来切换Activity和Layout</a></p>
+<p>结束</p>
+<p>本文中使用的资源均反编译自apk文件，这里主要是讲思路，欢迎大家交流。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.flysnow.org/2011/03/02/sina-weibo-tool-bar-tabhost.html" data-id="ci7g9uvmu004az1n1wv19ab04" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+  
+
+  
+    <article id="post-writing-efficient-android-code" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2011/02/22/writing-efficient-android-code.html" class="article-date">
+  <time datetime="2011-02-21T18:38:51.000Z" itemprop="datePublished">2011-02-22</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2011/02/22/writing-efficient-android-code.html">编写高效的Android代码</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>毫无疑问，基于Android平台的设备一定是嵌入式设备。现代的手持设备不仅仅是一部电话那么简单，它还是一个小型的手持电脑，但是，即使是最快的最高端的手持设备也远远比不上一个中等性能的桌面机。</p>
+<p>这就是为什么在编写Android程序时要时刻考虑执行的效率，这些系统不是想象中的那么快，并且你还要考虑它电池的续航能力。这就意味着没有多少剩余空间给你去浪费了，因此，在你写Android程序的时候，要尽可能的使你的代码优化而提高效率。</p>
+<p>本页介绍了几种可以让开发者的Android程序运行的更加有效率的方法。通过下面的一些跳转的连接，你可以学会怎么让你的程序更加有效运行</p>
+<p>内容</p>
+<ul>
+<li>介绍</li>
+</ul>
+<ul>
+<li>尽量避免创建对象</li>
+</ul>
+<ul>
+<li>使用自身方法</li>
+</ul>
+<ul>
+<li>使用虚拟优于使用接口</li>
+</ul>
+<ul>
+<li>使用静态优于使用虚拟</li>
+</ul>
+<ul>
+<li>避免内部使用Setter和Getter</li>
+</ul>
+<ul>
+<li>缓冲属性调用</li>
+</ul>
+<ul>
+<li>声明Final常量</li>
+</ul>
+<ul>
+<li>慎重使用增强型的For循环语句</li>
+</ul>
+<ul>
+<li>避免列举类型Avoid Enums</li>
+</ul>
+<ul>
+<li>通过内联类使用包空间</li>
+</ul>
+<ul>
+<li>尽量避免浮点类型</li>
+</ul>
+<ul>
+<li>一些标准操作的时间比较</li>
+</ul>
+<ul>
+<li><a href="/admin/blogs/l#closing_notes">结束语</a></li>
+</ul>
+<h2 id="介绍">介绍</h2><p>对于如何判断一个系统的不合理，这里有两个基本的原则：</p>
+<ul>
+<li>不要做不必要做的事情。</li>
+</ul>
+<ul>
+<li>尽可能的节省内存的使用。</li>
+</ul>
+<p>下面的所有方法都是基于这两项的。</p>
+<p>有人会认为本页花了大量的篇幅去讲如何进行“初步优化”（ premature<br>optimization）。虽然有时候微观优化对开发高效的数据结构和算法很困难，但是在嵌入式手持设备上面你毫无选择。例如，如果把桌面电脑的虚拟机<br>移植到你的Android系统中，你会发现你写的程序会耗尽你的内存。这就会导致程序运行起来极度缓慢，即使不考虑它对系统上其他的运行程序的影响。</p>
+<p>这就是为什么上面两条原则这么重要。Android的成功在于开发程序提供给用户的体验，然而用户体验的好坏又决定于你的代码是否能及时的响应而不<br>至于慢的让人崩溃。因为我们所有的程序都会在同一个设备上面运行，所以我们把它们作为一个整体来考虑。本文就像你考驾照需要学习的交通规则一样：如果所有<br>人遵守，事情就会很流畅；但当你不遵守时，你就会撞车。</p>
+<p>在我们讨论实质问题之前，有一个简要的说明：无论虚拟机是否是Java编译器的一个特点，下面介绍的所有观点都是正确的。如果我们有两种方法完成同<br>样的事情，但是foo()的解释执行要快于bar()，那么foo()的编译速度一定不会比bar()慢，仅仅靠编译器使你的代码运行速度提升是不明智的<br>做法。</p>
+<h2 id="尽可能避免创建对象（Object）">尽可能避免创建对象（Object）</h2><p>对象的创建并不是没有代价的。一个带有线程分配池的generational的内存管理机制会使创建临时对象的代价减少，不是分配内存总比不上不分配内存好。</p>
+<p>如果你在一个用户界面的循环中分配一个对象，你不得不强制的进行内存回收，那么就会使用户体验出现稍微“打嗝”的现象。</p>
+<p>因此，如果没有必要你就不应该创建对象实例。下面是一件有帮助的例子：</p>
+<ul>
+<li>当从原始的输入数据中提取字符串时，试着从原始字符串返回一个子字符串，而不是创建一份拷贝。你将会创建一个新的字符串对象，但是它和你的原始数据共享数据空间。</li>
+</ul>
+<ul>
+<li>如果你有一个返回字符串地方法，你应该知道无论如何返回的结果是StringBuffer，改变你的函数的定义和执行，让函数直接返回而不是通过创建一个临时的对象。</li>
+</ul>
+<p>一个比较激进的方法就是把一个多维数组分割成几个平行的一维数组：</p>
+<ul>
+<li>一个Int类型的数组要比一个Integer类型的数组要好，但着同样也可以归纳于这样一个原则，两个Int类型的数组要比一个（int，int）对象数组的效率要高的多<br>。对于其他原始数据类型，这个原则同样适用。</li>
+</ul>
+<ul>
+<li><br>如果你需要创建一个包含一系列Foo和Bar对象的容器（container）时，记住：两个平行的Foo[]和Bar[]要比一个（Foo,Bar）对<br>象数组的效率高得多。（这个例子也有一个例外，当你设计其他代码的接口API时；在这种情况下，速度上的一点损失就不用考虑了。但是，在你的代码里面，你<br>应该尽可能的编写高效代码。）</li>
+</ul>
+<p>一般来说，尽可能的避免创建短期的临时对象。越少的对象创建意味着越少的垃圾回收，这会提高你程序的用户体验质量。</p>
+<h2 id="使用自身方法（Use_Native_Methods）">使用自身方法（Use Native Methods）</h2><p>当处理字符串的时候，不要犹豫，尽可能多的使用诸如String.indexOf()、String.lastIndexOf()这样对象自身带有的方法。因为这些方法使用C/C++来实现的，要比在一个java循环中做同样的事情快10-100倍。</p>
+<p>还有一点要补充说明的是，这些自身方法使用的代价要比那些解释过的方法高很多，因而，对于细微的运算，尽量不用这类方法。</p>
+<h2 id="使用虚拟优于使用接口">使用虚拟优于使用接口</h2><p>假设你有一个HashMap对象，你可以声明它是一个HashMap或则只是一个Map：</p>
+<pre><code>Map myMap1 = <span class="keyword">new</span> <span class="keyword">HashMap</span>();
+<span class="keyword">HashMap</span> myMap2 = <span class="keyword">new</span> <span class="keyword">HashMap</span>();
+</code></pre><p>哪一个更好呢？</p>
+<p>一般来说明智的做法是使用Map，因为它能够允许你改变Map接口执行上面的任何东西，但是这种“明智”的方法只是适用于常规的编程，对于嵌入式系统并不适合。通过接口引用来调用会花费2倍以上的时间，相对于通过具体的引用进行虚拟函数的调用。</p>
+<p>如果你选择使用一个HashMap，因为它更适合于你的编程，那么使用Map会毫无价值。假定你有一个能重构你代码的集成编码环境，那么调用Map<br>没有什么用处，即使你不确定你的程序从哪开头。（同样，public的API是一个例外，一个好的API的价值往往大于执行效率上的那点损失）</p>
+<h2 id="使用静态优于使用虚拟">使用静态优于使用虚拟</h2><p>如果你没有必要去访问对象的外部，那么使你的方法成为静态方法。它会被更快的调用，因为它不需要一个虚拟函数导向表。这同时也是一个很好的实践，因为它告诉你如何区分方法的性质（signature），调用这个方法不会改变对象的状态。</p>
+<h2 id="尽可能避免使用内在的Get、Set方法">尽可能避免使用内在的Get、Set方法</h2><p>像C++iyangde编程语言，通常会使用Get方法(例如<code>i = getCount()</code><br>)去取代直接访问这个属性（<code>i=mCount</code><br>）。 这在C++编程里面是一个很好的习惯，因为编译器会把访问方式设置为Inline，并且如果想约束或调试属性访问，你只需要在任何时候添加一些代码。</p>
+<p>在Android编程中，这不是一个很不好的主意。虚方法的调用会产生很多代价，比实例属性查询的代价还要多。我们应该在外部调用时使用Get和Set函数，但是在内部调用时，我们应该直接调用。</p>
+<h2 id="缓冲属性调用Cache_Field_Lookups">缓冲属性调用Cache Field Lookups</h2><p>访问对象属性要比访问本地变量慢得多。你不应该这样写你的代码：</p>
+<pre><code>for <span class="comment">(int i = 0; i &lt; this.mCount; i++)</span>
+      dumpItem<span class="comment">(this.mItems[i])</span>;
+</code></pre><p>而是应该这样写：</p>
+<pre><code><span class="keyword">int</span> <span class="keyword">count</span> = <span class="keyword">this</span>.mCount;
+Item[] items = <span class="keyword">this</span>.mItems;
+
+<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">count</span>; i++)
+    dumpItems(items[i]);
+</code></pre><p>（我们直接使用“this”表明这些是它的成员变量）</p>
+<p>一个相似的原则就是：决不在一个For语句中第二次调用一个类的方法。例如，下面的代码就会一次又一次地执行getCount（）方法，这是一个极大地浪费相比你把它直接隐藏到一个Int变量中。</p>
+<pre><code>for <span class="comment">(int i = 0; i &lt; this.getCount()</span>; i++)
+    dumpItems<span class="comment">(this.getItem(i)</span>);
+</code></pre><p>这是一个比较好的办法，当你不止一次的调用某个实例时，直接本地化这个实例，把这个实例中的某些值赋给一个本地变量。例如：</p>
+<pre><code> <span class="keyword">protected</span> <span class="keyword">void</span> drawHorizontalScrollBar(Canvas canvas, <span class="built_in">int</span> <span class="variable">width</span>, <span class="built_in">int</span> <span class="variable">height</span>) {
+        <span class="keyword">if</span> (isHorizontalScrollBarEnabled()) {
+            <span class="built_in">int</span> <span class="built_in">size</span> = mScrollBar.getSize(<span class="keyword">false</span>
+
+);
+            <span class="keyword">if</span> (<span class="built_in">size</span> &lt;= <span class="number">0</span>) {
+                <span class="built_in">size</span> = mScrollBarSize;
+            }
+            mScrollBar.setBounds(<span class="number">0</span>, <span class="variable">height</span>- <span class="built_in">size</span>, <span class="variable">width</span>, <span class="variable">height</span>);
+            mScrollBar.setParams(
+                    computeHorizontalScrollRange(),
+                    computeHorizontalScrollOffset(),
+                    computeHorizontalScrollExtent(), <span class="keyword">false</span>
+
+);
+            mScrollBar.<span class="title">draw</span>(canvas);
+        }
+    }
+</code></pre><p>这里有四次<code>mScrollBar</code><br>的属性调用，把<code>mScrollBar</code><br>缓冲到一个堆栈变量之中，四次成员属性的调用就会变成四次堆栈的访问，这样就会提高效率。</p>
+<p>附带说一下，对于方法同样也可以像本地变量一样具有相同的特点。</p>
+<h2 id="声明Final常量">声明Final常量</h2><p>我们可以看看下面一个类顶部的声明：</p>
+<pre><code><span class="literal">static</span> <span class="built_in">int</span> intVal = <span class="number">42</span>;
+<span class="literal">static</span> <span class="built_in">String</span> strVal = <span class="string">"Hello, world!"</span>;
+</code></pre><p>当一个类第一次使用时，编译器会调用一个类初始化方法——<code>`
+，这个方法将42存入变量</code>intVal<code>，并且为</code>strVal`<br>在类文件字符串常量表中提取一个引用，当这些值在后面引用时，就会直接属性调用。</p>
+<p>我们可以用关键字“final”来改进代码：</p>
+<pre><code><span class="literal">static</span> <span class="keyword">final</span> <span class="built_in">int</span> intVal = <span class="number">42</span>;
+<span class="literal">static</span> <span class="keyword">final</span> <span class="built_in">String</span> strVal = <span class="string">"Hello, world!"</span>;
+</code></pre><p>这个类将不会调用es a <code>`
+方法，因为这些常量直接写入了类文件静态属性初始化中，这个初始化直接由虚拟机来处理。代码访问</code>intVal<code>将会使用Integer类型的42，访问</code>strVal`<br>将使用相对节省的“字符串常量”来替代一个属性调用。</p>
+<p>将一个类或者方法声明为“final”并不会带来任何的执行上的好处，它能够进行一定的最优化处理。例如，如果编译器知道一个Get方法不能被子类重载，那么它就把该函数设置成Inline。</p>
+<p>同时，你也可以把本地变量声明为final变量。但是，这毫无意义。作为一个本地变量，使用final只能使代码更加清晰（或者你不得不用，在匿名访问内联类时）。</p>
+<h2 id="慎重使用增强型For循环语句">慎重使用增强型For循环语句</h2><p>增强型For循环（也就是常说的“For-each循环”）经常用于Iterable接口的继承收集接口上面。在这些对象里面，一个<br>iterator被分配给对象去调用它的hasNext（）和next（）方法。在一个数组列表里面，你可以自己接的敷衍它，在其他的收集器里面，增强型<br>的for循环将相当于iterator的使用。</p>
+<p>尽管如此，下面的源代码给出了一个可以接受的增强型for循环的例子：</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Foo</span> </span>{
+    <span class="keyword">int</span> mSplat;
+    <span class="keyword">static</span> Foo mArray[] = <span class="keyword">new</span> Foo[<span class="number">27</span>];
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> zero() {
+        <span class="keyword">int</span> <span class="keyword">sum</span> = <span class="number">0</span>;
+        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; mArray.length; i++) {
+            <span class="keyword">sum</span> += mArray[i].mSplat;
+        }
+    }
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> one() {
+        <span class="keyword">int</span> <span class="keyword">sum</span> = <span class="number">0</span>;
+        Foo[] localArray = mArray;
+        <span class="keyword">int</span> len = localArray.length;
+
+        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; i++) {
+            <span class="keyword">sum</span> += localArray[i].mSplat;
+        }
+    }
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> two() {
+        <span class="keyword">int</span> <span class="keyword">sum</span> = <span class="number">0</span>;
+        <span class="keyword">for</span> (Foo a: mArray) {
+            <span class="keyword">sum</span> += a.mSplat;
+        }
+    }
+}
+</code></pre><p>zero()<br>函数在每一次的循环中重新得到静态属性两次，获得数组长度一次。</p>
+<p>one()<br>函数把所有的东西都变为本地变量，避免类查找属性调用</p>
+<p>two()</p>
+<p>函数使用Java语言的1.5版本中的for循环语句，编辑者产生的源代码考虑到了拷贝数组的引用和数组的长度到本地变量，是例遍数组比较好的方法，它在<br>主循环中确实产生了一个额外的载入和储存过程（显然保存了“a”），相比函数one（）来说，它有一点比特上的减慢和4字节的增长。</p>
+<p>总结之后，我们可以得到：增强的for循环在数组里面表现很好，但是当和Iterable对象一起使用时要谨慎，因为这里多了一个对象的创建。</p>
+<h2 id="避免列举类型Avoid_Enums">避免列举类型Avoid Enums</h2><p>列举类型非常好用，当考虑到尺寸和速度的时候，就会显得代价很高，例如：</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Foo</span> {</span>
+   <span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">Shrubbery</span> {</span> GROUND, CRAWLING, HANGING }
+}
+</code></pre><p>这会转变成为一个900字节的class文件（Foo$Shrubbery.class）。第一次使用时，类的初始化要在独享上面调用方法去描述列举的每一项，每一个对象都要有它自身的静态空间，整个被储存在一个数组里面（一个叫做“$VALUE”的静态数组）。那是一大堆的代码和数据，仅仅是为了三个整数值。</p>
+<pre><code><span class="attribute">Shrubbery shrub </span>=<span class="string"> Shrubbery.GROUND;</span>
+</code></pre><p>这会引起一个静态属性的调用，如果GROUND是一个静态的Final变量，编译器会把它当做一个常数嵌套在代码里面。</p>
+<p>还有一点要说的，通过列举，你可以得到更好地API和一些编译时间上的检查。因此，一种比较平衡的做法就是：你应该尽一切方法在你的公用API中使用列举型变量，当处理问题时就尽量的避免。</p>
+<p>在一些环境下面，通过<code>ordinal</code><br>（）方法获取一个列举变量的整数值是很有用的，例如：把下面代码</p>
+<pre><code><span class="keyword">for</span> (int <span class="keyword">n</span> = 0; <span class="keyword">n</span> &lt; <span class="keyword">list</span>.size(); <span class="keyword">n</span>++) {
+    <span class="keyword">if</span> (<span class="keyword">list</span>.items[<span class="keyword">n</span>].<span class="keyword">e</span> == MyEnum.VAL_X)
+       <span class="comment">// do stuff 1</span>
+    <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">list</span>.items[<span class="keyword">n</span>].<span class="keyword">e</span> == MyEnum.VAL_Y)
+       <span class="comment">// do stuff 2</span>
+}
+</code></pre><p>替换为：</p>
+<pre><code>int valX = MyEnum.VAL_X.ordinal();
+int valY = MyEnum.VAL_Y.ordinal();
+int <span class="keyword">count</span> = <span class="keyword">list</span>.size();
+MyItem items = <span class="keyword">list</span>.items();
+
+<span class="keyword">for</span> (int  <span class="keyword">n</span> = 0; <span class="keyword">n</span> &lt; <span class="keyword">count</span>; <span class="keyword">n</span>++)
+{
+     int  valItem = items[<span class="keyword">n</span>].<span class="keyword">e</span>.ordinal();
+
+     <span class="keyword">if</span> (valItem == valX)
+       <span class="comment">// do stuff 1</span>
+     <span class="keyword">else</span> <span class="keyword">if</span> (valItem == valY)
+       <span class="comment">// do stuff 2</span>
+}
+</code></pre><p>在一些条件下，这会执行的更快，虽然没有保障。</p>
+<h2 id="通过内联类使用包空间">通过内联类使用包空间</h2><p>我们看下面的类声明</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Foo</span> {
+    <span class="keyword">private</span> <span class="keyword">int</span> mValue;
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{
+        Inner <span class="keyword">in</span> = <span class="keyword">new</span> Inner();
+        mValue = <span class="number">27</span>;
+        <span class="keyword">in</span>.stuff();
+    }
+
+    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">doStuff</span><span class="params">(<span class="keyword">int</span> <span class="keyword">value</span>)</span> </span>{
+        System.<span class="keyword">out</span>.println(<span class="string">"Value is "</span> + <span class="keyword">value</span>);
+    }
+
+    <span class="keyword">private</span> <span class="keyword">class</span> <span class="title">Inner</span> {
+        <span class="function"><span class="keyword">void</span> <span class="title">stuff</span><span class="params">()</span> </span>{
+            Foo.<span class="keyword">this</span>.doStuff(Foo.<span class="keyword">this</span>.mValue);
+        }
+    }
+}
+</code></pre><p>这里我们要注意的是我们定义了一个内联类，它调用了外部类的私有方法和私有属性。这是合法的调用，代码应该会显示”Value is 27”。</p>
+<p>问题是Foo$Inner在理论上（后台运行上）是应该是一个完全独立的类，它违规的调用了Foo的私有成员。为了弥补这个缺陷，编译器产生了一对合成的方法：</p>
+<pre><code><span class="comment">/*package*/</span> <span class="keyword">static</span> <span class="keyword">int</span> Foo.access$<span class="number">100</span>(Foo foo) {
+    <span class="keyword">return</span> foo.mValue;
+}
+<span class="comment">/*package*/</span> <span class="keyword">static</span> <span class="keyword">void</span> Foo.access$<span class="number">200</span>(Foo foo, <span class="keyword">int</span> <span class="keyword">value</span>) {
+    foo.doStuff(<span class="keyword">value</span>);
+}
+</code></pre><p>当内联类需要从外部访问“mValue”和调用“doStuff”时，内联类就会调用这些静态的方法，这就意味着你不是直接访问类成员，而是通过公共的方法来访问的。前面我们谈过间接访问要比直接访问慢，因此这是一个按语言习惯无形执行的例子。</p>
+<p>让拥有包空间的内联类直接声明需要访问的属性和方法，我们就可以避免这个问题，哲理诗是包空间而不是私有空间。这运行的更快并且去除了生成函数前面<br>东西。（不幸的是，它同时也意味着该属性也能够被相同包下面的其他的类直接访问，这违反了标准的面向对象的使所有属性私有的原则。同样，如果是设计公共的<br>API你就要仔细的考虑这种优化的用法）</p>
+<h2 id="避免浮点类型的使用">避免浮点类型的使用</h2><p>在奔腾CPU发布之前，游戏作者尽可能的使用Integer类型的数学函数是很正常的。在奔腾处理器里面，浮点数的处理变为它一个突出的特点，并且浮点数与整数的交互使用相比单独使用整数来说，前者会使你的游戏运行的更快，一般的在桌面电脑上面我们可以自由的使用浮点数。</p>
+<p>不幸的是，嵌入式的处理器通常并不支持浮点数的处理，阴齿所有的“float”和“double”操作都是通过软件进行的，一些基本的浮点数的操作就需要花费毫秒级的时间。</p>
+<p>同事，即使是整数，一些芯片也只有乘法而没有除法。在这些情况下，整数的除法和取模操作都是通过软件实现。当你创建一个Hash表或者进行大量的数学运算时，这都是你要考虑的。</p>
+<h2 id="一些标准操作的时间比较">一些标准操作的时间比较</h2><p>为了距离说明我们的观点，下面有一张表，包括一些基本操作所使用的大概时间。注意这些时间并不是绝对的时间，绝对时间要考虑到CPU和时钟频率。系<br>统不同，时间的大小也会有所差别。当然，这也是一种有意义的比较方法，我们可以比叫不同操作花费的相对时间。例如，添加一个成员变量的时间是添加一个本地<br>变量的四倍。</p>
+<p>Action<br>Time</p>
+<table border="0"><br><tbody><br><tr><br><br><td>Add a local variable<br></td><br><br><td>1<br></td><br></tr><br><tr><br><br><td>Add a member variable<br></td><br><br><td>4<br></td><br></tr><br><tr><br><br><td>Call String.length()<br></td><br><br><td>5<br></td><br></tr><br><tr><br><br><td>Call empty static native method<br></td><br><br><td>5<br></td><br></tr><br><tr><br><br><td>Call empty static method<br></td><br><br><td>12<br></td><br></tr><br><tr><br><br><td>Call empty virtual method<br></td><br><br><td>12.5<br></td><br></tr><br><tr><br><br><td>Call empty interface method<br></td><br><br><td>15<br></td><br></tr><br><tr><br><br><td>Call Iterator:next() on a HashMap<br></td><br><br><td>165<br></td><br></tr><br><tr><br><br><td>Call put() on a HashMap<br></td><br><br><td>600<br></td><br></tr><br><tr><br><br><td>Inflate 1 View from XML<br></td><br><br><td>22,000<br></td><br></tr><br><tr><br><br><td>Inflate 1 LinearLayout containing 1 TextView<br></td><br><br><td>25,000<br></td><br></tr><br><tr><br><br><td>Inflate 1 LinearLayout containing 6 View objects<br></td><br><br><td>100,000<br></td><br></tr><br><tr><br><br><td>Inflate 1 LinearLayout containing 6 TextView objects<br></td><br><br><td>135,000<br></td><br></tr><br><tr><br><br><td>Launch an empty activity<br></td><br><br><td>3,000,000<br></td><br></tr><br></tbody><br></table>
+
+
+
+<h2 id="结束语">结束语</h2><p>写高效的嵌入式程序的最好方法就是要搞清楚你写的程序究竟做了些什么。如果你真的想分配一个iterator类，进一切方法的在一个List中使用增强型的for循环，使它成为一个有意而为之的做法，而不是一个无意的疏漏而产生负面影响。</p>
+<p>有备无患，搞清楚你在做什么！你可以假如你自己的一些行为准则，但是一定要注意你的代码正在做什么，然后开始寻找方法去优化它。</p>
+<p>转自：<a href="http://www.chinaup.org/docs/toolbox/performance.html" target="_blank" rel="external">http://www.chinaup.org/docs/toolbox/performance.html</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.flysnow.org/2011/02/22/writing-efficient-android-code.html" data-id="ci7g9uvmw004dz1n1ktci8sfx" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+  
+
+  
+    <article id="post-android-icon-with-number" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2011/02/15/android-icon-with-number.html" class="article-date">
+  <time datetime="2011-02-14T21:48:01.000Z" itemprop="datePublished">2011-02-15</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2011/02/15/android-icon-with-number.html">Android中为图标加上数字--用于未读短信数提醒，待更新应用数提醒等</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在我们开发一些如短消息、应用商店等应用时，会考虑在短消息的图标上加上未读短信的数量，在应用商店上加上可以升级的应用数量，这样不占太大空间还能达到提示的目的。</p>
+<p>本节就以一个展示手机内联系人数量的例子来演示怎么在一个图标的上面加上数字的例子，也就是一个数字overlay..做过google map开发的知道overlay这个东西。。</p>
+<h2 id="一：你可学到">一：你可学到</h2><ol>
+<li>手机内依据Uri查看联系人</li>
+</ol>
+<ol>
+<li>权限的添加</li>
+</ol>
+<ol>
+<li>获取手机内任意一款应用的应用图标</li>
+</ol>
+<ol>
+<li>对图形的处理，如复制，为图片加上覆盖层—数字。</li>
+</ol>
+<ol>
+<li>使用RemoteView自定义Notification</li>
+</ol>
+<h2 id="二：开始行动">二：开始行动</h2><ol>
+<li>新建名为NotificationIconCount的Android Project。附件中有最终版本的项目工程</li>
+</ol>
+<ol>
+<li>首先修改AndroidManifest.xml,加入权限,因为我们要读取联系人。</li>
+</ol>
+<ol>
+<li>修改main.xml如下,这里定义一个ImageView，勇于预览我们处理好的加上数字的图标。</li>
+</ol>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>
+    <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span>
+    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span>
+    <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>
+    &gt;</span>
+    <span class="tag">&lt;<span class="title">ImageView</span> 
+        <span class="attribute">android:id</span>=<span class="value">"@+id/icon"</span>
+        <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span>
+        <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>
+        <span class="attribute">android:scaleType</span>=<span class="value">"center"</span>
+        <span class="attribute">android:adjustViewBounds</span>=<span class="value">"true"</span>/&gt;</span>
+<span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>
+</code></pre><ol>
+<li>先来获取手机内通讯录的图标，如果没有获取到，则使用该应用的图标.</li>
+</ol>
+<pre><code><span class="keyword">super</span>.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
+        mImageView=(ImageView)findViewById(R.id.icon);
+        <span class="comment">//优先采用联系人的图标，如果不存在则采用该应用的图标</span>
+        Drawable contactIcon;
+        <span class="keyword">try</span> {
+            contactIcon = getPackageManager().getApplicationIcon(<span class="string">"com.android.contacts"</span>);
+        } <span class="keyword">catch</span> (NameNotFoundException e) {
+            contactIcon=<span class="literal">null</span>;
+        }
+        Bitmap icon;
+        <span class="keyword">if</span>(contactIcon <span class="keyword">instanceof</span> BitmapDrawable){
+            icon=((BitmapDrawable)contactIcon).getBitmap();
+        }<span class="keyword">else</span>{
+            icon=getResIcon(getResources(), R.id.icon);
+        }
+</code></pre><p>这里用到一个自定义的根据资源图标id获取图片的函数，很简单，代码如下：</p>
+<pre><code><span class="javadoc">/**
+ * 根据id获取一个图片
+ *<span class="javadoctag"> @param</span> res
+ *<span class="javadoctag"> @param</span> resId
+ *<span class="javadoctag"> @return</span>
+ */</span>
+<span class="keyword">private</span> <span class="function">Bitmap <span class="title">getResIcon</span><span class="params">(Resources res,<span class="keyword">int</span> resId)</span></span>{
+    Drawable icon=res.getDrawable(resId);
+    <span class="keyword">if</span>(icon <span class="keyword">instanceof</span> BitmapDrawable){
+        BitmapDrawable bd=(BitmapDrawable)icon;
+        <span class="function"><span class="keyword">return</span> bd.<span class="title">getBitmap</span><span class="params">()</span></span>;
+    }<span class="keyword">else</span>{
+        <span class="keyword">return</span> <span class="keyword">null</span>;
+    }
+}
+</code></pre><ol>
+<li>获取到图标之后就要对这个图标进行处理了，要为该图标加上联系人数量的覆盖，首先我们看获取联系人个数的函数。</li>
+</ol>
+<pre><code><span class="javadoc">/**
+     * 获取联系人的个数
+     *<span class="javadoctag"> @return</span> 手里通讯录中联系人的个数
+     */</span>
+    <span class="keyword">private</span> <span class="function"><span class="keyword">int</span> <span class="title">getContactCount</span><span class="params">()</span></span>{
+        Cursor c=getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, <span class="keyword">new</span> String[]{ContactsContract.Contacts._COUNT}, <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="keyword">null</span>);
+        <span class="keyword">try</span>{
+            c.moveToFirst();
+            <span class="function"><span class="keyword">return</span> c.<span class="title">getInt</span><span class="params">(<span class="number">0</span>)</span></span>;
+        }<span class="keyword">catch</span>(Exception e){
+            <span class="keyword">return</span> <span class="number">0</span>;
+        }<span class="keyword">finally</span>{
+            c.close();
+        }
+    }
+</code></pre><p>这里采用Uri的方式获取联系人的cursor，然后获取个数。</p>
+<ol>
+<li>有了图标和联系人个数就可以生成带联系人个数的图标了，我们看下生成的这个函数。</li>
+</ol>
+<pre><code><span class="javadoc">/**
+     * 在给定的图片的右上角加上联系人数量。数量用红色表示
+     *<span class="javadoctag"> @param</span> icon 给定的图片
+     *<span class="javadoctag"> @return</span> 带联系人数量的图片
+     */</span>
+    <span class="keyword">private</span> <span class="function">Bitmap <span class="title">generatorContactCountIcon</span><span class="params">(Bitmap icon)</span></span>{
+        <span class="comment">//初始化画布</span>
+        <span class="keyword">int</span> iconSize=(<span class="keyword">int</span>)getResources().getDimension(android.R.dimen.app_icon_size);
+        Log.d(TAG, <span class="string">"the icon size is "</span>+iconSize);
+        Bitmap contactIcon=Bitmap.createBitmap(iconSize, iconSize, Config.ARGB_8888);
+        Canvas canvas=<span class="keyword">new</span> Canvas(contactIcon);
+
+        <span class="comment">//拷贝图片</span>
+        Paint iconPaint=<span class="keyword">new</span> Paint();
+        iconPaint.setDither(<span class="keyword">true</span>);<span class="comment">//防抖动</span>
+        iconPaint.setFilterBitmap(<span class="keyword">true</span>);<span class="comment">//用来对Bitmap进行滤波处理，这样，当你选择Drawable时，会有抗锯齿的效果</span>
+        Rect src=<span class="keyword">new</span> Rect(<span class="number">0</span>, <span class="number">0</span>, icon.getWidth(), icon.getHeight());
+        Rect dst=<span class="keyword">new</span> Rect(<span class="number">0</span>, <span class="number">0</span>, iconSize, iconSize);
+        canvas.drawBitmap(icon, src, dst, iconPaint);
+
+        <span class="comment">//在图片上创建一个覆盖的联系人个数</span>
+        <span class="keyword">int</span> contacyCount=getContactCount();
+        <span class="comment">//启用抗锯齿和使用设备的文本字距</span>
+        Paint countPaint=<span class="keyword">new</span> Paint(Paint.ANTI_ALIAS_FLAG|Paint.DEV_KERN_TEXT_FLAG);
+        countPaint.setColor(Color.RED);
+        countPaint.setTextSize(<span class="number">20</span>f);
+        countPaint.setTypeface(Typeface.DEFAULT_BOLD);
+        canvas.drawText(String.valueOf(contacyCount), iconSize-<span class="number">18</span>, <span class="number">25</span>, countPaint);
+        <span class="keyword">return</span> contactIcon;
+    }
+</code></pre><p>注释的很详细，就不解释了，无非就是定义一个画布(Canvas)，然后在上面画图标，画数字文本。</p>
+<ol>
+<li>然后我们把得到的这个处理过的Bitmap放在我们在main.xml里定义的ImageView里展示就可以看到效果了.</li>
+</ol>
+<pre><code>mImageView.setImageBitmap<span class="comment">(contactCountIcon)</span>;
+</code></pre><ol>
+<li>我们启动应用看看效果.</li>
+</ol>
+<p><img src="http://dl.iteye.com/upload/attachment/416490/e01bcd81-c359-366c-944b-1b451c698847.png" alt=""><br>我们看到了，右上角红色的1代表我手机中有一个联系人</p>
+<h2 id="三：采用状态栏通知的办法展示联系人的数量">三：采用状态栏通知的办法展示联系人的数量</h2><ol>
+<li>如果我们监听未读短信的数量，展示在状态栏通知了，就可以用这个方法，我这里还是以联系人的数量为例</li>
+</ol>
+<ol>
+<li>由于Notification默认的icon字段使用的是一个一个资源的引用类型int,所以我们这里采用RemoteView的方式自定义Notification。定义RemoteView，需要一个layout，用于定义展示的Notification样式，我们新建一个notification.xml布局文件如下：</li>
+</ol>
+<pre><code>&lt;?xml <span class="variable">version=</span><span class="string">"1.0"</span> <span class="variable">encoding=</span><span class="string">"utf-8"</span>?&gt;
+&lt;LinearLayout xmlns:<span class="variable">android=</span><span class="string">"http://schemas.android.com/apk/res/android"</span>
+              android:<span class="variable">orientation=</span><span class="string">"horizontal"</span>
+              android:<span class="variable">layout_width=</span><span class="string">"fill_parent"</span>
+              android:<span class="variable">layout_height=</span><span class="string">"fill_parent"</span>
+              android:<span class="variable">padding=</span><span class="string">"3dp"</span>
+              &gt;
+    &lt;ImageView android:<span class="variable">id=</span><span class="string">"@+id/image"</span>
+              android:<span class="variable">layout_width=</span><span class="string">"wrap_content"</span>
+              android:<span class="variable">layout_height=</span><span class="string">"fill_parent"</span>
+              android:<span class="variable">layout_marginRight=</span><span class="string">"10dp"</span>
+              /&gt;
+    &lt;TextView android:<span class="variable">id=</span><span class="string">"@+id/text"</span>
+              android:<span class="variable">layout_width=</span><span class="string">"wrap_content"</span>
+              android:<span class="variable">layout_height=</span><span class="string">"fill_parent"</span>
+              android:<span class="variable">textColor=</span><span class="string">"#000"</span>
+              /&gt;
+&lt;/LinearLayout&gt;
+</code></pre><p>很简单，一个ImageView和一个TextView，用于显示提示的图标和文字。</p>
+<ol>
+<li>要想使用Notification，我们必须获取一个Service—NotificationManager,Android中由它来管理我们的Notification，获取NotificationManager的代码如下,卸载onCreate方法里</li>
+</ol>
+<pre><code><span class="attribute">nm</span>=<span class="string">(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);</span>
+</code></pre><ol>
+<li>然后紧接着我们就调用我们定义好的方法来显示通知:</li>
+</ol>
+<pre><code><span class="function">showNotifacation</span>(contactCountIcon);
+</code></pre><ol>
+<li>下面我们看一下方法showNotifacation的具体实现:</li>
+</ol>
+<pre><code><span class="comment">/**
+ * 显示状态栏通知
+ * @param icon 通知内容图标
+ */</span>
+<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">showNotifacation</span><span class="params">(Bitmap icon)</span></span>{
+    Notification notification=<span class="keyword">new</span>  Notification(R.drawable.icon,<span class="string">"联系人数量"</span>,System.currentTimeMillis());
+    <span class="comment">//使用RemoteView自定义通知视图</span>
+    RemoteViews contentView=<span class="keyword">new</span> RemoteViews(getPackageName(), R.layout.notification);
+    contentView.setImageViewBitmap(R.id.image, icon);
+    contentView.setTextViewText(R.id.text, <span class="string">"图标上的红色数字表示手机中联系人的数量"</span>);
+    notification.contentView=contentView;
+    Intent notificationIntent=<span class="keyword">new</span> Intent(<span class="keyword">this</span>, NotificationIconActivity.<span class="keyword">class</span>);
+    PendingIntent contentIntent=PendingIntent.getActivity(<span class="keyword">this</span>, <span class="number">0</span>, notificationIntent, <span class="number">0</span>);
+    notification.contentIntent=contentIntent;
+    nm.notify(NOTIFICATION_CONTACT_ID, notification);
+}
+</code></pre><p>注释的都很详细，就不一一解释了</p>
+<ol>
+<li>最后的就是重写onDestroy，在Android销毁该Activity的时候清除我们的通知。</li>
+</ol>
+<pre><code><span class="annotation">@Override</span>
+    <span class="keyword">protected</span> <span class="function"><span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span> </span>{
+        <span class="keyword">super</span>.onDestroy();
+        nm.cancel(NOTIFICATION_CONTACT_ID);
+    }
+</code></pre><ol>
+<li>运行，可以看到如下效果<br><img src="http://dl.iteye.com/upload/attachment/416492/cf287cda-9c80-3fe1-8fe9-09d06f677b33.png" alt=""><br>可以看到，效果已经出来了。。</li>
+</ol>
+<h2 id="四：小结和一点引申">四：小结和一点引申</h2><p>这结的主要关键还是对图片的处理，比如这里的加上数字，当时你也可以加上其他的东西，Canvas里有很多相应的函数可以使用。。</p>
+<p>这里说的都是应用内、状态通知等一些显示处理后图片的办法，那么有没有方法处理手机主屏幕上的图标的办法，为他们加上数字呢。比如在短信息的应用图标的右上角加上未读短信数目等,答案是有的，不过是迂回实现的，给个思路就是使用AppWidget,这个可以实现，还能动态更新，具体怎么实现，大家可以自己摸索下，这里只提供个思路，整体和这节的例子差不多，只不过呢，要做成AppWidget。。。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.flysnow.org/2011/02/15/android-icon-with-number.html" data-id="ci7g9uvmy004gz1n1ircbpn3o" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+  
+
+  
+    <article id="post-android-gridview-tutorial" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2011/01/20/android-gridview-tutorial.html" class="article-date">
+  <time datetime="2011-01-20T01:41:53.000Z" itemprop="datePublished">2011-01-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2011/01/20/android-gridview-tutorial.html">Android GridView组件的使用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>GridView是一个网络布局的视图，他能让你的元素显示在一个个的格子里。我们的桌面就是一个GridView。。</p>
+<ol>
+<li>新建一个HelloGridView的工程</li>
+</ol>
+<ol>
+<li>修改main.xml代码如下：</li>
+</ol>
+<pre><code>&lt;?xml <span class="variable">version=</span><span class="string">"1.0"</span> <span class="variable">encoding=</span><span class="string">"utf-8"</span>?&gt;
+&lt;GridView
+  xmlns:<span class="variable">android=</span><span class="string">"http://schemas.android.com/apk/res/android"</span>
+  android:<span class="variable">id=</span><span class="string">"@+id/gridview"</span>
+  android:<span class="variable">layout_width=</span><span class="string">"fill_parent"</span>
+  android:<span class="variable">layout_height=</span><span class="string">"fill_parent"</span>
+  android:<span class="variable">columnWidth=</span><span class="string">"90dp"</span>
+  android:<span class="variable">numColumns=</span><span class="string">"auto_fit"</span>
+  android:<span class="variable">horizontalSpacing=</span><span class="string">"10dp"</span>
+  android:<span class="variable">verticalSpacing=</span><span class="string">"10dp"</span>
+  android:<span class="variable">stretchMode=</span><span class="string">"columnWidth"</span>
+  android:<span class="variable">gravity=</span><span class="string">"center"</span>&gt;
+&lt;/GridView&gt;
+</code></pre><p>很简单，就是一个GridView。设置列宽为90dp,这样当我们的numColumns设置为auto_fit时，Android就会自动计算我们手机屏幕的大小以决定每一行展示几个元素。这是很方便。android:horizontalSpacing定义列之间的间隔，android:verticalSpacing定义行之间的间隔。android:stretchMode设置为columnWidth是意味着根据列宽自动缩放。</p>
+<ol>
+<li>修改我们Activity HelloGridView如下：</li>
+</ol>
+<pre><code><span class="javadoc">/**
+ * 
+ *<span class="javadoctag"> @author</span> 飞雪无情
+ *<span class="javadoctag"> @since</span> 2011-1-20
+ */</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloGridView</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>{
+    <span class="javadoc">/** Called when the activity is first created. */</span>
+    <span class="annotation">@Override</span>
+    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>{
+        <span class="keyword">super</span>.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
+        GridView gridView=(GridView)findViewById(R.id.gridview);
+        gridView.setAdapter(<span class="keyword">new</span> ImageAdapter(<span class="keyword">this</span>));
+        <span class="comment">//单击GridView元素的响应</span>
+        gridView.setOnItemClickListener(<span class="keyword">new</span> OnItemClickListener() {
+
+            <span class="annotation">@Override</span>
+            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onItemClick</span><span class="params">(AdapterView&lt;!--?--&gt; parent, View view,
+                    <span class="keyword">int</span> position, <span class="keyword">long</span> id)</span> </span>{
+                <span class="comment">//弹出单击的GridView元素的位置</span>
+                Toast.makeText(HelloGridView.<span class="keyword">this</span>,mThumbIds[position], Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">ImageAdapter</span> <span class="keyword">extends</span> <span class="title">BaseAdapter</span></span>{
+        <span class="keyword">private</span> Context mContext;
+
+        <span class="function"><span class="keyword">public</span> <span class="title">ImageAdapter</span><span class="params">(Context context)</span> </span>{
+            <span class="keyword">this</span>.mContext=context;
+        }
+
+        <span class="annotation">@Override</span>
+        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCount</span><span class="params">()</span> </span>{
+            <span class="keyword">return</span> mThumbIds.length;
+        }
+
+        <span class="annotation">@Override</span>
+        <span class="function"><span class="keyword">public</span> Object <span class="title">getItem</span><span class="params">(<span class="keyword">int</span> position)</span> </span>{
+            <span class="keyword">return</span> mThumbIds[position];
+        }
+
+        <span class="annotation">@Override</span>
+        <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">getItemId</span><span class="params">(<span class="keyword">int</span> position)</span> </span>{
+            <span class="comment">// TODO Auto-generated method stub</span>
+            <span class="keyword">return</span> <span class="number">0</span>;
+        }
+
+        <span class="annotation">@Override</span>
+        <span class="function"><span class="keyword">public</span> View <span class="title">getView</span><span class="params">(<span class="keyword">int</span> position, View convertView, ViewGroup parent)</span> </span>{
+            <span class="comment">//定义一个ImageView,显示在GridView里</span>
+            ImageView imageView;
+            <span class="keyword">if</span>(convertView==<span class="keyword">null</span>){
+                imageView=<span class="keyword">new</span> ImageView(mContext);
+                imageView.setLayoutParams(<span class="keyword">new</span> GridView.LayoutParams(<span class="number">85</span>, <span class="number">85</span>));
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                imageView.setPadding(<span class="number">8</span>, <span class="number">8</span>, <span class="number">8</span>, <span class="number">8</span>);
+            }<span class="keyword">else</span>{
+                imageView = (ImageView) convertView;
+            }
+            imageView.setImageResource(mThumbIds[position]);
+            <span class="keyword">return</span> imageView;
+        }
+
+    }
+    <span class="comment">//展示图片</span>
+    <span class="keyword">private</span> Integer[] mThumbIds = {
+            R.drawable.sample_2, R.drawable.sample_3,
+            R.drawable.sample_4, R.drawable.sample_5,
+            R.drawable.sample_6, R.drawable.sample_7,
+            R.drawable.sample_0, R.drawable.sample_1,
+            R.drawable.sample_2, R.drawable.sample_3,
+            R.drawable.sample_4, R.drawable.sample_5,
+            R.drawable.sample_6, R.drawable.sample_7,
+            R.drawable.sample_0, R.drawable.sample_1,
+            R.drawable.sample_2, R.drawable.sample_3,
+            R.drawable.sample_4, R.drawable.sample_5,
+            R.drawable.sample_6, R.drawable.sample_7
+    };
+}
+</code></pre><p>这里我们也是采用的自定义Adapter，可以上一节的自定义Adapter讲解。展示了一些图片，然后点击一个图片的时候会显示这个图片所在的位置。</p>
+<ol>
+<li>运行程序，效果图如下：<br><img src="http://dl.iteye.com/upload/attachment/401529/01f43426-e794-3215-84c1-9273836917cc.jpg" alt=""></li>
+</ol>
+<p>本文附件下载:</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.flysnow.org/2011/01/20/android-gridview-tutorial.html" data-id="ci7g9uvn0004jz1n1ze4httkc" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Widget/">Widget</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+  
+
+  
+    <article id="post-android-sources-directory-structure" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2011/01/10/android-sources-directory-structure.html" class="article-date">
+  <time datetime="2011-01-10T01:11:57.000Z" itemprop="datePublished">2011-01-10</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2011/01/10/android-sources-directory-structure.html">Android 源码目录结构详解</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这是Android2.1的源代码的目录结构，可以帮助我们研究Android的源代码。Android源代码的下载请参考官网</p>
+<p>Android 2.1<br>|— Makefile<br>|— bionic                        （bionic C库）</p>
+<p>|— bootable                （启动引导相关代码）<br>|— build<br>（存放系统编译规则及generic等基础开发包配置）<br>|— cts                        （Android兼容性测试套件标准）</p>
+<table>
+<thead>
+<tr>
+<th>— dalvik                        （dalvik JAVA虚拟机）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>development        （应用程序开发相关）<br>|— external<br>（android使用的一些开源的模组）<br>|— frameworks                （核心框架——java及C++语言）<br>|—<br>hardware                （部分厂家开源的硬解适配层HAL代码）<br>|— out<br>（编译完成后的代码输出与此目录）<br>|— packages                （应用程序包）<br>|—<br>prebuilt                （x86和arm架构下预编译的一些资源）<br>|— sdk<br>（sdk及模拟器）<br>|— system                        （底层文件系统库、应用及组件——C语言）<br>`—<br>vendor                （厂商定制代码）</p>
+<p>bionic 目录<br>|—<br>libc                        （C库）<br>|   |— arch-arm        （ARM架构，包含系统调用汇编实现）</p>
+<p>|   |— arch-x86        （x86架构，包含系统调用汇编实现）<br>|   |— bionic<br>（由C实现的功能，架构无关）<br>|   |— docs                （文档）<br>|   |—<br>include                （头文件）<br>|   |— inet                （？inet相关，具体作用不明）</p>
+<p>|   |— kernel                （Linux内核中的一些头文件）<br>|   |—<br>netbsd                （？nesbsd系统相关，具体作用不明）<br>|   |— private<br>（？一些私有的头文件）<br>|   |— stdio                （stdio实现）<br>|   |—<br>stdlib                （stdlib实现）<br>|   |— string                （string函数实现）</p>
+<p>|   |— tools                （几个工具）<br>|   |— tzcode<br>（时区相关代码）<br>|   |— unistd                （unistd实现）<br>|   `—<br>zoneinfo        （时区信息）<br>|— libdl<br>（libdl实现，dl是动态链接，提供访问动态链接库的功能）<br>|— libm                        （libm数学库的实现，）</p>
+<p>|   |— alpha                （apaha架构）<br>|   |— amd64<br>（amd64架构）<br>|   |— arm                （arm架构）<br>|   |—<br>bsdsrc                （？bsd的源码）<br>|   |— i386                （i386架构）<br>|<br>|— i387                （i387架构？）<br>|   |— ia64                （ia64架构）</p>
+<p>|   |— include                （头文件）<br>|   |— man<br>（数学函数，后缀名为.3，一些为freeBSD的库文件）<br>|   |— powerpc        （powerpc架构）<br>|   |—<br>sparc64                （sparc64架构）<br>|   <code>-- src                （源代码）
+|--
+libstdc++                （libstdc++ C++实现库）
+|   |-- include
+（头文件）
+|</code>— src                （源码）<br>|— libthread_db<br>（多线程程序的调试器库）<br>|   <code>-- include                （头文件）</code>—<br>linker                        （动态链接器）<br>`— arch<br>（支持arm和x86两种架构）</p>
+<p>bootable 目录<br>.<br>|—<br>bootloader                                （适合各种bootloader的通用代码）<br>|   <code>--
+legacy                                （估计不能直接使用，可以参考）
+|       |--
+arch_armv6                （V6架构，几个简单的汇编文件）
+|       |--
+arch_msm7k                （高通7k处理器架构的几个基本驱动）
+|       |--
+include                        （通用头文件和高通7k架构头文件）
+|       |--
+libboot                        （启动库，都写得很简单）
+|       |--
+libc                        （一些常用的c函数）
+|       |-- nandwrite
+（nandwirte函数实现）
+|</code>— usbloader                （usbloader实现）<br>|—<br>diskinstaller                        （android镜像打包器，x86可生产iso）<br><code>--
+recovery                                （系统恢复相关）
+|--
+edify                                （升级脚本使用的edify脚本语言）
+|--
+etc                                （init.rc恢复脚本）
+|--
+minui                                （一个简单的UI）
+|--
+minzip                                （一个简单的压缩工具）
+|--
+mtdutils                        （mtd工具）
+|--
+res                                （资源）
+|</code>—<br>images                        （一些图片）<br>|—<br>tools                                （工具）<br>|   <code>--
+ota                        （OTA Over The Air Updates升级工具）</code>—<br>updater                        （升级器）</p>
+<p>build目录<br>.<br>|—<br>core                                （核心编译规则）<br>|—<br>history                                （历史记录）<br>|—<br>libs<br>|   `— host<br>（主机端库，有android “cp”功能替换）<br>|— target                                （目标机编译对象）</p>
+<p>|   |— board                        （开发平台）<br>|   |   |— emulator<br>（模拟器）<br>|   |   |— generic                （通用）<br>|   |   |—<br>idea6410        （自己添加的）<br>|   |   <code>-- sim                （最简单）
+|</code>—<br>product                （开发平台对应的编译规则）<br>|       `— security        （密钥相关）</p>
+<p>`— tools                                （编译中主机使用的工具及脚本）<br>|—<br>acp                        （Android “acp” Command）<br>|—<br>apicheck                （api检查工具）<br>|— applypatch                （补丁工具）</p>
+<table>
+<thead>
+<tr>
+<th>— apriori                        （预链接工具）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>atree                        （tree工具）<br>|— bin2asm<br>（bin转换为asm工具）<br>|— check_prereq        （检查编译时间戳工具）<br>|—<br>dexpreopt                （模拟器相关工具，具体功能不明）<br>|— droiddoc<br>（？作用不明，java语言，网上有人说和JDK5有关）<br>|— fs_config                （This program<br>takes a list of files and directories）<br>|— fs_get_stats<br>（获取文件系统状态）<br>|— iself                        （判断是否ELF格式）<br>|—<br>isprelinked                （判断是否prelinked）<br>|—<br>kcm                        （按键相关）<br>|— lsd                        （List<br>symbol dependencies）<br>|— releasetools                （生成镜像的工具及脚本）</p>
+<table>
+<thead>
+<tr>
+<th>— rgb2565                （rgb转换为565）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>signapk                （apk签名工具）<br>|— soslim<br>（strip工具）<br>`— zipalign                （zip archive alignment tool）</p>
+<p>dalvik目录 dalvik虚拟机<br>.<br>|— dalvikvm<br>（main.c的目录）<br>|— dexdump                        （dex反汇编）<br>|—<br>dexlist                                （List all methods in all concrete classes<br>in a DEX file.）<br>|— dexopt                                （预验证与优化）<br>|—<br>docs                                （文档）<br>|—<br>dvz                                （和zygote相关的一个命令）<br>|—<br>dx                                （dx工具，将多个java转换为dex）<br>|—<br>hit                                （？java语言写成）<br>|—<br>libcore                                （核心库）<br>|—<br>libcore-disabled                （？禁用的库）<br>|—<br>libdex                                （dex的库）<br>|—<br>libnativehelper                （Support functions for Android’s class libraries）</p>
+<table>
+<thead>
+<tr>
+<th>— tests                                （测试代码）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>tools                                （工具）<br>`—<br>vm                                （虚拟机实现）</p>
+<p>development 目录<br>（开发者需要的一些例程及工具）<br>|— apps                                （一些核心应用程序）<br>|<br>|— BluetoothDebug        （蓝牙调试程序）<br>|   |— CustomLocale        （自定义区域设置）</p>
+<p>|   |— Development        （开发）<br>|   |— Fallback<br>（和语言相关的一个程序）<br>|   |— FontLab                （字库）<br>|   |—<br>GestureBuilder        （手势动作）<br>|   |— NinePatchLab        （？）<br>|   |—<br>OBJViewer                （OBJ查看器）<br>|   |— SdkSetup                （SDK安装器）</p>
+<p>|   |— SpareParts                （高级设置）<br>|   |—<br>Term                        （远程登录）<br>|   `— launchperf                （？）</p>
+<table>
+<thead>
+<tr>
+<th>— build                                （编译脚本模板）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>cmds                                （有个monkey工具）<br>|—<br>data                                （配置数据）<br>|—<br>docs                                （文档）<br>|—<br>host                                （主机端USB驱动等）<br>|—<br>ide                                （集成开发环境）<br>|—<br>ndk                                （本地开发套件——c语言开发套件）<br>|—<br>pdk                                （Plug Development Kit）<br>|—<br>samples                        （例程）<br>|   |— AliasActivity        （？）<br>|<br>|— ApiDemos                （API演示程序）<br>|   |— BluetoothChat        （蓝牙聊天）</p>
+<p>|   |— BrowserPlugin        （浏览器插件）<br>|   |— BusinessCard        （商业卡）</p>
+<p>|   |— Compass                （指南针）<br>|   |— ContactManager<br>（联系人管理器）<br>|   |— CubeLiveWallpaper        （动态壁纸的一个简单例程）<br>|   |—<br>FixedGridLayout        （像是布局）<br>|   |— GlobalTime                （全球时间）</p>
+<p>|   |— HelloActivity        （Hello）<br>|   |— Home<br>（Home）<br>|   |— JetBoy                        （jetBoy游戏）<br>|   |—<br>LunarLander        （貌似又是一个游戏）<br>|   |— MailSync                （邮件同步）<br>|<br>|— MultiResolution        （多分辨率）<br>|   |— MySampleRss        （RSS）<br>|<br>|— NotePad                （记事本）<br>|   |— RSSReader                （RSS阅读器）</p>
+<p>|   |— SearchableDictionary        （目录搜索）<br>|   |—<br>SimpleJNI                （JNI例程）<br>|   |— SkeletonApp        （空壳APP）<br>|<br>|— Snake                        （snake程序）<br>|   |— SoftKeyboard        （软键盘）</p>
+<p>|   |— Wiktionary                （？维基）<br>|   `— WiktionarySimple（？维基例程）</p>
+<table>
+<thead>
+<tr>
+<th>— scripts                                （脚本）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>sdk                                （sdk配置）<br>|—<br>simulator                        （？模拟器）<br>|—<br>testrunner                        （？测试用）<br>`—<br>tools                                （一些工具）</p>
+<p>external 目录<br>.<br>|—<br>aes                        （AES加密）<br>|— apache-http                （网页服务器）</p>
+<p>|— astl                        （ASTL (Android STL) is a slimmed-down<br>version of the regular C++ STL.）<br>|— bison<br>（自动生成语法分析器，将无关文法转换成C、C++）<br>|— blktrace                （blktrace is a block<br>layer IO tracing mechanism）<br>|— bluetooth                （蓝牙相关、协议栈）<br>|—<br>bsdiff                        （diff工具）<br>|— bzip2<br>（压缩工具）<br>|— clearsilver                （html模板系统）<br>|—<br>dbus                        （低延时、低开销、高可用性的IPC机制）<br>|— dhcpcd<br>（DHCP服务）<br>|— dosfstools                （DOS文件系统工具）<br>|—<br>dropbear                （SSH2的server）<br>|— e2fsprogs<br>（EXT2文件系统工具）<br>|— elfcopy                （复制ELF的工具）<br>|—<br>elfutils                        （ELF工具）<br>|— embunit                （Embedded<br>Unit Project）<br>|— emma                        （java代码覆盖率统计工具）<br>|—<br>esd                        （Enlightened Sound Daemon，将多种音频流混合在一个设备上播放）<br>|—<br>expat                        （Expat is a stream-oriented XML parser.）<br>|—<br>fdlibm                        （FDLIBM (Freely Distributable LIBM)）<br>|—<br>freetype                （字体）<br>|— fsck_msdos                （dos文件系统检查工具）</p>
+<table>
+<thead>
+<tr>
+<th>— gdata                        （google的无线数据相关）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>genext2fs                （genext2fs generates an ext2 filesystem as a normal<br>(non-root) user）<br>|— giflib                        （gif库）<br>|—<br>googleclient        （google用户库）<br>|— grub                        （This is GNU<br>GRUB, the GRand Unified Bootloader.）<br>|— gtest<br>（Google C++ Testing Framework）<br>|— icu4c<br>（ICU(International Component for Unicode)在C/C++下的版本）<br>|—<br>ipsec-tools                （This package provides a way to use the native IPsec<br>functionality ）<br>|— iptables                （防火墙）<br>|—<br>jdiff                        （generate a report describing the difference<br>between two public Java APIs.）<br>|— jhead                        （jpeg头部信息工具）</p>
+<p>|— jpeg                        （jpeg库）<br>|— junit<br>（JUnit是一个Java语言的单元测试框架）<br>|— kernel-headers        （内核的一些头文件）<br>|—<br>libffi                        （libffi is a foreign function interface library.）</p>
+<p>|— libpcap                （网络数据包捕获函数）<br>|— libpng<br>（png库）<br>|— libxml2                （xml解析库）<br>|—<br>mtpd                        （一个命令）<br>|— netcat                        （simple<br>Unix utility which reads and writes dataacross network connections）<br>|—<br>netperf                        （网络性能测量工具）<br>|— neven<br>（看代码和JNI相关）<br>|— opencore                （多媒体框架）<br>|—<br>openssl                （SSL加密相关）<br>|— openvpn                （VPN开源库）<br>|—<br>oprofile                （OProfile是Linux内核支持的一种性能分析机制。）<br>|—<br>ping                        （ping命令）<br>|— ppp<br>（pppd拨号命令，好像还没有chat）<br>|— proguard                （Java class file shrinker,<br>optimizer, obfuscator, and preverifier）<br>|— protobuf                （a<br>flexible, efficient, automated mechanism for serializing structured data）</p>
+<p>|— qemu                        （arm模拟器）<br>|— safe-iop<br>（functions for performing safe integer operations ）<br>|—<br>skia                        （skia图形引擎）<br>|— sonivox                （sole MIDI<br>solution for Google Android Mobile Phone Platform）<br>|—<br>speex                        （Speex编/解码API的使用(libspeex)）<br>|—<br>sqlite                        （数据库）<br>|— srec                        （Nuance<br>公司提供的开源连续非特定人语音识别）<br>|— strace                        （trace工具）<br>|—<br>svox                        （Embedded Text-to-Speech）<br>|—<br>tagsoup                （TagSoup是一个Java开发符合SAX的HTML解析器）<br>|—<br>tcpdump                （抓TCP包的软件）<br>|— tesseract                （Tesseract<br>Open Source OCR Engine.）<br>|— tinyxml                （TinyXml is a simple,<br>small, C++ XML parser）<br>|— tremor                        （I stream and file<br>decoder provides an embeddable,integer-only library）<br>|—<br>webkit                        （浏览器核心）<br>|— wpa_supplicant        （无线网卡管理）</p>
+<table>
+<thead>
+<tr>
+<th>— xmlwriter                （XML 编辑工具）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>yaffs2                        （yaffs文件系统）<br>`— zlib                        （a<br>general purpose data compression library）</p>
+<p>frameworks 目录<br>（核心框架——java及C++语言）<br>.<br>|— base                        （基本内容）<br>|   |—<br>api                  （？都是xml文件，定义了java的api？）<br>|   |— awt<br>（AWT库）<br>|   |— build                （空的）<br>|   |— camera<br>（摄像头服务程序库）<br>|   |— cmds              （重要命令：am、app_proce等）<br>|   |—<br>core                （核心库）<br>|   |— data                （字体和声音等数据文件）<br>|<br>|— docs                （文档）<br>|   |— graphics           （图形相关）<br>|   |—<br>include             （头文件）<br>|   |— keystore        （和数据签名证书相关）<br>|   |—<br>libs                （库）<br>|   |— location        （地区库）<br>|   |—<br>media                （媒体相关库）<br>|   |— obex                （蓝牙传输库）<br>|   |—<br>opengl                （2D-3D加速库）<br>|   |— packages        （设置、TTS、VPN程序）</p>
+<p>|   |— sax                （XML解析器）<br>|   |— services        （各种服务程序）</p>
+<p>|   |— telephony        （电话通讯管理）<br>|   |— test-runner        （测试工具相关）</p>
+<p>|   |— tests                （各种测试）<br>|   |— tools<br>（一些叫不上名的工具）<br>|   |— vpn                （VPN）<br>|   <code>-- wifi
+（无线网络）
+|-- opt                        （可选部分）
+|   |--
+com.google.android                                （有个framework.jar）
+|   |--
+com.google.android.googlelogin                （有个client.jar）
+|</code>—<br>emoji                （standard message elements）<br>`— policies<br>（Product policies are operating system directions aimed at specific uses）</p>
+<p>`— base<br>|— mid        （MID设备）</p>
+<p>`— phone   （手机类设备一般用这个，与锁屏有关的代码）</p>
+<p>hardware 目录<br>（部分厂家开源的硬解适配层HAL代码）<br>|— broadcom                        （博通公司）<br>|   <code>--
+wlan                        （无线网卡）
+|-- libhardware
+（硬件库）
+|   |-- include                        （头文件）
+|</code>—<br>modules                （Default (and possibly architecture dependents) HAL<br>modules）<br>|       |— gralloc                （gralloc显示相关）<br>|       `—<br>overlay                （Skeleton for the “overlay” HAL module.）<br>|—<br>libhardware_legacy        （旧的硬件库）<br>|   |— flashlight                （背光）</p>
+<p>|   |— gps                        （GPS）<br>|   |—<br>include                        （头文件）<br>|   |— mount<br>（旧的挂载器）<br>|   |— power                        （电源）<br>|   |—<br>qemu                        （模拟器）<br>|   |— qemu_tracing        （模拟器跟踪）</p>
+<p>|   |— tests                        （测试）<br>|   |—<br>uevent                        （uevent）<br>|   |—<br>vibrator                        （震动）<br>|   `— wifi<br>（无线）<br>|— msm7k                        （高通7k处理器开源抽象层）<br>|   |—<br>boot                        （启动）<br>|   |— libaudio                （声音库）</p>
+<p>|   |— libaudio-qsd8k        （qsd8k的声音相关库）<br>|   |—<br>libcamera                （摄像头库）<br>|   |— libcopybit                （copybit库）</p>
+<p>|   |— libgralloc                （gralloc库）<br>|   |—<br>libgralloc-qsd8k        （qsd8k的gralloc库）<br>|   |— liblights<br>（背光库）<br>|   <code>-- librpc                        （RPC库）
+|--
+ril                                （无线电抽象层）
+|   |--
+include                        （头文件）
+|   |-- libril
+（库）
+|   |-- reference-cdma-sms        （cdma短信参考）
+|   |--
+reference-ril                        （ril参考）
+|</code>—<br>rild                                （ril后台服务程序）<br><code>--
+ti                                                （ti公司开源HAL）
+|--
+omap3                                （omap3处理器）
+|   |--
+dspbridge                （DSP桥）
+|   |-- libopencorehw
+（opencore硬件库）
+|   |-- liboverlay                （overlay硬件库）
+|
+|-- libstagefrighthw        （stagefright硬件库）
+|</code>—<br>omx                        （omx组件）<br>`—<br>wlan                                （无线网卡）</p>
+<p>packages 目录<br>.<br>|—<br>apps                            （应用程序库）<br>|   |— AlarmClock              （闹钟）</p>
+<p>|   |— Bluetooth                （蓝牙）<br>|   |— Browser<br>（浏览器）<br>|   |— Calculator                （计算器）<br>|   |—<br>Calendar                  （日历）<br>|   |— Camera                   （相机）<br>|<br>|— CertInstaller             （在Android中安装数字签名，被调用）<br>|   |—<br>Contacts                 （拨号(调用)、联系人、通话记录）<br>|   |— DeskClock<br>（桌面时钟）<br>|   |— Email                       （Email）<br>|   |—<br>Gallery                     （相册，和Camera类似，多了列表）<br>|   |—<br>Gallery3D                 （？3D相册）<br>|   |— GlobalSearch<br>（为google搜索服务，提供底层应用）<br>|   |— GoogleSearch           （google搜索）<br>|   |—<br>HTMLViewer             （浏览器附属界面，被浏览器应用调用，同时提供存储记录功能）<br>|   |—<br>IM                            （即时通讯，为手机提供信号发送、接收、通信的服务）<br>|   |—<br>Launcher                  （登陆启动项，显示图片框架等等图形界面）<br>|   |—<br>Launcher2                （登陆启动项，负责应用的调用）<br>|   |— Mms<br>（？彩信业务）<br>|   |— Music                        （音乐播放器）<br>|   |—<br>PackageInstaller        （安装、卸载程序的响应）<br>|   |— Phone<br>（电话拨号程序）<br>|   |— Provision                （预设应用的状态，使能应用）<br>|   |—<br>Settings                （开机设定，包括电量、蓝牙、设备信息、界面、wifi等）<br>|   |—<br>SoundRecorder        （录音机，可计算存储所需空间和时间）<br>|   |— Stk<br>（接收和发送短信）<br>|   |— Sync                        （空）   ———-○1<br>|   |—<br>Updater                （空）<br>|   `— VoiceDialer                （语音识别通话）</p>
+<p>|— inputmethods                （输入法）<br>|   |— LatinIME<br>（拉丁文输入法）<br>|   |— OpenWnn                （OpenWnn输入法）<br>|   <code>--
+PinyinIME                （拼音输入法）
+|-- providers
+（提供器，提供应用程序、界面所需的数据）
+|   |-- ApplicationsProvider
+（应用程序提供器，提供应用程序启动项、更新等）
+|   |-- CalendarProvider
+（日历提供器）
+|   |-- ContactsProvider                        （联系人提供器）
+|   |--
+DownloadProvider                （下载管理提供器）
+|   |--
+DrmProvider                        （创建和更新数据库时调用）
+|   |--
+GoogleContactsProvider        （联系人提供器的子类，用以同步联系人）
+|   |--
+GoogleSubscribedFeedsProvider（设置信息提供器）
+|   |--
+ImProvider                                （空）
+|   |--
+ManagementProvider                （空）
+|   |--
+MediaProvider                        （媒体提供器，提供存储数据）
+|   |--
+TelephonyProvider                （彩信提供器）
+|   |--
+UserDictionaryProvider        （用户字典提供器，提供用户常用字字典）
+|</code>—<br>WebSearchProvider                （空）<br>|—<br>services<br>|   |—<br>EasService                                （空）<br>|   <code>--
+LockAndWipe                        （空）</code>—<br>wallpapers                                        （墙纸）<br>|—<br>Basic                                        （基本墙纸，系统内置墙纸）<br>|—<br>LivePicker                                （选择动态壁纸）<br>|—<br>MagicSmoke                        （壁纸特殊效果）<br>`—<br>MusicVisualization                （音乐可视化，图形随音乐而变化）</p>
+<p>○1里面有一个隐藏的.git文件夹，内容都是一样的，没有有意义的代码，config看似乎是一个下载程序，因此认为这些文件夹下没有实质东西。</p>
+<p>prebuilt 目录                        （x86和arm架构下预编译的一些资源）<br>.<br>|—<br>android-arm                （arm-android相关）<br>|   |— gdbserver<br>（gdb调试器）<br>|   <code>-- kernel                        （模拟的arm内核）
+|--
+android-x86                （x86-android相关）
+|</code>—<br>kernel                        （空的）<br>|— common<br>（通用编译好的代码，应该是java的）<br>|— darwin-x86                        （drawin x86平台）</p>
+<p>|   `— toolchain                （工具链）<br>|       |— arm-eabi-4.2.1</p>
+<p>|       |— arm-eabi-4.3.1<br>|       `— arm-eabi-4.4.0</p>
+<table>
+<thead>
+<tr>
+<th>— darwin-x86_64                （drawin x86 64bit平台）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>linux-x86                        （linux x86平台）<br>|   `—<br>toolchain                （工具链，我们应该主要用这个）<br>|       |— arm-eabi-4.2.1</p>
+<p>|       |— arm-eabi-4.3.1<br>|       |— arm-eabi-4.4.0</p>
+<table>
+<thead>
+<tr>
+<th>`— i686-unknown-linux-gnu-4.2.1        （x86版编译器）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>linux-x86_64                （linux x86 64bit平台）<br>|—<br>windows                        （windows平台）<br>`— windows-x86_64        （64bit<br>windows平台）<br>system 目录                （底层文件系统库、应用及组件——C语言）<br>.<br>|—<br>Bluetooth                （蓝牙相关）<br>|— core                        （系统核心工具盒接口）</p>
+<p>|   |— adb                （adb调试工具）<br>|   |— cpio<br>（cpio工具，创建img）<br>|   |— debuggerd        （调试工具）<br>|   |— fastboot<br>（快速启动相关）<br>|   |— include                （系统接口头文件）<br>|   |—<br>init                （init程序源代码）<br>|   |— libacc                （轻量级C编译器）</p>
+<p>|   |— libctest                （libc测试相关）<br>|   |— libcutils<br>（libc工具）<br>|   |— liblog                （log库）<br>|   |— libmincrypt<br>（加密库）<br>|   |— libnetutils        （网络工具库）<br>|   |— libpixelflinger<br>（图形处理库）<br>|   |— libsysutils        （系统工具库）<br>|   |— libzipfile<br>（zip库）<br>|   |— logcat                （查看log工具）<br>|   |— logwrapper<br>（log封装工具）<br>|   |— mkbootimg        （制作启动boot.img的工具盒脚本）<br>|   |—<br>netcfg                （网络配置netcfg源码）<br>|   |— nexus<br>（google最新手机的代码）<br>|   |— rootdir                （rootfs，包含一些etc下的脚本和配置）</p>
+<p>|   |— sh                        （shell代码）<br>|   |—<br>toolbox                （toolbox，类似busybox的工具集）<br>|   `— vold<br>（SD卡管理器）<br>|— extras                        （额外工具）<br>|   |—<br>latencytop        （a tool for software developers ，identifying system latency<br>happen）<br>|   |— libpagemap        （pagemap库）<br>|   |—<br>librank                （Java Library Ranking System库）<br>|   |— procmem<br>（pagemap相关）<br>|   |— procrank        （Java Library Ranking System相关）<br>|<br>|— showmap        （showmap工具）<br>|   |— showslab        （showslab工具）<br>|<br>|— sound                （声音相关）<br>|   |— su                        （su命令源码）</p>
+<p>|   |— tests                （一些测试工具）<br>|   `— timeinfo        （时区相关）</p>
+<p><code>-- wlan                        （无线相关）</code>— ti<br>（ti网卡相关工具及库）</p>
+<p>vendor 目录                        （厂家定制内容）</p>
+<p>|—<br>aosp                             （android open source project）<br>|   <code>--
+products                  （一些板级规则）
+|-- htc
+（HTC公司）
+|   |-- common-open         （通用部分）
+|   |</code>—<br>akmd                 （解压img用的工具）<br>|   |— dream-open            （G1开放部分）</p>
+<p>|   |— prebuilt-open           （预编译开放部分）<br>|   <code>-- sapphire-open
+（sapphire这款型号开放内容）
+|-- pv-open                       （没东西）
+|--
+qcom                           （里面基本是空的）</code>— sample<br>（google提供的样例）<br>|— apps                        （应用）<br>|   |—<br>client                   （用户）<br>|   `— upgrade              （升级）</p>
+<p>|— frameworks             （框架）<br>|   `— PlatformLibrary   （平台库）</p>
+<p>|— products                  （产品）<br>|— sdk_addon              （sdk添加部分）</p>
+<p>`— skins                       （皮肤）</p>
+<p>`— WVGAMedDpi      （WVGA适用的图片）</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.flysnow.org/2011/01/10/android-sources-directory-structure.html" data-id="ci7g9uvn2004nz1n1a11ydu6f" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+  
+
+  
+    <article id="post-android-listview-tutorials" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2011/01/08/android-listview-tutorials.html" class="article-date">
+  <time datetime="2011-01-08T00:59:56.000Z" itemprop="datePublished">2011-01-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2011/01/08/android-listview-tutorials.html">Android ListView组件的使用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>ListView是Android开发中非常常用的组件，ListView可以用来显示一个列表，我们可以对这个列表操作，比如点击列表要做什么等等。这篇文章主要通过一个示例来展示ListView的用法。</p>
+<p>请加入，大家一块学习。</p>
+<h2 id="一、不使用xml布局文件创建一个ListView">一、不使用xml布局文件创建一个ListView</h2><ol>
+<li>创建一个名称为HelloListView的Android工程，可以参见<br><a href="/admin/blog/810785">Android 第一个Android应用，HelloWorld</a></li>
+</ol>
+<ol>
+<li>要使用ListView，需要让你的Activity继承于ListActivity，这个和以前的有区别，以前的都是继承Activity，该ListActivity继承Activity，扩展了很多常用的用于操作ListView的方法，使用很方便。</li>
+</ol>
+<ol>
+<li>现修改HelloListView类如下</li>
+</ol>
+<pre><code>public <span class="class"><span class="keyword">class</span> <span class="title">HelloListView</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">ListActivity</span> {</span>
+    <span class="comment">/** Called when the activity is first created. */</span>
+    <span class="annotation">@Override</span>
+    public void onCreate(<span class="type">Bundle</span> savedInstanceState) {
+        <span class="keyword">super</span>.onCreate(savedInstanceState);
+        <span class="comment">//setContentView(R.layout.main);</span>
+        <span class="comment">//设置一个Adapter</span>
+        setListAdapter(<span class="keyword">new</span> <span class="type">ArrayAdapter</span>(<span class="keyword">this</span>,android.<span class="type">R</span>.layout.simple_list_item_1,<span class="type">COUNTRIES</span>));
+    }
+    <span class="comment">//数据数据</span>
+    <span class="keyword">private</span>  static <span class="keyword">final</span> <span class="type">String</span>[] <span class="type">COUNTRIES</span>=<span class="keyword">new</span> <span class="type">String</span>[]{<span class="string">"中国"</span>,<span class="string">"俄罗斯"</span>,<span class="string">"英国"</span>,<span class="string">"法国"</span>};
+}
+</code></pre><ol>
+<li>运行程序效果如下：<img src="http://dl.iteye.com/upload/attachment/385759/1864e29c-2014-3275-80d2-760c9de2fa23.jpg" alt=""><br>看到了吧，我们的数据已经通过列表的形式显示了出来！！！</li>
+</ol>
+<p>这里主要的是使用了一个Adapter—适配器，你可以把他看成是ListView的数据源，ListView要展示的数据都是已Adapter的形势传递给ListView的。这个Adapter很重要，Android的用于传给集合控件（ListView,Spinner,GridView等）的数据都是以Adapter的形势，这样的好处就是只要掌握了Adapter，就可以很随意的给这些集合控制传递数据，因为他们使用的都是Adapter。适配器适配器关键就是适配，只需公布一个Adapter，就全搞定了。Android已经给我们实现了一些常用的适配器，如刚刚使用的数组器，还有简单适配器等,如果这些不能满足，我们还可以通过自定义适配器来实现自己的适配器。其实一种适配器就对应了一个集合控件中的一个元素的布局展示。</p>
+<h2 id="二:使用xml来自定义ListView">二:使用xml来自定义ListView</h2><ol>
+<li>上个例子我们并没有使用在main.xml中定义一个ListView的形势来布局ListView，而是使用的ListActivity中默认的ListView来演示的。</li>
+</ol>
+<ol>
+<li>下面就使用我们在main.xml中自定义的ListView,这样我们可以很方便的控制ListView展示的布局，大小，背景色等属性。当然上个例子中我们一样可以通过getListView获取ListView后使用它的方法来改变布局、大小和背景色等。</li>
+</ol>
+<ol>
+<li>修改main.xml为：</li>
+</ol>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="tag">&lt;<span class="title">ListView</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>
+    <span class="attribute">android:id</span>=<span class="value">"@android:id/list"</span>
+    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span>
+    <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>
+    <span class="attribute">android:background</span>=<span class="value">"#FF0000FF"</span>
+    &gt;</span>
+<span class="tag">&lt;/<span class="title">ListView</span>&gt;</span>
+</code></pre><p>这里要注意的是我们设置ListView的id为”@android:id/list”,意思是我们引用Android已经为我们定义好的一个id，名字是list，如果你不定义成这样，这个ListView是不能被ListActivity识别的。然后就是添加了一个蓝色的背景，看看我们这个自定义的ListView是否起了作用。</p>
+<ol>
+<li>修改HelloListView类为：</li>
+</ol>
+<pre><code>public <span class="class"><span class="keyword">class</span> <span class="title">HelloListView</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">ListActivity</span> {</span>
+    <span class="comment">/** Called when the activity is first created. */</span>
+    <span class="annotation">@Override</span>
+    public void onCreate(<span class="type">Bundle</span> savedInstanceState) {
+        <span class="keyword">super</span>.onCreate(savedInstanceState);
+        setContentView(<span class="type">R</span>.layout.main);
+        <span class="comment">//设置一个Adapter</span>
+        setListAdapter(<span class="keyword">new</span> <span class="type">ArrayAdapter</span>(<span class="keyword">this</span>,android.<span class="type">R</span>.layout.simple_list_item_1,<span class="type">COUNTRIES</span>));
+    }
+    <span class="comment">//数据数据</span>
+    <span class="keyword">private</span>  static <span class="keyword">final</span> <span class="type">String</span>[] <span class="type">COUNTRIES</span>=<span class="keyword">new</span> <span class="type">String</span>[]{<span class="string">"中国"</span>,<span class="string">"俄罗斯"</span>,<span class="string">"英国"</span>,<span class="string">"法国"</span>};
+}
+</code></pre><p>比上个例子只是多了setContentView(R.layout.main);是为了让Android识别我们定义的ListView。</p>
+<ol>
+<li>运行效果图：<img src="http://dl.iteye.com/upload/attachment/385771/602d0716-3fea-315b-a846-a61c9a78c793.jpg" alt=""><br>背景已经变成了蓝色，说明我们在xml中定义的ListView起作用了。</li>
+</ol>
+<h2 id="三：自定义要展示的元素">三：自定义要展示的元素</h2><ol>
+<li>前面的两个例子都是展示一行文字，如果我们想图文混排怎么做呢，比如前面是文字，后面是图片。要实现这种功能就需要我们自定义Adapter啦。</li>
+</ol>
+<ol>
+<li>新建布局文件item.xml,内容如下：</li>
+</ol>
+<pre><code>&lt;?xml <span class="variable">version=</span><span class="string">"1.0"</span> <span class="variable">encoding=</span><span class="string">"utf-8"</span>?&gt;
+&lt;RelativeLayout
+  xmlns:<span class="variable">android=</span><span class="string">"http://schemas.android.com/apk/res/android"</span>
+  android:<span class="variable">layout_width=</span><span class="string">"fill_parent"</span>
+  android:<span class="variable">layout_height=</span><span class="string">"wrap_content"</span>&gt;
+  &lt;TextView    
+      android:<span class="variable">id=</span><span class="string">"@+id/text"</span>
+      android:<span class="variable">layout_alignParentLeft=</span><span class="string">"true"</span>
+      android:<span class="variable">layout_width=</span><span class="string">"wrap_content"</span>
+      android:<span class="variable">layout_height=</span><span class="string">"wrap_content"</span>/&gt;
+  &lt;ImageView 
+      android:<span class="variable">id=</span><span class="string">"@+id/image"</span>
+      android:<span class="variable">layout_alignParentRight=</span><span class="string">"true"</span>
+      android:<span class="variable">layout_width=</span><span class="string">"wrap_content"</span>
+      android:<span class="variable">layout_height=</span><span class="string">"wrap_content"</span>/&gt;
+&lt;/RelativeLayout&gt;
+</code></pre><p>这里主要定义一个TextView和一个ImageView，用于显示列表每一行的文本和图片</p>
+<ol>
+<li>修改HelloListView类如下：</li>
+</ol>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloListView</span> <span class="keyword">extends</span> <span class="title">ListActivity</span> </span>{
+    <span class="javadoc">/** Called when the activity is first created. */</span>
+    <span class="annotation">@Override</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>{
+        <span class="keyword">super</span>.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
+        <span class="comment">//设置一个Adapter,使用自定义的Adapter</span>
+        setListAdapter(<span class="keyword">new</span> TextImageAdapter(<span class="keyword">this</span>));
+    }
+    <span class="javadoc">/**
+     * 自定义视图
+     *<span class="javadoctag"> @author</span> 飞雪无情
+     *
+     */</span>
+    <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">TextImageAdapter</span> <span class="keyword">extends</span> <span class="title">BaseAdapter</span></span>{
+        <span class="keyword">private</span> Context mContext;
+        <span class="function"><span class="keyword">public</span> <span class="title">TextImageAdapter</span><span class="params">(Context context)</span> </span>{
+            <span class="keyword">this</span>.mContext=context;
+        }
+        <span class="javadoc">/**
+         * 元素的个数
+         */</span>
+        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCount</span><span class="params">()</span> </span>{
+            <span class="keyword">return</span> texts.length;
+        }
+
+        <span class="function"><span class="keyword">public</span> Object <span class="title">getItem</span><span class="params">(<span class="keyword">int</span> position)</span> </span>{
+            <span class="keyword">return</span> <span class="keyword">null</span>;
+        }
+
+        <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">getItemId</span><span class="params">(<span class="keyword">int</span> position)</span> </span>{
+            <span class="keyword">return</span> <span class="number">0</span>;
+        }
+        <span class="comment">//用以生成在ListView中展示的一个个元素View</span>
+        <span class="function"><span class="keyword">public</span> View <span class="title">getView</span><span class="params">(<span class="keyword">int</span> position, View convertView, ViewGroup parent)</span> </span>{
+            <span class="comment">//优化ListView</span>
+            <span class="keyword">if</span>(convertView==<span class="keyword">null</span>){
+                convertView=LayoutInflater.from(mContext).inflate(R.layout.item, <span class="keyword">null</span>);
+                ItemViewCache viewCache=<span class="keyword">new</span> ItemViewCache();
+                viewCache.mTextView=(TextView)convertView.findViewById(R.id.text);
+                viewCache.mImageView=(ImageView)convertView.findViewById(R.id.image);
+                convertView.setTag(viewCache);
+            }
+            ItemViewCache cache=(ItemViewCache)convertView.getTag();
+            <span class="comment">//设置文本和图片，然后返回这个View，用于ListView的Item的展示</span>
+            cache.mTextView.setText(texts[position]);
+            cache.mImageView.setImageResource(images[position]);
+            <span class="keyword">return</span> convertView;
+        }
+    }
+    <span class="comment">//元素的缓冲类,用于优化ListView</span>
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">ItemViewCache</span></span>{
+        <span class="keyword">public</span> TextView mTextView;
+        <span class="keyword">public</span> ImageView mImageView;
+    }
+  <span class="comment">//展示的文字</span>
+    <span class="keyword">private</span>  String[] texts=<span class="keyword">new</span> String[]{<span class="string">"天气"</span>,<span class="string">"我团"</span>,<span class="string">"背景"</span>};
+    <span class="comment">//展示的图片</span>
+    <span class="keyword">private</span> <span class="keyword">int</span>[] images=<span class="keyword">new</span> <span class="keyword">int</span>[]{R.drawable.img1,R.drawable.img2,R.drawable.img3};
+}
+</code></pre><p>这里的主要地方是自定义了一个Adapter，我们只需要继承BaseAdapter即可，BaseAdapter已经实现了Adapter的大部分方法，我们继承后只需要实现部分的方法即可。必须实现的就是getCount和getView方法，前一个是返回ListView中有多少个元素，后一个是生成要展示的View。ListView在每添加一个View是就会调用Adapter的getView方法，所以我们有必要对这个方法做优化，例子中就做了部分的优化，一般面试的时候会被问到ListView优化，回答例子中的这些代码就差不多了。</p>
+<ol>
+<li>运行，我们会看到效果如图：<img src="http://dl.iteye.com/upload/attachment/385773/07462b29-e24f-387b-9649-842cfbfb0359.jpg" alt=""></li>
+</ol>
+<h2 id="四、ListView列表中的元素的单击事件响应">四、ListView列表中的元素的单击事件响应</h2><ol>
+<li>如果我们要想单击一个ListView的元素使其作出相应的响应怎么办呢？比如弹出什么，打开什么，展示什么等等，那么我们只需要实现单击事件的函数既可。</li>
+</ol>
+<ol>
+<li>要实现ListView的单击事件有两种方法，一个是使用getListView().setOnClickListener(l);设置，这个和平时我们用的控件设置是一样的，不做介绍，下面介绍第二个，就是重写ListActivity的onListItemClick方法，其实这个的最后处理也是ListView的setOnClickListener进行监听调用的。</li>
+</ol>
+<ol>
+<li>在HelloListView类中增加如下代码：</li>
+</ol>
+<pre><code><span class="annotation">@Override</span>
+<span class="keyword">protected</span> <span class="function"><span class="keyword">void</span> <span class="title">onListItemClick</span><span class="params">(ListView l, View v, <span class="keyword">int</span> position, <span class="keyword">long</span> id)</span> </span>{
+        Toast.makeText(<span class="keyword">this</span>, <span class="string">"你单击了"</span>+texts[position], Toast.LENGTH_SHORT).show();
+</code></pre><ol>
+<li>运行单击其中的一行效果如下图：<br><img src="http://dl.iteye.com/upload/attachment/385776/b52954ad-12b5-34dd-8c8c-b2bb03312427.jpg" alt=""></li>
+</ol>
+<h2 id="五、小结">五、小结</h2><p>到这里ListView应该算是会使用了，起码常用的功能会的，当然还有很多没有说到的，比如ListView的分割部分，headView和footView以及ListView的分页等等，这些就需要我们自己下去好好摸索了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.flysnow.org/2011/01/08/android-listview-tutorials.html" data-id="ci7g9uvn3004rz1n1hx7zwv1w" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Widget/">Widget</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+  
+
+  
+    <article id="post-android-edittext-tutorials" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2010/11/29/android-edittext-tutorials.html" class="article-date">
+  <time datetime="2010-11-29T00:51:00.000Z" itemprop="datePublished">2010-11-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2010/11/29/android-edittext-tutorials.html">Android EditText使用详解-包含很多教程上看不到的功能演示</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>标题有点大，说是详解，其实就是对EditText的一些常用功能的介绍，包括密码框，电话框，空白提示文字等等的讲解，尽量的介绍详细一点，也就是所谓的详解了。。呵呵</p>
+<h2 id="一：新建HelloEditText工程">一：新建HelloEditText工程</h2><p>新建一个Hello world详细步骤可以参见</p>
+<p><a href="/2010/11/13/android-helloworld.html">Android 第一个Android应用，HelloWorld</a></p>
+<p>创建设置如下：</p>
+<ol>
+<li>Project name:HelloEditText</li>
+<li>Build Target :android 2.2</li>
+<li>Application name:HelloEditText</li>
+<li>Package name:com.flysnow</li>
+<li>create Activity:HelloEditText</li>
+<li>min SDK 8</li>
+</ol>
+<p>这时候运行还看不到EditText，因为我们还没有加上,修改main.xml如下：</p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+    <span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>
+        <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span>
+        <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span>
+        <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>
+        &gt;</span>
+    <span class="tag">&lt;<span class="title">EditText</span>
+        <span class="attribute">android:id</span>=<span class="value">"@+id/edit_text"</span>  
+        <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> 
+        <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span> 
+        <span class="attribute">android:text</span>=<span class="value">"这是一个EditText"</span>/&gt;</span>
+<span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>
+</code></pre><p> 这里添加了一个id为”edit_text”的EditText，设置默认显示为本为“这是一个EditText”。。运行效果如下：</p>
+<p><img src="http://dl.iteye.com/upload/attachment/355666/8abc632a-3e6c-3c5f-9dc1-90aac6470f96.png" alt=""></p>
+<h2 id="二：EditText简介">二：EditText简介</h2><p>EditText是一个非常重要的组件，可以说它是用户和Android应用进行数据传输窗户，有了它就等于有了一扇和Android应用传输的门，通过它用户可以把数据传给Android应用，然后得到我们想要的数据。</p>
+<p>EditText是TextView的子类，所以TextView的方法和特性同样存在于EditText中，具体的TextView的介绍可以参考上一节<a href="/2010/11/25/android-textview-tutorials.html">Android TextView小组件的使用—附带超链接和跑马灯效果 </a></p>
+<h2 id="三：长度和空白提示文字,提示文字颜色,是否可编辑等">三：长度和空白提示文字,提示文字颜色,是否可编辑等</h2><p>EditText有一些属性可以设置EditText的特性，比如最大长度，空白提示文字等。</p>
+<ol>
+<li>有时候我们有一些特属的需要，要求只能在EditText中输入特定个数的字符，比如身份证号、手机号吗等。这时候就可以通过android:maxLength属性来设置最大输入字符个数，比如android:maxLength=“4”就表示最多能输入4个字符，再多了就输入不进去了。</li>
+</ol>
+<ol>
+<li>空白提示文字。有时候我们需要说明你定义的这个EditText是做什么用的，比如让输入“用户名”，或者输入“电话号码”等，但是你又不想在EditText前面加一个TextView来说明这是输入“用户名”的，因为这会使用一个TextView，那么怎么办呢？EditText为我们提供了android:hint来设置当EditText内容为空时显示的文本，这个文本只在EditText为空时显示，你输入字符的时候就消失了，不影响你的EditText的文本。。修改main.xml如下：</li>
+</ol>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>
+    <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span>
+    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span>
+    <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>
+    &gt;</span>
+<span class="tag">&lt;<span class="title">EditText</span>
+    <span class="attribute">android:id</span>=<span class="value">"@+id/edit_text"</span>  
+    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> 
+    <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>
+    <span class="attribute">android:maxLength</span>=<span class="value">"40"</span>
+    <span class="attribute">android:hint</span>=<span class="value">"请输入用户名..."</span>/&gt;</span>
+<span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>
+</code></pre><p>运行应用就会看到如下的效果：</p>
+<p><img src="http://dl.iteye.com/upload/attachment/355690/1fe441fe-e9fc-32f2-8fcf-53e0445d654c.png" alt=""><br>看看吧，简洁明了还不用新增一个TextView说明，也不影响用户操作。</p>
+<ol>
+<li>上面列出了空白时的提示文字，有的人说了，我不想要这个灰色的提示文字，和我的应用整体风格不协调，那也行啊，我们可以换颜色，怎么换呢，就是通过android:textColorHint属性设置你想要的颜色。修改main.xml如下:</li>
+</ol>
+<pre><code>&lt;?xml <span class="variable">version=</span><span class="string">"1.0"</span> <span class="variable">encoding=</span><span class="string">"utf-8"</span>?&gt;
+&lt;LinearLayout xmlns:<span class="variable">android=</span><span class="string">"http://schemas.android.com/apk/res/android"</span>
+    android:<span class="variable">orientation=</span><span class="string">"vertical"</span>
+    android:<span class="variable">layout_width=</span><span class="string">"fill_parent"</span>
+    android:<span class="variable">layout_height=</span><span class="string">"fill_parent"</span>
+    &gt;
+&lt;EditText
+    android:<span class="variable">id=</span><span class="string">"@+id/edit_text"</span>  
+    android:<span class="variable">layout_width=</span><span class="string">"fill_parent"</span> 
+    android:<span class="variable">layout_height=</span><span class="string">"wrap_content"</span>
+    android:<span class="variable">maxLength=</span><span class="string">"40"</span>
+    android:<span class="variable">hint=</span><span class="string">"请输入用户名..."</span>
+    android:<span class="variable">textColorHint=</span><span class="string">"#238745"</span>/&gt;
+&lt;/LinearLayout&gt;
+</code></pre><p>运行程序效果如下：</p>
+<p><img src="http://dl.iteye.com/upload/attachment/355702/7751967e-633b-3c69-bdc0-f135b1a25a25.png" alt=""><br>看到了吧，颜色已经变了。。</p>
+<ol>
+<li>还有一个比较实用的功能，就是设置EditText的不可编辑。设置android:enabled=”false”可以实现不可编辑，可以获得焦点。这时候我们看到EditText和一个TextView差不多：<img src="http://dl.iteye.com/upload/attachment/355705/dccc8638-134c-3532-9d44-03fbb394669b.png" alt=""></li>
+</ol>
+<ol>
+<li>实现类似html中Textarea的文本域。在Android中没有专门的文本域组件，但是可以通过设置EditText的高来实现同样的文本域功能。修改main.xml如下:</li>
+</ol>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>
+    <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span>
+    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span>
+    <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>
+    &gt;</span>
+<span class="tag">&lt;<span class="title">EditText</span>
+    <span class="attribute">android:id</span>=<span class="value">"@+id/edit_text"</span>  
+    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> 
+    <span class="attribute">android:layout_height</span>=<span class="value">"200dip"</span>/&gt;</span>
+<span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>
+</code></pre><p>运行程序效果如下：</p>
+<p><img src="http://dl.iteye.com/upload/attachment/355707/a1e61bd2-1162-3b7a-8a5c-3dfe880e3866.png" alt=""></p>
+<h2 id="四：输入特殊格式的字符">四：输入特殊格式的字符</h2><p>在我们开发程序的时候不免会输入一些特属个数的字符，比如密码（输入框的字符要加密显示），电话号码（比如数字和-）,数字等，这些都算是一些特属格式的字符，强大的EditText同样为我们提供了输入这些特属格式字符的设置。</p>
+<ol>
+<li>密码文本框。密码输入也是Android应用常用的功能，通过配置EditText的android:password=”true”就可以实现这一密码输入功能，修改main.xml如下：</li>
+</ol>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>
+    <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span>
+    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span>
+    <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>
+    &gt;</span>
+<span class="tag">&lt;<span class="title">EditText</span>
+    <span class="attribute">android:id</span>=<span class="value">"@+id/edit_text"</span>  
+    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> 
+    <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>
+    <span class="attribute">android:password</span>=<span class="value">"true"</span>/&gt;</span>
+<span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>
+</code></pre><p>运行效果如下：</p>
+<p><img src="http://dl.iteye.com/upload/attachment/355709/b4831d6e-2f6a-3b1e-a8ae-982083b1e596.png" alt=""><br>可以看到我们输入的字符已经被“.”这样的掩码所代替。</p>
+<ol>
+<li>手机中发短信打电话是必不可少的，所以用于专门输入电话号码的文本框也是大有用途，有了他我们对是否是电话号码的校验就容易的多了(因为字符是正确的，只要校验格式<br>).通过设置android:phoneNumber=”true”就可以把EditText变成只接受电话号码输入的文本框，连软键盘都已经变成拨号专用软键盘了，所以不用再担心输入其他字符了。修改main.xml如下： </li>
+</ol>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>
+    <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span>
+    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span>
+    <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>
+    &gt;</span>
+<span class="tag">&lt;<span class="title">EditText</span>
+    <span class="attribute">android:id</span>=<span class="value">"@+id/edit_text"</span>  
+    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> 
+    <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>
+    <span class="attribute">android:phoneNumber</span>=<span class="value">"true"</span>/&gt;</span>
+<span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>
+</code></pre><p>运行程序效果如下：</p>
+<p><img src="http://dl.iteye.com/upload/attachment/355713/525c31d6-adbe-39e2-8edb-afb6431d657f.png" alt=""><br>注意看软键盘，已经变成拨号专用的啦.</p>
+<ol>
+<li>有时候我们只想输入数字，不想输入字母，EditText为我们提供了android:numeric来控制输入的数字类型，一共有三种分别为integer（正整数）、signed（带符号整数）和decimal(浮点数)。这里以signed类型的为例，修改main.xml如下：</li>
+</ol>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>
+    <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span>
+    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span>
+    <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>
+    &gt;</span>
+<span class="tag">&lt;<span class="title">EditText</span>
+    <span class="attribute">android:id</span>=<span class="value">"@+id/edit_text"</span>  
+    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> 
+    <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>
+    <span class="attribute">android:numeric</span>=<span class="value">"signed"</span>/&gt;</span>
+<span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>
+</code></pre><p>运行效果如下：</p>
+<p><img src="http://dl.iteye.com/upload/attachment/355719/88cc320b-3d8f-3cd7-9dc0-19c8da6df9dd.png" alt=""><br>注意这里的软键盘变成“数字键盘”的变化.</p>
+<h2 id="五：为文本指定特定的软键盘类型">五：为文本指定特定的软键盘类型</h2><p>前面我们通过指定为电话号码特定格式，然后键盘类型变成了拨号专用的键盘，这个是自动变的，其实我们也可以通<br>过android:inputType来设置文本的类型，让输入法选择合适的软键盘的。。android:inputType有很多类型，这里使用date类型来演示,修改main.xml如下：</p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>
+    <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span>
+    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span>
+    <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>
+    &gt;</span>
+<span class="tag">&lt;<span class="title">EditText</span>
+    <span class="attribute">android:id</span>=<span class="value">"@+id/edit_text"</span>  
+    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> 
+    <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>
+    <span class="attribute">android:inputType</span>=<span class="value">"date"</span>/&gt;</span>
+<span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>
+</code></pre><p>运行效果如下：</p>
+<p><img src="http://dl.iteye.com/upload/attachment/355729/bbfe54c6-a87a-3ab6-908d-32644cda7d31.png" alt=""></p>
+<h2 id="六：Enter键图标的设置">六：Enter键图标的设置</h2><p>软键盘的Enter键默认显示的是“完成”文本，我们知道按Enter建表示前置工作已经准备完毕了，要去什么什么啦。比如，在一个搜索中，我们输入要搜索的文本，然后按Enter表示要去搜索了，但是默认的Enter键显示的是“完成”文本，看着不太合适，不符合搜索的语义，如果能显示“搜索”两个字或者显示一个表示搜索的图标多好。事实证明我们的想法是合理的，Android也为我们提供的这样的功能。通过设置android:imeOptions来改变默认的“完成”文本。这里举几个常用的常量值：</p>
+<ol>
+<li>actionUnspecified  未指定，对应常量EditorInfo.IME_ACTION_UNSPECIFIED.效果：<img src="http://dl.iteye.com/upload/attachment/355737/bd9d7b7c-2a93-37b3-afd9-cda2f3593058.png" alt=""></li>
+</ol>
+<ol>
+<li>actionNone 没有动作,对应常量EditorInfo.IME_ACTION_NONE 效果：<img src="http://dl.iteye.com/upload/attachment/355737/bd9d7b7c-2a93-37b3-afd9-cda2f3593058.png" alt=""></li>
+</ol>
+<ol>
+<li>actionGo 去往，对应常量EditorInfo.IME_ACTION_GO 效果：<img src="http://dl.iteye.com/upload/attachment/355757/a8db4447-ec91-39aa-a546-c117db16cf55.png" alt=""></li>
+</ol>
+<ol>
+<li>actionSearch 搜索，对应常量EditorInfo.IME_ACTION_SEARCH 效果： <img src="http://dl.iteye.com/upload/attachment/355769/c35d6b78-d5b9-314a-9698-144bc12d0af3.png" alt=""></li>
+</ol>
+<ol>
+<li>actionSend 发送，对应常量EditorInfo.IME_ACTION_SEND 效果：<img src="http://dl.iteye.com/upload/attachment/355788/c168252f-bb3d-3831-8e3c-8bced16b12a1.png" alt=""></li>
+</ol>
+<ol>
+<li>actionNext 下一个，对应常量EditorInfo.IME_ACTION_NEXT 效果：<img src="http://dl.iteye.com/upload/attachment/355798/aa6bd8b1-8ab3-38d9-b162-01ce10f4f998.png" alt=""></li>
+</ol>
+<ol>
+<li>actionDone 完成，对应常量EditorInfo.IME_ACTION_DONE 效果：<img src="http://dl.iteye.com/upload/attachment/355804/79979746-7373-3377-bb7e-3dd4bdede464.png" alt=""></li>
+</ol>
+<p>下面已搜索为例，演示一个实例，修改main.xml如下：</p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>
+    <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span>
+    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span>
+    <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>
+    &gt;</span>
+<span class="tag">&lt;<span class="title">EditText</span>
+    <span class="attribute">android:id</span>=<span class="value">"@+id/edit_text"</span>  
+    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> 
+    <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>
+    <span class="attribute">android:imeOptions</span>=<span class="value">"actionSearch"</span>/&gt;</span>
+<span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>
+</code></pre><p>修改HelloEditText如下：</p>
+<pre><code><span class="keyword">package</span> com.flysnow;
+
+<span class="keyword">import</span> android.app.<span class="type">Activity</span>;
+<span class="keyword">import</span> android.os.<span class="type">Bundle</span>;
+<span class="keyword">import</span> android.view.<span class="type">KeyEvent</span>;
+<span class="keyword">import</span> android.widget.<span class="type">EditText</span>;
+<span class="keyword">import</span> android.widget.<span class="type">TextView</span>;
+<span class="keyword">import</span> android.widget.<span class="type">Toast</span>;
+<span class="keyword">import</span> android.widget.<span class="type">TextView</span>.<span class="type">OnEditorActionListener</span>;
+
+public <span class="class"><span class="keyword">class</span> <span class="title">HelloEditText</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Activity</span> {</span>
+    <span class="comment">/** Called when the activity is first created. */</span>
+    <span class="annotation">@Override</span>
+    public void onCreate(<span class="type">Bundle</span> savedInstanceState) {
+        <span class="keyword">super</span>.onCreate(savedInstanceState);
+        setContentView(<span class="type">R</span>.layout.main);
+        <span class="type">EditText</span> editText=(<span class="type">EditText</span>)findViewById(<span class="type">R</span>.id.edit_text);
+        editText.setOnEditorActionListener(<span class="keyword">new</span> <span class="type">OnEditorActionListener</span>() {
+            <span class="annotation">@Override</span>
+            public boolean onEditorAction(<span class="type">TextView</span> v, int actionId, <span class="type">KeyEvent</span> event) {
+                <span class="type">Toast</span>.makeText(<span class="type">HelloEditText</span>.<span class="keyword">this</span>, <span class="type">String</span>.valueOf(actionId), <span class="type">Toast</span>.<span class="type">LENGTH_SHORT</span>).show();
+                <span class="keyword">return</span> <span class="literal">false</span>;
+            }
+        });
+    }
+}
+</code></pre><p>运行程序，点击回车（也就是搜索图标软键盘按钮）会显示该actionId.我们上面的每一个设置都会对应一个常量，这里的actionId就是那个常量值。</p>
+<p><img src="http://dl.iteye.com/upload/attachment/355851/c9f95967-fe2f-3850-a96a-17bc220fcc32.png" alt=""></p>
+<h2 id="七：EditText的取值、全选、部分选择、获取选中文本">七：EditText的取值、全选、部分选择、获取选中文本</h2><p>下面通过一个例子来演示EditText的取值、全选、部分选择和获取选中文本.main.xml修改如下：</p>
+<pre><code>&lt;?xml <span class="variable">version=</span><span class="string">"1.0"</span> <span class="variable">encoding=</span><span class="string">"utf-8"</span>?&gt;
+&lt;LinearLayout xmlns:<span class="variable">android=</span><span class="string">"http://schemas.android.com/apk/res/android"</span>
+    android:<span class="variable">orientation=</span><span class="string">"vertical"</span>
+    android:<span class="variable">layout_width=</span><span class="string">"fill_parent"</span>
+    android:<span class="variable">layout_height=</span><span class="string">"fill_parent"</span>
+    &gt;
+&lt;EditText
+    android:<span class="variable">id=</span><span class="string">"@+id/edit_text"</span>  
+    android:<span class="variable">layout_width=</span><span class="string">"fill_parent"</span> 
+    android:<span class="variable">layout_height=</span><span class="string">"wrap_content"</span>
+    android:<span class="variable">imeOptions=</span><span class="string">"actionSearch"</span>/&gt;
+&lt;Button 
+    android:<span class="variable">id=</span><span class="string">"@+id/btn_get_value"</span>
+    android:<span class="variable">text=</span><span class="string">"取值"</span>
+    android:<span class="variable">layout_width=</span><span class="string">"wrap_content"</span>
+    android:<span class="variable">layout_height=</span><span class="string">"wrap_content"</span>/&gt;
+&lt;Button 
+    android:<span class="variable">id=</span><span class="string">"@+id/btn_all"</span>
+    android:<span class="variable">text=</span><span class="string">"全选"</span>
+    android:<span class="variable">layout_width=</span><span class="string">"wrap_content"</span>
+    android:<span class="variable">layout_height=</span><span class="string">"wrap_content"</span>/&gt;
+&lt;Button 
+    android:<span class="variable">id=</span><span class="string">"@+id/btn_select"</span>
+    android:<span class="variable">text=</span><span class="string">"从第2个字符开始选择"</span>
+    android:<span class="variable">layout_width=</span><span class="string">"wrap_content"</span>
+    android:<span class="variable">layout_height=</span><span class="string">"wrap_content"</span>/&gt;
+&lt;Button 
+    android:<span class="variable">id=</span><span class="string">"@+id/btn_get_select"</span>
+    android:<span class="variable">text=</span><span class="string">"获取选中文本"</span>
+    android:<span class="variable">layout_width=</span><span class="string">"wrap_content"</span>
+    android:<span class="variable">layout_height=</span><span class="string">"wrap_content"</span>/&gt;
+&lt;/LinearLayout&gt;
+</code></pre><p>HelloEditText修改如下：</p>
+<pre><code><span class="keyword">package</span> com.flysnow;
+
+<span class="keyword">import</span> android.app.Activity;
+<span class="keyword">import</span> android.os.Bundle;
+<span class="keyword">import</span> android.text.Editable;
+<span class="keyword">import</span> android.text.Selection;
+<span class="keyword">import</span> android.view.KeyEvent;
+<span class="keyword">import</span> android.view.View;
+<span class="keyword">import</span> android.view.View.OnClickListener;
+<span class="keyword">import</span> android.widget.Button;
+<span class="keyword">import</span> android.widget.EditText;
+<span class="keyword">import</span> android.widget.TextView;
+<span class="keyword">import</span> android.widget.Toast;
+<span class="keyword">import</span> android.widget.TextView.OnEditorActionListener;
+<span class="javadoc">/**
+ * EditText演示
+ *<span class="javadoctag"> @author</span> 飞雪无情
+ *<span class="javadoctag"> @since</span> 2010-11-29
+ */</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloEditText</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>{
+    <span class="javadoc">/** Called when the activity is first created. */</span>
+    <span class="annotation">@Override</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>{
+        <span class="keyword">super</span>.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
+        <span class="keyword">final</span> EditText editText=(EditText)findViewById(R.id.edit_text);
+        <span class="comment">//监听回车键</span>
+        editText.setOnEditorActionListener(<span class="keyword">new</span> OnEditorActionListener() {
+            <span class="annotation">@Override</span>
+            <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onEditorAction</span><span class="params">(TextView v, <span class="keyword">int</span> actionId, KeyEvent event)</span> </span>{
+                Toast.makeText(HelloEditText.<span class="keyword">this</span>, String.valueOf(actionId), Toast.LENGTH_SHORT).show();
+                <span class="keyword">return</span> <span class="keyword">false</span>;
+            }
+        });
+        <span class="comment">//获取EditText文本</span>
+        Button getValue=(Button)findViewById(R.id.btn_get_value);
+        getValue.setOnClickListener(<span class="keyword">new</span> OnClickListener() {
+            <span class="annotation">@Override</span>
+            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>{
+                Toast.makeText(HelloEditText.<span class="keyword">this</span>, editText.getText().toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        <span class="comment">//让EditText全选</span>
+        Button all=(Button)findViewById(R.id.btn_all);
+        all.setOnClickListener(<span class="keyword">new</span> OnClickListener() {
+            <span class="annotation">@Override</span>
+            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>{
+                editText.selectAll();
+            }
+        });
+        <span class="comment">//从第2个字符开始选择EditText文本</span>
+        Button select=(Button)findViewById(R.id.btn_select);
+        select.setOnClickListener(<span class="keyword">new</span> OnClickListener() {
+            <span class="annotation">@Override</span>
+            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>{
+                Editable editable=editText.getText();
+                Selection.setSelection(editable, <span class="number">1</span>,editable.length());
+            }
+        });
+      <span class="comment">//获取选中的文本</span>
+        Button getSelect=(Button)findViewById(R.id.btn_get_select);
+        getSelect.setOnClickListener(<span class="keyword">new</span> OnClickListener() {
+            <span class="annotation">@Override</span>
+            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>{
+                <span class="keyword">int</span> start=editText.getSelectionStart();
+                <span class="keyword">int</span> end=editText.getSelectionEnd();
+                CharSequence selectText=editText.getText().subSequence(start, end);
+                Toast.makeText(HelloEditText.<span class="keyword">this</span>, selectText, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    <span class="javadoc">/**
+     * 交换两个索引
+     *<span class="javadoctag"> @param</span> start 开始索引
+     *<span class="javadoctag"> @param</span> end 结束索引
+     */</span>
+    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">switchIndex</span><span class="params">(<span class="keyword">int</span> start, <span class="keyword">int</span> end)</span> </span>{
+        <span class="keyword">int</span> temp=start;
+        start=end;
+        end=temp;
+    }
+}
+</code></pre><p>运行效果如下：</p>
+<p><img src="http://dl.iteye.com/upload/attachment/356058/4926c2d1-36a0-3cb6-b02f-e743e2313045.png" alt=""><br>可以通过输入文字和点击下面的按钮测试。</p>
+<h2 id="八：小结">八：小结</h2><p>这结详细介绍了EditText的大部分特性和常用功能，如常用的密码框，获取值等等。这几天忙的没更新，这次更新个长的。可以够消化一阵子的。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.flysnow.org/2010/11/29/android-edittext-tutorials.html" data-id="ci7g9uvn5004vz1n1u88c6db9" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Widget/">Widget</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+  
+
+  
+    <article id="post-android-textview-tutorials" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2010/11/24/android-textview-tutorials.html" class="article-date">
+  <time datetime="2010-11-24T08:19:03.000Z" itemprop="datePublished">2010-11-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2010/11/24/android-textview-tutorials.html">Android TextView小组件的使用--附带超链接和跑马灯效果</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这节主要介绍一下TextView的简单用法，以及超链接文本、跑马灯等实例。</p>
+<h2 id="一：新建HelloTextView_工程">一：新建HelloTextView 工程</h2><p>新建一个Hello world详细步骤可以参见</p>
+<h3 id="Android第一个Android应用，HelloWorld"><a href="/2010/11/13/android-helloworld.html">Android第一个Android应用，HelloWorld</a></h3><p>创建设置如下：</p>
+<ol>
+<li>Project name:HelloTextView</li>
+</ol>
+<ol>
+<li>Build Target :android 2.2</li>
+</ol>
+<ol>
+<li>Application name:HelloTextView</li>
+</ol>
+<ol>
+<li>Package name:com.flysnow</li>
+</ol>
+<ol>
+<li>create Activity:HelloTextView</li>
+</ol>
+<ol>
+<li>min SDK 8</li>
+</ol>
+<p>然后运行该应用就可以看到TextView的效果，是显示一行字：“Hello World, HelloTextView!”，这是因为新建的Hello项目自带的一个TextView。</p>
+<h2 id="二：分析TextView组件">二：分析TextView组件</h2><p>TextView是Android中常用的组件之一，可以用他来显示文字，就像一个标签一样，或者你可以认为是html中的span。对于TextView我们最关心的应该是怎么设置显示的文本，怎样设置字体的大小，字体的颜色，字体的样式，</p>
+<p>其实很简单，TextView中提供了大量的属性帮我们配置TextView。</p>
+<ol>
+<li>修改xml配置文件实现。我们修改main.xml如下:</li>
+</ol>
+<pre><code>&lt;?xml <span class="variable">version=</span><span class="string">"1.0"</span> <span class="variable">encoding=</span><span class="string">"utf-8"</span>?&gt;
+&lt;LinearLayout xmlns:<span class="variable">android=</span><span class="string">"http://schemas.android.com/apk/res/android"</span>
+    android:<span class="variable">orientation=</span><span class="string">"vertical"</span>
+    android:<span class="variable">layout_width=</span><span class="string">"fill_parent"</span>
+    android:<span class="variable">layout_height=</span><span class="string">"fill_parent"</span>
+    &gt;
+&lt;TextView  
+    android:<span class="variable">layout_width=</span><span class="string">"fill_parent"</span> 
+    android:<span class="variable">layout_height=</span><span class="string">"wrap_content"</span>
+    android:<span class="variable">textColor=</span><span class="string">"#ff0000"</span>
+    android:<span class="variable">textSize=</span><span class="string">"24sp"</span>
+    android:<span class="variable">textStyle=</span><span class="string">"bold"</span>
+    android:<span class="variable">text=</span><span class="string">"@string/hello"</span>
+    /&gt;
+&lt;/LinearLayout&gt;
+</code></pre><p>这里增加了三个属性的设置，分别是android:textColor=”#ff0000”设置字体为红色，android:textSize=”24sp”设置字体为24sp, android:textStyle=”bold”设置字体加粗，预览效果如下图：<br><img src="http://dl.iteye.com/upload/attachment/353237/12c1bbb8-419b-3dbd-b53a-501f73088c50.png" alt="">看到我们的TextView的内容已经变成红色，24sp大，加粗。。</p>
+<ol>
+<li>2.修改java代码实现。同样我们不修改xml文件，而是通过java编码来实现上面的图示效果，首先我们先给这个TextView分配一个id，也就是这个TextView的标记记号，方便我们找到他。在main.xml的TextView中加入android:id=”@+id/text_view”就可以为该TextView分配一个id。。这里@+id/是表示在R类的id类下新增常量字段，这里的常量字段是text_view。下面修改HelloTextView类如下：</li>
+</ol>
+<pre><code><span class="keyword">package</span> com.flysnow;
+
+<span class="keyword">import</span> android.app.<span class="type">Activity</span>;
+<span class="keyword">import</span> android.graphics.<span class="type">Color</span>;
+<span class="keyword">import</span> android.graphics.<span class="type">Typeface</span>;
+<span class="keyword">import</span> android.os.<span class="type">Bundle</span>;
+<span class="keyword">import</span> android.util.<span class="type">TypedValue</span>;
+<span class="keyword">import</span> android.widget.<span class="type">TextView</span>;
+
+public <span class="class"><span class="keyword">class</span> <span class="title">HelloTextView</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Activity</span> {</span>
+    <span class="comment">/** Called when the activity is first created. */</span>
+    <span class="annotation">@Override</span>
+    public void onCreate(<span class="type">Bundle</span> savedInstanceState) {
+        <span class="keyword">super</span>.onCreate(savedInstanceState);
+        setContentView(<span class="type">R</span>.layout.main);<span class="comment">//设置内容显示的xml布局文件</span>
+        <span class="type">TextView</span> textView=(<span class="type">TextView</span>)findViewById(<span class="type">R</span>.id.text_view);<span class="comment">//取得我们的TextView组件</span>
+        textView.setTextColor(<span class="type">Color</span>.<span class="type">RED</span>);<span class="comment">//设置成红色</span>
+        textView.setTextSize(<span class="type">TypedValue</span>.<span class="type">COMPLEX_UNIT_SP</span>, <span class="number">24</span>f);<span class="comment">//设置成24sp</span>
+        textView.setTypeface(<span class="type">Typeface</span>.defaultFromStyle(<span class="type">Typeface</span>.<span class="type">BOLD</span>));<span class="comment">//加粗</span>
+    }
+}
+</code></pre><p>最终结果和上图一样的，这说明通过代码和xml配置都可以定制TextView，但是推荐使用xml进行定制，使用java代码控制逻辑，这符合mvc模式，也符合Android的设计思想。</p>
+<p>这里说一下度量单位。度量单位有很多，如px,pt,dip,sp等等。不过建议应该使用sp作为字体大小的单位，使用dip作为其他元素的单位。。因为sp是刻度无关的像素，更重要的是他可以根据用户的字体大小的首选项进行缩放，这才是重要的，这样当你调整了整体的字体大小时不至于使得个别字体的大小不一致而影响美观。</p>
+<h2 id="三：TextView的一些有用的实例">三：TextView的一些有用的实例</h2><ol>
+<li>TextView的超链接形势。我们应该都见过html中的超链接，加一个a标记就可以让一段文字变成超链接的形式，可以点击到连接的地址。那么TextView可以实现吗？作为强大的TextView当然不会忘记这一点。TextView为我们提供了android:autoLink属性，只要把他设置成“web”,那么该TextView中的是网址形势的文件就会自动变成超链接的形式。好了，耳听为虚，眼见为实，看下面的例子。修改strings.xml为：</li>
+</ol>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="tag">&lt;<span class="title">resources</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">string</span> <span class="attribute">name</span>=<span class="value">"hello"</span>&gt;</span>我的博客地址是：http://www.flysnow.org    \n我的电话是：400-34534-500\n我的email是12235@163.com<span class="tag">&lt;/<span class="title">string</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">string</span> <span class="attribute">name</span>=<span class="value">"app_name"</span>&gt;</span>HelloTextView<span class="tag">&lt;/<span class="title">string</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">resources</span>&gt;</span>
+</code></pre><p>修改main.xml为：</p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>
+    <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span>
+    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span>
+    <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>
+    &gt;</span>
+<span class="tag">&lt;<span class="title">TextView</span> 
+    <span class="attribute">android:id</span>=<span class="value">"@+id/text_view"</span>
+    <span class="attribute">android:autoLink</span>=<span class="value">"web"</span>
+    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> 
+    <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>
+    <span class="attribute">android:text</span>=<span class="value">"@string/hello"</span>
+    /&gt;</span>
+<span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>
+</code></pre><p>然后把HelloTextView类中的那一段设置文本颜色、大小和样式的代码注释掉，运行程序就会看到如下图的效果:<br><img src="http://dl.iteye.com/upload/attachment/353258/c4c40145-5e31-3541-8fbd-bfb734a8b3cd.png" alt=""><br>当我们点击蓝色的我的博客的网址的时候，Android系统就会调用默认的web浏览器打开我的博客。<br>有的朋友已经注意到了，文本里我还写了我的电话和email，难道TextView也支持电话和email超链接吗？没错，的确支持，当我们设置android:autoLink=”phone”的时候，文本里的电话就会变成蓝色超链接形式，点击就会打开拨号界面等待你按通话键拨号，email也是同理。。</p>
+<p>当我们把 android:autoLink换成phone的时候发现网址不超连接了，换成email也是一样。难道我们不能一下子让网址，电话，email都超链接吗？答案是肯定的，这时候我们可以把 android:autoLink设置成all，这样里面的网址、电话和email就都可以超链接了。<br><img src="http://dl.iteye.com/upload/attachment/353264/3de8c6b3-263b-3c8b-86b8-951de945bce6.png" alt=""></p>
+<ol>
+<li>跑马丁效果。有时候我们要显示的文本较长，TextView不能完全显示，这时候可以通过这中跑马灯的方式让文本移动展示，达到了既不占用地方又能完全看到文本的目的。这里直接复用农民伯伯的跑马灯代码：</li>
+</ol>
+<pre><code>&lt;?xml <span class="variable">version=</span><span class="string">"1.0"</span> <span class="variable">encoding=</span><span class="string">"utf-8"</span>?&gt;
+&lt;LinearLayout xmlns:<span class="variable">android=</span><span class="string">"http://schemas.android.com/apk/res/android"</span>
+    android:<span class="variable">orientation=</span><span class="string">"vertical"</span>
+    android:<span class="variable">layout_width=</span><span class="string">"fill_parent"</span>
+    android:<span class="variable">layout_height=</span><span class="string">"fill_parent"</span>
+    &gt;
+&lt;TextView 
+    android:<span class="variable">id=</span><span class="string">"@+id/text_view"</span>
+    android:<span class="variable">autoLink=</span><span class="string">"all"</span>
+    android:<span class="variable">layout_width=</span><span class="string">"fill_parent"</span> 
+    android:<span class="variable">layout_height=</span><span class="string">"wrap_content"</span>
+    android:<span class="variable">text=</span><span class="string">"@string/hello"</span>
+    android:<span class="variable">ellipsize=</span><span class="string">"marquee"</span> 
+    android:<span class="variable">focusable=</span><span class="string">"true"</span> 
+    android:<span class="variable">marqueeRepeatLimit=</span><span class="string">"marquee_forever"</span> 
+    android:<span class="variable">focusableInTouchMode=</span><span class="string">"true"</span> 
+    android:<span class="variable">scrollHorizontally=</span><span class="string">"true"</span>/&gt;
+&lt;/LinearLayout&gt;
+</code></pre><p>然后为TextView设置一个很长的字符串。运行就可以看到横向移动的效果。</p>
+<p><img src="http://dl.iteye.com/upload/attachment/353267/fab3be3a-0850-32d1-8b74-893ac8dcb816.png" alt=""><br>设置的属性说明可以参考TextView的文档，这里也有中文版本：<a href="http://www.cnblogs.com/over140/archive/2010/08/27/1809745.html" target="_blank" rel="external">TextView中文API文档</a></p>
+<p>这里要进行说明的是：以上设置在大部分情况下都会成功的展示跑马灯样式，但是在一些复杂的布局中就会看不到任何文字。比如我开发的Android应用“我团”，在展示团购详细信息页面，我自定义了一个标题栏让其显示团购的信息，想让其跑马灯的方式显示，但是使用了上述代码后看不到文字，其实是文字被撑下来的，这时候我们设置android:singleLine=”true”以单行的方式展示就好了。所以请以后实现跑马灯效果的时候最好加上android:singleLine=”true”单行展示。。</p>
+<h2 id="四：小结">四：小结</h2><p>好了，一个TextView也啰嗦了那么多，希望大家能听明白，最后两个实用的例子能帮助大家更好的学习和使用TextView。。这两天JE挂了，没来得及更新，对不起大家了。最近忙于升级“我团”应用，也只能网上10点后才能上网写。可能更新会很慢，请见谅，谢谢各位的支持。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.flysnow.org/2010/11/24/android-textview-tutorials.html" data-id="ci7g9uvn8004zz1n1tnyjet3h" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Widget/">Widget</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+  
+
+  
+  
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
+    </nav>
+  
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a><span class="category-list-count">37</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Hexo/">Hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/软件开发/">软件开发</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/API/">API</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">37</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Apache/">Apache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Email/">Email</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github/">Github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Http/">Http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HttpClitent/">HttpClitent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intent/">Intent</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/">Nginx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/">PHP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/">Ubuntu</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Widget/">Widget</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/goagent/">goagent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gradle/">gradle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/代理/">代理</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/开源/">开源</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/敏捷/">敏捷</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库/">数据库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻墙/">翻墙</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻译/">翻译</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/软件工程/">软件工程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/软件开发/">软件开发</a><span class="tag-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/API/" style="font-size: 13.33px;">API</a><a href="/tags/Android/" style="font-size: 20px;">Android</a><a href="/tags/Apache/" style="font-size: 10px;">Apache</a><a href="/tags/Email/" style="font-size: 10px;">Email</a><a href="/tags/Github/" style="font-size: 10px;">Github</a><a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a><a href="/tags/Http/" style="font-size: 10px;">Http</a><a href="/tags/HttpClitent/" style="font-size: 10px;">HttpClitent</a><a href="/tags/Intent/" style="font-size: 13.33px;">Intent</a><a href="/tags/Linux/" style="font-size: 15px;">Linux</a><a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a><a href="/tags/PHP/" style="font-size: 10px;">PHP</a><a href="/tags/Ubuntu/" style="font-size: 18.33px;">Ubuntu</a><a href="/tags/Widget/" style="font-size: 16.67px;">Widget</a><a href="/tags/goagent/" style="font-size: 10px;">goagent</a><a href="/tags/gradle/" style="font-size: 10px;">gradle</a><a href="/tags/代理/" style="font-size: 10px;">代理</a><a href="/tags/开源/" style="font-size: 10px;">开源</a><a href="/tags/敏捷/" style="font-size: 10px;">敏捷</a><a href="/tags/数据库/" style="font-size: 10px;">数据库</a><a href="/tags/翻墙/" style="font-size: 10px;">翻墙</a><a href="/tags/翻译/" style="font-size: 10px;">翻译</a><a href="/tags/软件工程/" style="font-size: 10px;">软件工程</a><a href="/tags/软件开发/" style="font-size: 11.67px;">软件开发</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">十一月 2013</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">二月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">一月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/12/">十二月 2011</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/11/">十一月 2011</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/10/">十月 2011</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/07/">七月 2011</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/05/">五月 2011</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/03/">三月 2011</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/02/">二月 2011</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/01/">一月 2011</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2010/11/">十一月 2010</a><span class="archive-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/03/19/android-process-application-init-databases-problem.html">Android多进程的数据库访问问题</a>
+          </li>
+        
+          <li>
+            <a href="/2015/03/10/github-page-with-hexo.html">使用Hexo在Github上搭建自己的博客</a>
+          </li>
+        
+          <li>
+            <a href="/2015/01/12/android-gradle-plugin-translate-done.html">Android Gradle插件中文指南</a>
+          </li>
+        
+          <li>
+            <a href="/2014/07/13/effective-programming-more-than-writing-code.html">高效能程序员的修炼</a>
+          </li>
+        
+          <li>
+            <a href="/2014/03/22/android-avd-not-launcher.html">android新建大分辨率模拟器不能启动的问题</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 飞雪无情<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+    <a href="/about" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>
