@@ -8,7 +8,7 @@ category :
 - Android
 tags : 
 - Android
-- gradle
+- Gradle
 - 翻译
 ---
 
