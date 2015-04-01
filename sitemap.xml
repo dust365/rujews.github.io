@@ -2,17 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.flysnow.org/2015/03/30/manage-your-android-project-with-gradle.html</loc>
+    <lastmod>2015-04-01T14:59:14.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.flysnow.org/2015/01/12/android-gradle-plugin-translate-done.html</loc>
+    <lastmod>2015-03-30T13:51:53.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://www.flysnow.org/2015/03/19/android-process-application-init-databases-problem.html</loc>
     <lastmod>2015-03-19T14:45:54.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://www.flysnow.org/about/index.html</loc>
-    <lastmod>2015-03-19T13:40:30.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.flysnow.org/2015/01/12/android-gradle-plugin-translate-done.html</loc>
     <lastmod>2015-03-19T13:40:30.000Z</lastmod>
   </url>
   
@@ -117,12 +122,12 @@
   </url>
   
   <url>
-    <loc>http://www.flysnow.org/2011/10/22/adsl-and-vpn-config-for-ubuntu.html</loc>
+    <loc>http://www.flysnow.org/2015/03/10/github-page-with-hexo.html</loc>
     <lastmod>2015-03-19T13:40:30.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://www.flysnow.org/2015/03/10/github-page-with-hexo.html</loc>
+    <loc>http://www.flysnow.org/2011/07/19/android-send-email-intro.html</loc>
     <lastmod>2015-03-19T13:40:30.000Z</lastmod>
   </url>
   
@@ -237,7 +242,7 @@
   </url>
   
   <url>
-    <loc>http://www.flysnow.org/2011/07/19/android-send-email-intro.html</loc>
+    <loc>http://www.flysnow.org/2011/10/22/adsl-and-vpn-config-for-ubuntu.html</loc>
     <lastmod>2015-03-19T13:40:30.000Z</lastmod>
   </url>
   
