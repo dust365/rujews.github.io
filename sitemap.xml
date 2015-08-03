@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.flysnow.org/2015/08/03/android-tech-docs-ant-tasks.html</loc>
+    <lastmod>2015-08-03T14:50:02.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://www.flysnow.org/2015/03/30/manage-your-android-project-with-gradle.html</loc>
     <lastmod>2015-04-01T14:59:14.000Z</lastmod>
   </url>

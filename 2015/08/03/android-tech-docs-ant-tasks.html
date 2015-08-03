@@ -3,17 +3,35 @@
 <head>
   <meta charset="utf-8">
   
-  <title>飞雪无情的博客</title>
+  <title>android技术文档翻译--ant任务 | 飞雪无情的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="飞雪无情的博客">
-<meta property="og:url" content="http://www.flysnow.org/categories/Linux/index.html">
+  <meta name="description" content="以下内容由http://www.flysnow.org(飞雪无情)提供翻译
+原文地址 http://tools.android.com/tech-docs/ant-tasks
+更多翻译的Android技术文档请参考：https://github.com/rujews/android-tech-docs
+Ant任务此功能还在积极开发过程中，可以到ADT-dev中讨论
+当前自定义的任务列表：
+
+Aap">
+<meta property="og:type" content="article">
+<meta property="og:title" content="android技术文档翻译--ant任务">
+<meta property="og:url" content="http://www.flysnow.org/2015/08/03/android-tech-docs-ant-tasks.html">
 <meta property="og:site_name" content="飞雪无情的博客">
-<meta property="og:description">
+<meta property="og:description" content="以下内容由http://www.flysnow.org(飞雪无情)提供翻译
+原文地址 http://tools.android.com/tech-docs/ant-tasks
+更多翻译的Android技术文档请参考：https://github.com/rujews/android-tech-docs
+Ant任务此功能还在积极开发过程中，可以到ADT-dev中讨论
+当前自定义的任务列表：
+
+Aap">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="飞雪无情的博客">
-<meta name="twitter:description">
+<meta name="twitter:title" content="android技术文档翻译--ant任务">
+<meta name="twitter:description" content="以下内容由http://www.flysnow.org(飞雪无情)提供翻译
+原文地址 http://tools.android.com/tech-docs/ant-tasks
+更多翻译的Android技术文档请参考：https://github.com/rujews/android-tech-docs
+Ant任务此功能还在积极开发过程中，可以到ADT-dev中讨论
+当前自定义的任务列表：
+
+Aap">
   
     <link rel="alternative" href="/atom.xml" title="飞雪无情的博客" type="application/atom+xml">
   
@@ -78,124 +96,248 @@ ga('send', 'pageview');
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2013" class="archive-year">2013</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2013/12/27/linux-php-server-with-nginx.html" class="archive-article-date">
-  <time datetime="2013-12-27T04:59:13.000Z" itemprop="datePublished">12月 27</time>
+        <section id="main"><article id="post-android-tech-docs-ant-tasks" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/08/03/android-tech-docs-ant-tasks.html" class="article-date">
+  <time datetime="2015-08-03T14:07:29.000Z" itemprop="datePublished">2015-08-03</time>
 </a>
-      
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2013/12/27/linux-php-server-with-nginx.html">使用Nginx搭建PHP服务器</a>
+    <h1 class="article-title" itemprop="name">
+      android技术文档翻译--ant任务
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2013/11/07/goagent-403-not-have-permiss.html" class="archive-article-date">
-  <time datetime="2013-11-07T06:48:52.000Z" itemprop="datePublished">11月 7</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2013/11/07/goagent-403-not-have-permiss.html">goagent 403  not have permiss</a>
-    </h1>
-  
+        <p>以下内容由<a href="http://www.flysnow.org" target="_blank" rel="external">http://www.flysnow.org</a>(飞雪无情)提供翻译</p>
+<p>原文地址 <a href="http://tools.android.com/tech-docs/ant-tasks" target="_blank" rel="external">http://tools.android.com/tech-docs/ant-tasks</a></p>
+<p>更多翻译的Android技术文档请参考：<a href="https://github.com/rujews/android-tech-docs" target="_blank" rel="external">https://github.com/rujews/android-tech-docs</a></p>
+<h2 id="Ant任务">Ant任务</h2><p>此功能还在积极开发过程中，可以到ADT-dev中讨论</p>
+<p>当前自定义的任务列表：</p>
+<ul>
+<li>AaptExecTask</li>
+<li>AidlExecTask</li>
+<li>ApkBuilderTask</li>
+<li>BuildConfigTask</li>
+<li>DexExecTask</li>
+<li>IfElseTask</li>
+<li>PropertyByReplaceTask</li>
+<li>RenderScriptTask</li>
+<li>SignApkTask</li>
+<li>XPathTask</li>
+<li>ZipAlignTask</li>
+</ul>
+<p>r20版本新增的任务：</p>
+<ul>
+<li>CheckEnvTask</li>
+<li>ComputeDependencyTask</li>
+<li>ComputeProjectClasspathTask</li>
+<li>GetEmmaFilterTask</li>
+<li>GetLibraryListTask</li>
+<li>GetTargetTask</li>
+<li>GetTypeTask</li>
+<li>ManifestMergerTask</li>
+</ul>
+<p>被以上主要任务所使用的一些基本任务：</p>
+<ul>
+<li>BuildTypedTask</li>
+<li>MultiFilesTask</li>
+<li>SingleDependencyTask</li>
+<li>SingleInputOutputTask</li>
+</ul>
+<h3 id="com-android-ant-CheckEnvTask:&lt;checkenv&gt;">com.android.ant.CheckEnvTask:&lt;checkenv&gt;</h3><p>对如下的环境信息作一些简单的校验:</p>
+<ul>
+<li>Ant的版本</li>
+<li>Android SDK里的platform-tool文件夹是否存在</li>
+</ul>
+<p>该任务没有属性可配置</p>
+<h3 id="com-android-ant-GetTypeTask_&lt;gettype&gt;">com.android.ant.GetTypeTask &lt;gettype&gt;</h3><p>获取项目工程的类型，其取值可能是：</p>
+<ul>
+<li>“app”</li>
+<li>“library”</li>
+<li>“test”</li>
+<li>“test-app”</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>属性名</th>
+<th>描述</th>
+<th>是否必须</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>projectTypeOut</td>
+<td>用于存储获得的项目类型</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+<h3 id="com-android-ant-GetTargetTask_&lt;gettarget&gt;">com.android.ant.GetTargetTask &lt;gettarget&gt;</h3><p>解析项目target，返回构建所必需依赖的target的值</p>
+<table>
+<thead>
+<tr>
+<th>属性名</th>
+<th>描述</th>
+<th>是否必须</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>androidJarFileOut</td>
+<td>存储获得的构建工程的target android.jar位置</td>
+<td>是</td>
+</tr>
+<tr>
+<td>androidAidlFileOut</td>
+<td>存储获得的构建工程的target framework.aidl位置</td>
+<td>是</td>
+</tr>
+<tr>
+<td>bootClassPathOut</td>
+<td>存储获得的一个Path对象，该对象包含所有启动jar(android.jar + add-on APIs)</td>
+<td>是</td>
+</tr>
+<tr>
+<td>targetApiOut</td>
+<td>存储获得的构建工程的target API级别</td>
+<td>是</td>
+</tr>
+<tr>
+<td>minSdkVersionOut</td>
+<td>存储获得的应用的minSdkVersion的值</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+<h3 id="com-android-ant-GetLibraryListTask_&lt;getlibs&gt;">com.android.ant.GetLibraryListTask &lt;getlibs&gt;</h3><p>统计工程所依赖的所有库工程的列表。该列表包含所有直接和间接的依赖，并且按指定的顺序排列。</p>
+<table>
+<thead>
+<tr>
+<th>属性名</th>
+<th>描述</th>
+<th>是否必须</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>libraryFolderPathOut</td>
+<td>存储获得的一个Path对象，该对象包含所有的库工程文件夹，并且以编译顺序排序</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+<h3 id="com-android-ant-ComputeDependencyTask_&lt;dependency&gt;">com.android.ant.ComputeDependencyTask &lt;dependency&gt;</h3><p>统计工程的依赖。主要是关于库工程相关的细节，当然也包括和主工程和它的库工程有关的所有jar库。<br>它会使用 <a href="http://tools.android.com/recent/dealingwithdependenciesinandroidprojects" target="_blank" rel="external">这里</a> 提到的依赖方案进行处理。</p>
+<table>
+<thead>
+<tr>
+<th>属性名</th>
+<th>描述</th>
+<th>是否必须</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>libraryFolderPathOut</td>
+<td>存储获得的一个Path对象，该对象包含所有的库工程文件夹，并且以编译顺序排序</td>
+<td>是</td>
+</tr>
+<tr>
+<td>libraryPackagesOut</td>
+<td>存储获得的所有库工程的包名，并且以逗号分割</td>
+<td>是</td>
+</tr>
+<tr>
+<td>libraryManifestFilePathOut</td>
+<td>存储获得的一个Path对象，该对象包含所有库工程的Manifest文件</td>
+<td>是</td>
+</tr>
+<tr>
+<td>libraryResFolderPathOut</td>
+<td>存储获得的一个Path对象，该对象包含所有库工程的资源文件夹。<br 它="">使用aapt的顺序排序，正好和libraryFolderPathOut的顺序相反</td>
+<td>是</td>
+</tr>
+<tr>
+<td>libraryNativeFolderPathOut</td>
+<td>存储获得的一个Path对象，该对象包含所有的库工程本地文件夹</td>
+<td>是</td>
+</tr>
+<tr>
+<td>jarLibraryPathOut</td>
+<td>存储获得的一个Path对象，该对象包含所有构建所需的jar库</td>
+<td>是</td>
+</tr>
+<tr>
+<td>targetApi</td>
+<td>项目构建的target API级别</td>
+<td>是</td>
+</tr>
+<tr>
+<td>verbose</td>
+<td>项目构建显示的明细级别</td>
+<td>否</td>
+</tr>
+</tbody>
+</table>
+<h3 id="其他的任务将在以后引入补充">其他的任务将在以后引入补充</h3>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.flysnow.org/2015/08/03/android-tech-docs-ant-tasks.html" data-id="cicw1g7de0003vjn11ayttsvz" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ant/">Ant</a></li></ul>
 
-    </header>
+    </footer>
   </div>
-</article>
   
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2013/10/07/ubuntu-sougou-pinyin-input-method.html" class="archive-article-date">
-  <time datetime="2013-10-06T18:24:25.000Z" itemprop="datePublished">10月 7</time>
-</a>
-      
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2013/10/07/ubuntu-sougou-pinyin-input-method.html">Ubuntu下使用搜狗拼音输入法</a>
-    </h1>
   
+    <a href="/2015/03/30/manage-your-android-project-with-gradle.html" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">使用Gradle管理你的Android Studio工程</div>
+    </a>
+  
+</nav>
 
-    </header>
-  </div>
+  
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2013/03/29/ubuntu-saned-disabled.html" class="archive-article-date">
-  <time datetime="2013-03-28T20:06:37.000Z" itemprop="datePublished">3月 29</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2013/03/29/ubuntu-saned-disabled.html">ubuntu启动错误saned disabled edit /etc/default/saned checking battery state</a>
-    </h1>
-  
 
-    </header>
-  </div>
-</article>
   
-    
-    
-      
-        </div></section>
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2011" class="archive-year">2011</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2011/10/22/adsl-and-vpn-config-for-ubuntu.html" class="archive-article-date">
-  <time datetime="2011-10-22T08:06:17.000Z" itemprop="datePublished">10月 22</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2011/10/22/adsl-and-vpn-config-for-ubuntu.html">Ubuntu下ADSL拨号和VPN 访问网站</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
+  <section id="comments">
+    <!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="post-android-tech-docs-ant-tasks" data-title="android技术文档翻译--ant任务" data-url="http://www.flysnow.org/2015/08/03/android-tech-docs-ant-tasks.html"></div>
+    <!-- 多说评论框 end -->
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'flysnow'};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+    <!-- 多说公共JS代码 end -->
+  </section>
   
 </section>
         

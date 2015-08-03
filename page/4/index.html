@@ -80,6 +80,51 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
+    <article id="post-do-you-know-android-resource" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2011/03/28/do-you-know-android-resource.html" class="article-date">
+  <time datetime="2011-03-27T19:22:31.000Z" itemprop="datePublished">2011-03-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2011/03/28/do-you-know-android-resource.html">android.resource://这个Uri你知道吗</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>如何访问平时APK文件Res目录下的内容呢? 如果直接访问Apk下的assets目录可以使用AssetManager类处理，而需要访问<br>res/raw这样的文件夹怎么办呢? 这里Android123可以告诉大家APK在安装时已经解压缩，部分资源存放在/data/data<br>/package_name/这里， 比如我们想访问res/raw/android123.cwj文件，可以使用android.resource:<br>//package_name/“ + R.raw.android123 这个Uri，其中package_name是你工程的包名。<br>完整的处理代码为 Uri uri = Uri.parse(“android.resource://com.android123.Sample/raw/android123.cwj”); 即可使用工程res/raw目录下的文件了。</p>
+<p>转自：<a href="http://www.android123.com.cn/androidkaifa/827.html" target="_blank" rel="external">http://www.android123.com.cn/androidkaifa/827.html</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.flysnow.org/2011/03/28/do-you-know-android-resource.html" data-id="cicw1g7gy0045vjn11sxiihux" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+  
+
+  
     <article id="post-android-intents-and-intent-filters-two" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2011/03/17/android-intents-and-intent-filters-two.html" class="article-date">
@@ -256,7 +301,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.flysnow.org/2011/03/17/android-intents-and-intent-filters-two.html" data-id="ci7yv69500043l0n1mi18b1co" class="article-share-link">Share</a>
+      <a data-url="http://www.flysnow.org/2011/03/17/android-intents-and-intent-filters-two.html" data-id="cicw1g7gz0048vjn1r3c822b4" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Intent/">Intent</a></li></ul>
@@ -451,7 +496,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.flysnow.org/2011/03/14/android-intents-and-intent-filters-one.html" data-id="ci7yv69510047l0n1g734jejc" class="article-share-link">Share</a>
+      <a data-url="http://www.flysnow.org/2011/03/14/android-intents-and-intent-filters-one.html" data-id="cicw1g7h1004cvjn18gmwlfrf" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Intent/">Intent</a></li></ul>
@@ -497,7 +542,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.flysnow.org/2011/03/08/android-bottom-tool-bar-demo.html" data-id="ci7yv6953004bl0n19xc5vb4c" class="article-share-link">Share</a>
+      <a data-url="http://www.flysnow.org/2011/03/08/android-bottom-tool-bar-demo.html" data-id="cicw1g7h4004gvjn1sd15annx" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
@@ -705,7 +750,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.flysnow.org/2011/03/02/sina-weibo-tool-bar-tabhost.html" data-id="ci7yv6956004el0n1zp9xlih0" class="article-share-link">Share</a>
+      <a data-url="http://www.flysnow.org/2011/03/02/sina-weibo-tool-bar-tabhost.html" data-id="cicw1g7h5004jvjn181w3xj70" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
@@ -987,7 +1032,7 @@ MyItem items = <span class="keyword">list</span>.items();
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.flysnow.org/2011/02/22/writing-efficient-android-code.html" data-id="ci7yv6958004hl0n1bkok6zeq" class="article-share-link">Share</a>
+      <a data-url="http://www.flysnow.org/2011/02/22/writing-efficient-android-code.html" data-id="cicw1g7h7004mvjn1cxmh8ade" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
@@ -1231,7 +1276,7 @@ MyItem items = <span class="keyword">list</span>.items();
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.flysnow.org/2011/02/15/android-icon-with-number.html" data-id="ci7yv6959004kl0n19nbtwda1" class="article-share-link">Share</a>
+      <a data-url="http://www.flysnow.org/2011/02/15/android-icon-with-number.html" data-id="cicw1g7h8004pvjn1q7gmfrkz" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
@@ -1382,7 +1427,7 @@ MyItem items = <span class="keyword">list</span>.items();
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.flysnow.org/2011/01/20/android-gridview-tutorial.html" data-id="ci7yv695b004nl0n1jniz4qx0" class="article-share-link">Share</a>
+      <a data-url="http://www.flysnow.org/2011/01/20/android-gridview-tutorial.html" data-id="cicw1g7ha004svjn1ldv6y3xq" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Widget/">Widget</a></li></ul>
@@ -1721,7 +1766,7 @@ qcom                           （里面基本是空的）</code>— sample<br>�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.flysnow.org/2011/01/10/android-sources-directory-structure.html" data-id="ci7yv695d004rl0n1lry3o8t4" class="article-share-link">Share</a>
+      <a data-url="http://www.flysnow.org/2011/01/10/android-sources-directory-structure.html" data-id="cicw1g7hc004wvjn1hwat2e6h" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li></ul>
@@ -1934,389 +1979,7 @@ qcom                           （里面基本是空的）</code>— sample<br>�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.flysnow.org/2011/01/08/android-listview-tutorials.html" data-id="ci7yv695f004vl0n1xrch1yq2" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Widget/">Widget</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-  
-
-  
-    <article id="post-android-edittext-tutorials" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2010/11/29/android-edittext-tutorials.html" class="article-date">
-  <time datetime="2010-11-29T00:51:00.000Z" itemprop="datePublished">2010-11-29</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Android/">Android</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2010/11/29/android-edittext-tutorials.html">Android EditText使用详解-包含很多教程上看不到的功能演示</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>标题有点大，说是详解，其实就是对EditText的一些常用功能的介绍，包括密码框，电话框，空白提示文字等等的讲解，尽量的介绍详细一点，也就是所谓的详解了。。呵呵</p>
-<h2 id="一：新建HelloEditText工程">一：新建HelloEditText工程</h2><p>新建一个Hello world详细步骤可以参见</p>
-<p><a href="/2010/11/13/android-helloworld.html">Android 第一个Android应用，HelloWorld</a></p>
-<p>创建设置如下：</p>
-<ol>
-<li>Project name:HelloEditText</li>
-<li>Build Target :android 2.2</li>
-<li>Application name:HelloEditText</li>
-<li>Package name:com.flysnow</li>
-<li>create Activity:HelloEditText</li>
-<li>min SDK 8</li>
-</ol>
-<p>这时候运行还看不到EditText，因为我们还没有加上,修改main.xml如下：</p>
-<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
-    <span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>
-        <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span>
-        <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span>
-        <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>
-        &gt;</span>
-    <span class="tag">&lt;<span class="title">EditText</span>
-        <span class="attribute">android:id</span>=<span class="value">"@+id/edit_text"</span>  
-        <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> 
-        <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span> 
-        <span class="attribute">android:text</span>=<span class="value">"这是一个EditText"</span>/&gt;</span>
-<span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>
-</code></pre><p> 这里添加了一个id为”edit_text”的EditText，设置默认显示为本为“这是一个EditText”。。运行效果如下：</p>
-<p><img src="http://dl.iteye.com/upload/attachment/355666/8abc632a-3e6c-3c5f-9dc1-90aac6470f96.png" alt=""></p>
-<h2 id="二：EditText简介">二：EditText简介</h2><p>EditText是一个非常重要的组件，可以说它是用户和Android应用进行数据传输窗户，有了它就等于有了一扇和Android应用传输的门，通过它用户可以把数据传给Android应用，然后得到我们想要的数据。</p>
-<p>EditText是TextView的子类，所以TextView的方法和特性同样存在于EditText中，具体的TextView的介绍可以参考上一节<a href="/2010/11/25/android-textview-tutorials.html">Android TextView小组件的使用—附带超链接和跑马灯效果 </a></p>
-<h2 id="三：长度和空白提示文字,提示文字颜色,是否可编辑等">三：长度和空白提示文字,提示文字颜色,是否可编辑等</h2><p>EditText有一些属性可以设置EditText的特性，比如最大长度，空白提示文字等。</p>
-<ol>
-<li>有时候我们有一些特属的需要，要求只能在EditText中输入特定个数的字符，比如身份证号、手机号吗等。这时候就可以通过android:maxLength属性来设置最大输入字符个数，比如android:maxLength=“4”就表示最多能输入4个字符，再多了就输入不进去了。</li>
-</ol>
-<ol>
-<li>空白提示文字。有时候我们需要说明你定义的这个EditText是做什么用的，比如让输入“用户名”，或者输入“电话号码”等，但是你又不想在EditText前面加一个TextView来说明这是输入“用户名”的，因为这会使用一个TextView，那么怎么办呢？EditText为我们提供了android:hint来设置当EditText内容为空时显示的文本，这个文本只在EditText为空时显示，你输入字符的时候就消失了，不影响你的EditText的文本。。修改main.xml如下：</li>
-</ol>
-<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
-<span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>
-    <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span>
-    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span>
-    <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>
-    &gt;</span>
-<span class="tag">&lt;<span class="title">EditText</span>
-    <span class="attribute">android:id</span>=<span class="value">"@+id/edit_text"</span>  
-    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> 
-    <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>
-    <span class="attribute">android:maxLength</span>=<span class="value">"40"</span>
-    <span class="attribute">android:hint</span>=<span class="value">"请输入用户名..."</span>/&gt;</span>
-<span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>
-</code></pre><p>运行应用就会看到如下的效果：</p>
-<p><img src="http://dl.iteye.com/upload/attachment/355690/1fe441fe-e9fc-32f2-8fcf-53e0445d654c.png" alt=""><br>看看吧，简洁明了还不用新增一个TextView说明，也不影响用户操作。</p>
-<ol>
-<li>上面列出了空白时的提示文字，有的人说了，我不想要这个灰色的提示文字，和我的应用整体风格不协调，那也行啊，我们可以换颜色，怎么换呢，就是通过android:textColorHint属性设置你想要的颜色。修改main.xml如下:</li>
-</ol>
-<pre><code>&lt;?xml <span class="variable">version=</span><span class="string">"1.0"</span> <span class="variable">encoding=</span><span class="string">"utf-8"</span>?&gt;
-&lt;LinearLayout xmlns:<span class="variable">android=</span><span class="string">"http://schemas.android.com/apk/res/android"</span>
-    android:<span class="variable">orientation=</span><span class="string">"vertical"</span>
-    android:<span class="variable">layout_width=</span><span class="string">"fill_parent"</span>
-    android:<span class="variable">layout_height=</span><span class="string">"fill_parent"</span>
-    &gt;
-&lt;EditText
-    android:<span class="variable">id=</span><span class="string">"@+id/edit_text"</span>  
-    android:<span class="variable">layout_width=</span><span class="string">"fill_parent"</span> 
-    android:<span class="variable">layout_height=</span><span class="string">"wrap_content"</span>
-    android:<span class="variable">maxLength=</span><span class="string">"40"</span>
-    android:<span class="variable">hint=</span><span class="string">"请输入用户名..."</span>
-    android:<span class="variable">textColorHint=</span><span class="string">"#238745"</span>/&gt;
-&lt;/LinearLayout&gt;
-</code></pre><p>运行程序效果如下：</p>
-<p><img src="http://dl.iteye.com/upload/attachment/355702/7751967e-633b-3c69-bdc0-f135b1a25a25.png" alt=""><br>看到了吧，颜色已经变了。。</p>
-<ol>
-<li>还有一个比较实用的功能，就是设置EditText的不可编辑。设置android:enabled=”false”可以实现不可编辑，可以获得焦点。这时候我们看到EditText和一个TextView差不多：<img src="http://dl.iteye.com/upload/attachment/355705/dccc8638-134c-3532-9d44-03fbb394669b.png" alt=""></li>
-</ol>
-<ol>
-<li>实现类似html中Textarea的文本域。在Android中没有专门的文本域组件，但是可以通过设置EditText的高来实现同样的文本域功能。修改main.xml如下:</li>
-</ol>
-<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
-<span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>
-    <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span>
-    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span>
-    <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>
-    &gt;</span>
-<span class="tag">&lt;<span class="title">EditText</span>
-    <span class="attribute">android:id</span>=<span class="value">"@+id/edit_text"</span>  
-    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> 
-    <span class="attribute">android:layout_height</span>=<span class="value">"200dip"</span>/&gt;</span>
-<span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>
-</code></pre><p>运行程序效果如下：</p>
-<p><img src="http://dl.iteye.com/upload/attachment/355707/a1e61bd2-1162-3b7a-8a5c-3dfe880e3866.png" alt=""></p>
-<h2 id="四：输入特殊格式的字符">四：输入特殊格式的字符</h2><p>在我们开发程序的时候不免会输入一些特属个数的字符，比如密码（输入框的字符要加密显示），电话号码（比如数字和-）,数字等，这些都算是一些特属格式的字符，强大的EditText同样为我们提供了输入这些特属格式字符的设置。</p>
-<ol>
-<li>密码文本框。密码输入也是Android应用常用的功能，通过配置EditText的android:password=”true”就可以实现这一密码输入功能，修改main.xml如下：</li>
-</ol>
-<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
-<span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>
-    <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span>
-    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span>
-    <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>
-    &gt;</span>
-<span class="tag">&lt;<span class="title">EditText</span>
-    <span class="attribute">android:id</span>=<span class="value">"@+id/edit_text"</span>  
-    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> 
-    <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>
-    <span class="attribute">android:password</span>=<span class="value">"true"</span>/&gt;</span>
-<span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>
-</code></pre><p>运行效果如下：</p>
-<p><img src="http://dl.iteye.com/upload/attachment/355709/b4831d6e-2f6a-3b1e-a8ae-982083b1e596.png" alt=""><br>可以看到我们输入的字符已经被“.”这样的掩码所代替。</p>
-<ol>
-<li>手机中发短信打电话是必不可少的，所以用于专门输入电话号码的文本框也是大有用途，有了他我们对是否是电话号码的校验就容易的多了(因为字符是正确的，只要校验格式<br>).通过设置android:phoneNumber=”true”就可以把EditText变成只接受电话号码输入的文本框，连软键盘都已经变成拨号专用软键盘了，所以不用再担心输入其他字符了。修改main.xml如下： </li>
-</ol>
-<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
-<span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>
-    <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span>
-    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span>
-    <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>
-    &gt;</span>
-<span class="tag">&lt;<span class="title">EditText</span>
-    <span class="attribute">android:id</span>=<span class="value">"@+id/edit_text"</span>  
-    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> 
-    <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>
-    <span class="attribute">android:phoneNumber</span>=<span class="value">"true"</span>/&gt;</span>
-<span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>
-</code></pre><p>运行程序效果如下：</p>
-<p><img src="http://dl.iteye.com/upload/attachment/355713/525c31d6-adbe-39e2-8edb-afb6431d657f.png" alt=""><br>注意看软键盘，已经变成拨号专用的啦.</p>
-<ol>
-<li>有时候我们只想输入数字，不想输入字母，EditText为我们提供了android:numeric来控制输入的数字类型，一共有三种分别为integer（正整数）、signed（带符号整数）和decimal(浮点数)。这里以signed类型的为例，修改main.xml如下：</li>
-</ol>
-<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
-<span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>
-    <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span>
-    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span>
-    <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>
-    &gt;</span>
-<span class="tag">&lt;<span class="title">EditText</span>
-    <span class="attribute">android:id</span>=<span class="value">"@+id/edit_text"</span>  
-    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> 
-    <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>
-    <span class="attribute">android:numeric</span>=<span class="value">"signed"</span>/&gt;</span>
-<span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>
-</code></pre><p>运行效果如下：</p>
-<p><img src="http://dl.iteye.com/upload/attachment/355719/88cc320b-3d8f-3cd7-9dc0-19c8da6df9dd.png" alt=""><br>注意这里的软键盘变成“数字键盘”的变化.</p>
-<h2 id="五：为文本指定特定的软键盘类型">五：为文本指定特定的软键盘类型</h2><p>前面我们通过指定为电话号码特定格式，然后键盘类型变成了拨号专用的键盘，这个是自动变的，其实我们也可以通<br>过android:inputType来设置文本的类型，让输入法选择合适的软键盘的。。android:inputType有很多类型，这里使用date类型来演示,修改main.xml如下：</p>
-<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
-<span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>
-    <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span>
-    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span>
-    <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>
-    &gt;</span>
-<span class="tag">&lt;<span class="title">EditText</span>
-    <span class="attribute">android:id</span>=<span class="value">"@+id/edit_text"</span>  
-    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> 
-    <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>
-    <span class="attribute">android:inputType</span>=<span class="value">"date"</span>/&gt;</span>
-<span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>
-</code></pre><p>运行效果如下：</p>
-<p><img src="http://dl.iteye.com/upload/attachment/355729/bbfe54c6-a87a-3ab6-908d-32644cda7d31.png" alt=""></p>
-<h2 id="六：Enter键图标的设置">六：Enter键图标的设置</h2><p>软键盘的Enter键默认显示的是“完成”文本，我们知道按Enter建表示前置工作已经准备完毕了，要去什么什么啦。比如，在一个搜索中，我们输入要搜索的文本，然后按Enter表示要去搜索了，但是默认的Enter键显示的是“完成”文本，看着不太合适，不符合搜索的语义，如果能显示“搜索”两个字或者显示一个表示搜索的图标多好。事实证明我们的想法是合理的，Android也为我们提供的这样的功能。通过设置android:imeOptions来改变默认的“完成”文本。这里举几个常用的常量值：</p>
-<ol>
-<li>actionUnspecified  未指定，对应常量EditorInfo.IME_ACTION_UNSPECIFIED.效果：<img src="http://dl.iteye.com/upload/attachment/355737/bd9d7b7c-2a93-37b3-afd9-cda2f3593058.png" alt=""></li>
-</ol>
-<ol>
-<li>actionNone 没有动作,对应常量EditorInfo.IME_ACTION_NONE 效果：<img src="http://dl.iteye.com/upload/attachment/355737/bd9d7b7c-2a93-37b3-afd9-cda2f3593058.png" alt=""></li>
-</ol>
-<ol>
-<li>actionGo 去往，对应常量EditorInfo.IME_ACTION_GO 效果：<img src="http://dl.iteye.com/upload/attachment/355757/a8db4447-ec91-39aa-a546-c117db16cf55.png" alt=""></li>
-</ol>
-<ol>
-<li>actionSearch 搜索，对应常量EditorInfo.IME_ACTION_SEARCH 效果： <img src="http://dl.iteye.com/upload/attachment/355769/c35d6b78-d5b9-314a-9698-144bc12d0af3.png" alt=""></li>
-</ol>
-<ol>
-<li>actionSend 发送，对应常量EditorInfo.IME_ACTION_SEND 效果：<img src="http://dl.iteye.com/upload/attachment/355788/c168252f-bb3d-3831-8e3c-8bced16b12a1.png" alt=""></li>
-</ol>
-<ol>
-<li>actionNext 下一个，对应常量EditorInfo.IME_ACTION_NEXT 效果：<img src="http://dl.iteye.com/upload/attachment/355798/aa6bd8b1-8ab3-38d9-b162-01ce10f4f998.png" alt=""></li>
-</ol>
-<ol>
-<li>actionDone 完成，对应常量EditorInfo.IME_ACTION_DONE 效果：<img src="http://dl.iteye.com/upload/attachment/355804/79979746-7373-3377-bb7e-3dd4bdede464.png" alt=""></li>
-</ol>
-<p>下面已搜索为例，演示一个实例，修改main.xml如下：</p>
-<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
-<span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>
-    <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span>
-    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span>
-    <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>
-    &gt;</span>
-<span class="tag">&lt;<span class="title">EditText</span>
-    <span class="attribute">android:id</span>=<span class="value">"@+id/edit_text"</span>  
-    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> 
-    <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>
-    <span class="attribute">android:imeOptions</span>=<span class="value">"actionSearch"</span>/&gt;</span>
-<span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>
-</code></pre><p>修改HelloEditText如下：</p>
-<pre><code><span class="keyword">package</span> com.flysnow;
-
-<span class="keyword">import</span> android.app.<span class="type">Activity</span>;
-<span class="keyword">import</span> android.os.<span class="type">Bundle</span>;
-<span class="keyword">import</span> android.view.<span class="type">KeyEvent</span>;
-<span class="keyword">import</span> android.widget.<span class="type">EditText</span>;
-<span class="keyword">import</span> android.widget.<span class="type">TextView</span>;
-<span class="keyword">import</span> android.widget.<span class="type">Toast</span>;
-<span class="keyword">import</span> android.widget.<span class="type">TextView</span>.<span class="type">OnEditorActionListener</span>;
-
-public <span class="class"><span class="keyword">class</span> <span class="title">HelloEditText</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Activity</span> {</span>
-    <span class="comment">/** Called when the activity is first created. */</span>
-    <span class="annotation">@Override</span>
-    public void onCreate(<span class="type">Bundle</span> savedInstanceState) {
-        <span class="keyword">super</span>.onCreate(savedInstanceState);
-        setContentView(<span class="type">R</span>.layout.main);
-        <span class="type">EditText</span> editText=(<span class="type">EditText</span>)findViewById(<span class="type">R</span>.id.edit_text);
-        editText.setOnEditorActionListener(<span class="keyword">new</span> <span class="type">OnEditorActionListener</span>() {
-            <span class="annotation">@Override</span>
-            public boolean onEditorAction(<span class="type">TextView</span> v, int actionId, <span class="type">KeyEvent</span> event) {
-                <span class="type">Toast</span>.makeText(<span class="type">HelloEditText</span>.<span class="keyword">this</span>, <span class="type">String</span>.valueOf(actionId), <span class="type">Toast</span>.<span class="type">LENGTH_SHORT</span>).show();
-                <span class="keyword">return</span> <span class="literal">false</span>;
-            }
-        });
-    }
-}
-</code></pre><p>运行程序，点击回车（也就是搜索图标软键盘按钮）会显示该actionId.我们上面的每一个设置都会对应一个常量，这里的actionId就是那个常量值。</p>
-<p><img src="http://dl.iteye.com/upload/attachment/355851/c9f95967-fe2f-3850-a96a-17bc220fcc32.png" alt=""></p>
-<h2 id="七：EditText的取值、全选、部分选择、获取选中文本">七：EditText的取值、全选、部分选择、获取选中文本</h2><p>下面通过一个例子来演示EditText的取值、全选、部分选择和获取选中文本.main.xml修改如下：</p>
-<pre><code>&lt;?xml <span class="variable">version=</span><span class="string">"1.0"</span> <span class="variable">encoding=</span><span class="string">"utf-8"</span>?&gt;
-&lt;LinearLayout xmlns:<span class="variable">android=</span><span class="string">"http://schemas.android.com/apk/res/android"</span>
-    android:<span class="variable">orientation=</span><span class="string">"vertical"</span>
-    android:<span class="variable">layout_width=</span><span class="string">"fill_parent"</span>
-    android:<span class="variable">layout_height=</span><span class="string">"fill_parent"</span>
-    &gt;
-&lt;EditText
-    android:<span class="variable">id=</span><span class="string">"@+id/edit_text"</span>  
-    android:<span class="variable">layout_width=</span><span class="string">"fill_parent"</span> 
-    android:<span class="variable">layout_height=</span><span class="string">"wrap_content"</span>
-    android:<span class="variable">imeOptions=</span><span class="string">"actionSearch"</span>/&gt;
-&lt;Button 
-    android:<span class="variable">id=</span><span class="string">"@+id/btn_get_value"</span>
-    android:<span class="variable">text=</span><span class="string">"取值"</span>
-    android:<span class="variable">layout_width=</span><span class="string">"wrap_content"</span>
-    android:<span class="variable">layout_height=</span><span class="string">"wrap_content"</span>/&gt;
-&lt;Button 
-    android:<span class="variable">id=</span><span class="string">"@+id/btn_all"</span>
-    android:<span class="variable">text=</span><span class="string">"全选"</span>
-    android:<span class="variable">layout_width=</span><span class="string">"wrap_content"</span>
-    android:<span class="variable">layout_height=</span><span class="string">"wrap_content"</span>/&gt;
-&lt;Button 
-    android:<span class="variable">id=</span><span class="string">"@+id/btn_select"</span>
-    android:<span class="variable">text=</span><span class="string">"从第2个字符开始选择"</span>
-    android:<span class="variable">layout_width=</span><span class="string">"wrap_content"</span>
-    android:<span class="variable">layout_height=</span><span class="string">"wrap_content"</span>/&gt;
-&lt;Button 
-    android:<span class="variable">id=</span><span class="string">"@+id/btn_get_select"</span>
-    android:<span class="variable">text=</span><span class="string">"获取选中文本"</span>
-    android:<span class="variable">layout_width=</span><span class="string">"wrap_content"</span>
-    android:<span class="variable">layout_height=</span><span class="string">"wrap_content"</span>/&gt;
-&lt;/LinearLayout&gt;
-</code></pre><p>HelloEditText修改如下：</p>
-<pre><code><span class="keyword">package</span> com.flysnow;
-
-<span class="keyword">import</span> android.app.Activity;
-<span class="keyword">import</span> android.os.Bundle;
-<span class="keyword">import</span> android.text.Editable;
-<span class="keyword">import</span> android.text.Selection;
-<span class="keyword">import</span> android.view.KeyEvent;
-<span class="keyword">import</span> android.view.View;
-<span class="keyword">import</span> android.view.View.OnClickListener;
-<span class="keyword">import</span> android.widget.Button;
-<span class="keyword">import</span> android.widget.EditText;
-<span class="keyword">import</span> android.widget.TextView;
-<span class="keyword">import</span> android.widget.Toast;
-<span class="keyword">import</span> android.widget.TextView.OnEditorActionListener;
-<span class="javadoc">/**
- * EditText演示
- *<span class="javadoctag"> @author</span> 飞雪无情
- *<span class="javadoctag"> @since</span> 2010-11-29
- */</span>
-<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloEditText</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>{
-    <span class="javadoc">/** Called when the activity is first created. */</span>
-    <span class="annotation">@Override</span>
-    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>{
-        <span class="keyword">super</span>.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-        <span class="keyword">final</span> EditText editText=(EditText)findViewById(R.id.edit_text);
-        <span class="comment">//监听回车键</span>
-        editText.setOnEditorActionListener(<span class="keyword">new</span> OnEditorActionListener() {
-            <span class="annotation">@Override</span>
-            <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onEditorAction</span><span class="params">(TextView v, <span class="keyword">int</span> actionId, KeyEvent event)</span> </span>{
-                Toast.makeText(HelloEditText.<span class="keyword">this</span>, String.valueOf(actionId), Toast.LENGTH_SHORT).show();
-                <span class="keyword">return</span> <span class="keyword">false</span>;
-            }
-        });
-        <span class="comment">//获取EditText文本</span>
-        Button getValue=(Button)findViewById(R.id.btn_get_value);
-        getValue.setOnClickListener(<span class="keyword">new</span> OnClickListener() {
-            <span class="annotation">@Override</span>
-            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>{
-                Toast.makeText(HelloEditText.<span class="keyword">this</span>, editText.getText().toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
-        <span class="comment">//让EditText全选</span>
-        Button all=(Button)findViewById(R.id.btn_all);
-        all.setOnClickListener(<span class="keyword">new</span> OnClickListener() {
-            <span class="annotation">@Override</span>
-            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>{
-                editText.selectAll();
-            }
-        });
-        <span class="comment">//从第2个字符开始选择EditText文本</span>
-        Button select=(Button)findViewById(R.id.btn_select);
-        select.setOnClickListener(<span class="keyword">new</span> OnClickListener() {
-            <span class="annotation">@Override</span>
-            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>{
-                Editable editable=editText.getText();
-                Selection.setSelection(editable, <span class="number">1</span>,editable.length());
-            }
-        });
-      <span class="comment">//获取选中的文本</span>
-        Button getSelect=(Button)findViewById(R.id.btn_get_select);
-        getSelect.setOnClickListener(<span class="keyword">new</span> OnClickListener() {
-            <span class="annotation">@Override</span>
-            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>{
-                <span class="keyword">int</span> start=editText.getSelectionStart();
-                <span class="keyword">int</span> end=editText.getSelectionEnd();
-                CharSequence selectText=editText.getText().subSequence(start, end);
-                Toast.makeText(HelloEditText.<span class="keyword">this</span>, selectText, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-    <span class="javadoc">/**
-     * 交换两个索引
-     *<span class="javadoctag"> @param</span> start 开始索引
-     *<span class="javadoctag"> @param</span> end 结束索引
-     */</span>
-    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">switchIndex</span><span class="params">(<span class="keyword">int</span> start, <span class="keyword">int</span> end)</span> </span>{
-        <span class="keyword">int</span> temp=start;
-        start=end;
-        end=temp;
-    }
-}
-</code></pre><p>运行效果如下：</p>
-<p><img src="http://dl.iteye.com/upload/attachment/356058/4926c2d1-36a0-3cb6-b02f-e743e2313045.png" alt=""><br>可以通过输入文字和点击下面的按钮测试。</p>
-<h2 id="八：小结">八：小结</h2><p>这结详细介绍了EditText的大部分特性和常用功能，如常用的密码框，获取值等等。这几天忙的没更新，这次更新个长的。可以够消化一阵子的。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://www.flysnow.org/2010/11/29/android-edittext-tutorials.html" data-id="ci7yv695i004zl0n1m8duhyr9" class="article-share-link">Share</a>
+      <a data-url="http://www.flysnow.org/2011/01/08/android-listview-tutorials.html" data-id="cicw1g7hf0050vjn1uz57w9cl" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Widget/">Widget</a></li></ul>
@@ -2342,7 +2005,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Hexo/">Hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/软件开发/">软件开发</a><span class="category-list-count">2</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a><span class="category-list-count">39</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Hexo/">Hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/软件开发/">软件开发</a><span class="category-list-count">2</span></li></ul>
     </div>
   </div>
 
@@ -2351,7 +2014,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/API/">API</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">38</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Apache/">Apache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Email/">Email</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github/">Github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gradle/">Gradle</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Http/">Http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HttpClitent/">HttpClitent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intent/">Intent</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/">Nginx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/">PHP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/">Ubuntu</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Widget/">Widget</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/goagent/">goagent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/代理/">代理</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/开源/">开源</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/敏捷/">敏捷</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库/">数据库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻墙/">翻墙</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻译/">翻译</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/软件工程/">软件工程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/软件开发/">软件开发</a><span class="tag-list-count">2</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/API/">API</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">39</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ant/">Ant</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Apache/">Apache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Email/">Email</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github/">Github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gradle/">Gradle</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Http/">Http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HttpClitent/">HttpClitent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intent/">Intent</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/">Nginx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/">PHP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/">Ubuntu</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Widget/">Widget</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/goagent/">goagent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/代理/">代理</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/开源/">开源</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/敏捷/">敏捷</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库/">数据库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻墙/">翻墙</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻译/">翻译</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/软件工程/">软件工程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/软件开发/">软件开发</a><span class="tag-list-count">2</span></li></ul>
     </div>
   </div>
 
@@ -2360,7 +2023,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/API/" style="font-size: 13.33px;">API</a><a href="/tags/Android/" style="font-size: 20px;">Android</a><a href="/tags/Apache/" style="font-size: 10px;">Apache</a><a href="/tags/Email/" style="font-size: 10px;">Email</a><a href="/tags/Github/" style="font-size: 10px;">Github</a><a href="/tags/Gradle/" style="font-size: 11.67px;">Gradle</a><a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a><a href="/tags/Http/" style="font-size: 10px;">Http</a><a href="/tags/HttpClitent/" style="font-size: 10px;">HttpClitent</a><a href="/tags/Intent/" style="font-size: 13.33px;">Intent</a><a href="/tags/Linux/" style="font-size: 15px;">Linux</a><a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a><a href="/tags/PHP/" style="font-size: 10px;">PHP</a><a href="/tags/Ubuntu/" style="font-size: 18.33px;">Ubuntu</a><a href="/tags/Widget/" style="font-size: 16.67px;">Widget</a><a href="/tags/goagent/" style="font-size: 10px;">goagent</a><a href="/tags/代理/" style="font-size: 10px;">代理</a><a href="/tags/开源/" style="font-size: 10px;">开源</a><a href="/tags/敏捷/" style="font-size: 10px;">敏捷</a><a href="/tags/数据库/" style="font-size: 10px;">数据库</a><a href="/tags/翻墙/" style="font-size: 10px;">翻墙</a><a href="/tags/翻译/" style="font-size: 10px;">翻译</a><a href="/tags/软件工程/" style="font-size: 10px;">软件工程</a><a href="/tags/软件开发/" style="font-size: 11.67px;">软件开发</a>
+      <a href="/tags/API/" style="font-size: 13.33px;">API</a><a href="/tags/Android/" style="font-size: 20px;">Android</a><a href="/tags/Ant/" style="font-size: 10px;">Ant</a><a href="/tags/Apache/" style="font-size: 10px;">Apache</a><a href="/tags/Email/" style="font-size: 10px;">Email</a><a href="/tags/Github/" style="font-size: 10px;">Github</a><a href="/tags/Gradle/" style="font-size: 11.67px;">Gradle</a><a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a><a href="/tags/Http/" style="font-size: 10px;">Http</a><a href="/tags/HttpClitent/" style="font-size: 10px;">HttpClitent</a><a href="/tags/Intent/" style="font-size: 13.33px;">Intent</a><a href="/tags/Linux/" style="font-size: 15px;">Linux</a><a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a><a href="/tags/PHP/" style="font-size: 10px;">PHP</a><a href="/tags/Ubuntu/" style="font-size: 18.33px;">Ubuntu</a><a href="/tags/Widget/" style="font-size: 16.67px;">Widget</a><a href="/tags/goagent/" style="font-size: 10px;">goagent</a><a href="/tags/代理/" style="font-size: 10px;">代理</a><a href="/tags/开源/" style="font-size: 10px;">开源</a><a href="/tags/敏捷/" style="font-size: 10px;">敏捷</a><a href="/tags/数据库/" style="font-size: 10px;">数据库</a><a href="/tags/翻墙/" style="font-size: 10px;">翻墙</a><a href="/tags/翻译/" style="font-size: 10px;">翻译</a><a href="/tags/软件工程/" style="font-size: 10px;">软件工程</a><a href="/tags/软件开发/" style="font-size: 11.67px;">软件开发</a>
     </div>
   </div>
 
@@ -2369,7 +2032,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">十一月 2013</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">二月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">一月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/12/">十二月 2011</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/11/">十一月 2011</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/10/">十月 2011</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/07/">七月 2011</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/05/">五月 2011</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/03/">三月 2011</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/02/">二月 2011</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/01/">一月 2011</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2010/11/">十一月 2010</a><span class="archive-list-count">7</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">十一月 2013</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">二月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">一月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/12/">十二月 2011</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/11/">十一月 2011</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/10/">十月 2011</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/07/">七月 2011</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/05/">五月 2011</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/03/">三月 2011</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/02/">二月 2011</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/01/">一月 2011</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2010/11/">十一月 2010</a><span class="archive-list-count">7</span></li></ul>
     </div>
   </div>
 
@@ -2379,6 +2042,10 @@ public <span class="class"><span class="keyword">class</span> <span class="title
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/08/03/android-tech-docs-ant-tasks.html">android技术文档翻译--ant任务</a>
+          </li>
         
           <li>
             <a href="/2015/03/30/manage-your-android-project-with-gradle.html">使用Gradle管理你的Android Studio工程</a>
@@ -2394,10 +2061,6 @@ public <span class="class"><span class="keyword">class</span> <span class="title
         
           <li>
             <a href="/2015/01/12/android-gradle-plugin-translate-done.html">Android Gradle插件中文指南</a>
-          </li>
-        
-          <li>
-            <a href="/2014/07/13/effective-programming-more-than-writing-code.html">高效能程序员的修炼</a>
           </li>
         
       </ul>
