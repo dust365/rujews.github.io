@@ -4,7 +4,7 @@
   <subtitle><![CDATA[专注于Android、Java、移动互联网、项目管理、软件架构]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.flysnow.org/"/>
-  <updated>2015-08-03T14:50:02.000Z</updated>
+  <updated>2015-08-13T14:27:45.000Z</updated>
   <id>http://www.flysnow.org/</id>
   
   <author>
@@ -13,6 +13,267 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[Android注解支持(Support Annotations)]]></title>
+    <link href="http://www.flysnow.org/2015/08/13/android-tech-docs-support-annotations.html"/>
+    <id>http://www.flysnow.org/2015/08/13/android-tech-docs-support-annotations.html</id>
+    <published>2015-08-13T14:16:50.000Z</published>
+    <updated>2015-08-13T14:27:45.000Z</updated>
+    <content type="html"><![CDATA[<p>以下内容由<a href="http://www.flysnow.org" target="_blank" rel="external">http://www.flysnow.org</a>(飞雪无情)提供翻译</p>
+<p>原文地址 <a href="http://tools.android.com/tech-docs/support-annotations" target="_blank" rel="external">http://tools.android.com/tech-docs/support-annotations</a></p>
+<p>更多翻译的Android技术文档请参考：<a href="https://github.com/rujews/android-tech-docs" target="_blank" rel="external">https://github.com/rujews/android-tech-docs</a></p>
+<h2 id="注解支持(Support_Annotations)">注解支持(Support Annotations)</h2><p>Android support library从19.1版本开始引入了一个新的注解库，它包含很多有用的元注解，你能用它们修饰你的代码，帮助你发现bug。Support library自己本身也用到了这些注解，所以作为support library的用户，Android Studio已经基于这些注解校验了你的代码并且标注其中潜在的问题。Support library 22.2版本又新增了13个新的注解以供使用。</p>
+<h3 id="使用注解库">使用注解库</h3><p>注解默认是没有包含的；他们被包装成一个独立的库。（support library现在由一些更小的库组成：v4-support, appcompat, gridlayout, mediarouter等等）</p>
+<p>(如果你正在使用appcompat库，那么你已经可以使用这些注解了，因为appcomat它自己也依赖它。)</p>
+<p>添加使用注解最简单的方式就是打开Project Structure对话框。首先在左边选中module，然后在右边选中Dependencies标签页，点击面板底部的<code>+</code>按钮，选择Library Dependency，假设你已经把Android Support Repository安装到你的SDK中了，那么注解库将会出现在列表中，你只需点击选中它即可(这里是列表中的第一个):<br><img src="/uploads/2015/08/add-dependency.png" alt="添加依赖"></p>
+<p>点击OK完成Project Structure的编辑。这会修改你的build.gradle文件，当然你也可以手动编辑它：</p>
+<pre><code><span class="keyword">dependencies</span> {
+    <span class="keyword">compile</span> <span class="string">'com.android.support:support-annotations:22.2.0'</span>
+}
+</code></pre><p>对于Android application和Android library这两个类型的module(你应用了<code>com.android.application</code>或者<code>com.android.library</code>插件的)来说，你需要做的已经都做好了。如果你想只在Java module使用这些注解，那么你就明确的包含SDK仓库了，因为support libraries不能从jcenter获得(Android Gradle插件会自动的包含这些依赖，但是Java插件却没有。)</p>
+<pre><code><span class="xml">repositories </span><span class="expression">{
+   <span class="variable">jcenter</span>()
+   <span class="variable">maven</span> { <span class="variable">url</span> '&lt;<span class="variable">your-SDK-path</span>&gt;<span class="end-block">/extras</span><span class="end-block">/android</span><span class="end-block">/m</span>2<span class="variable">repository</span>' }</span><span class="xml">
+}</span>
+</code></pre><h3 id="执行注解">执行注解</h3><p>当你用Android Studio和IntelliJ的时候，如果给标注了这些注解的方法传递错误类型的参数，那么IDE就会实时标记出来。</p>
+<p>从Gradle插件1.3.0-beta1版本开始，并且安装了Android M Preview平台工具的情况下，通过命令行调用gradle的<code>lint</code>任务就可以执行这些检查。如果你想把标记问题作为持续集成的一部分，那么这种方式是非常有用的。说明：这并不包含nullness注解。本文中所介绍的其他注解都可以通过lint执行检查。</p>
+<h3 id="Nullness_Annotations">Nullness Annotations</h3><p>@Nullable注解能被用来标注给定的参数或者返回值可以为null。<br>类似的，@NonNull注解能被用来标注给定的参数或者返回值不能为null。</p>
+<p>如果一个本地变量的值为null(比如因为过早的代码检查它是否为null)，而你又把它作为参数传递给了一个方法，并且该方法的参数又被@NonNull标注，那么IDE会提醒你，你有一个潜在的崩溃问题。</p>
+<pre><code>v4 support <span class="keyword">library</span>中的FragmentActivity的示例代码：
+
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+<span class="keyword">...</span>
+
+/**
+ * Add support <span class="keyword">for</span> inflating the &amp;lt;fragment&gt; tag.
+ */
+@Nullable
+@Override
+public View onCreateView(String name, @NonNull Context context, @NonNull AttributeSet attrs) {
+<span class="keyword">...</span>
+</code></pre><p>(如果你执行Analyze &gt; Infer Nullity，或者你在键入时把@NonNull替换成了@NotNull，那么IDE可能会提供附加的IntelliJ注解。参考底部的“IntelliJ Annotations”段落了解更多)</p>
+<p>注意@NonNull和@Nullable并不是对立的：还有第三种可能：未指定。当你没有指定@NonNull或者@Nullable的时候，工具就不能确定，所以这个API也就不起作用。</p>
+<p>最初，我们在findViewById方法上标注@Nullable，从技术上说，这是正确的：findViewById可以返回null。但是如果你知道你在做什么的时候(如果你传递给他一个存在的id)他是不会返回null的。当我们使用@Nullable注解它的时候，就意味着源代码编辑器中会有大量的代码出现高亮警告。如果你已经意识到每次使用该方法都应该明确的进行null检查，那么就只能用@Nullable标注返回值。有个经验规则：看现有的“好的代码”(比如审查产品代码)，看看这些API是怎么被使用的。如果该代码为null检查结果，你应该为方法注解@Nullable。</p>
+<h3 id="资源类型注解">资源类型注解</h3><p>Android的资源值通常都是使用整型传递。这意味着获取一个drawable使用的参数，也能很容易的传递给一个获取string的方法；因为他们都是int类型，编译器很难区分。</p>
+<p>资源类型注解可以在这种情况下提供类型检查。比如一个被@StringRes住进诶的int类型参数，如果传递一个不是R.string类型的引用将会被IDE标注：<br><img src="/uploads/2015/08/image00.png" alt="资源类型注解"><br>以ActionBar为例:</p>
+<pre><code>import android.support.annotation.StringRes;
+<span class="keyword">...</span>
+public abstract void setTitle(@StringRes int resId);
+</code></pre><p>有很多不同资源类型的注解：如下的每一个Android资源类型：<br>@StringRes, @DrawableRes, @ColorRes, @InterpolatorRes,等等。一般情况下，如果有一个<code>foo</code>类型的资源，那么它的相应的资源类型注解就是FooRes.</p>
+<p>除此之外，还有一个名为@AnyRes特殊的资源类型注解。它被用来标注一个未知的特殊类型的资源，但是它必须是一个资源类型。比如在框架中，它被用在<code>Resources#getResourceName(@AnyRes int resId)</code>上，使用的时候，你可以这样<code>getResources().getResourceName(R.drawable.icon)</code>用，也可以<code>getResources().getResourceName(R.string.app_name)</code>这样用，但是却不能这样<code>getResources().getResourceName(42)</code>用。</p>
+<p>请注意，如果你的API支持多个资源类型，你可以使用多个注解来标注你的参数。</p>
+<h3 id="IntDef/StringDef:_类型定义注解">IntDef/StringDef: 类型定义注解</h3><p>整型除了可以作为资源的引用之外，也可以用作“枚举”类型使用。</p>
+<p>@IntDef和”typedef”作用非常类似，你可以创建另外一个注解，然后用@IntDef指定一个你期望的整型常量值列表，最后你就可以用这个定义好的注解修饰你的API了。</p>
+<p>appcompat库里的一个例子：</p>
+<pre><code><span class="keyword">import</span> android.support.annotation.IntDef;
+...
+<span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">ActionBar</span> </span>{
+...
+<span class="annotation">@IntDef</span>({NAVIGATION_MODE_STANDARD, NAVIGATION_MODE_LIST, NAVIGATION_MODE_TABS})
+<span class="annotation">@Retention</span>(RetentionPolicy.SOURCE)
+<span class="keyword">public</span> <span class="annotation">@interface</span> NavigationMode {}
+
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> NAVIGATION_MODE_STANDARD = <span class="number">0</span>;
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> NAVIGATION_MODE_LIST = <span class="number">1</span>;
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> NAVIGATION_MODE_TABS = <span class="number">2</span>;
+
+<span class="annotation">@NavigationMode</span>
+<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">getNavigationMode</span><span class="params">()</span></span>;
+
+<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">setNavigationMode</span><span class="params">(@NavigationMode <span class="keyword">int</span> mode)</span></span>;
+</code></pre><p>上面非注解的部分是现有的API。我们创建了一个新的注解(NavigationMode)并且用@IntDef标注它,通过@IntDef我们为返回值或者参数指定了可用的常量值。我们还添加了<code>@Retention(RetentionPolicy.SOURCE)</code>告诉编译器这个新定义的注解不需要被记录在生成的.class文件中(译者注：源代码级别的，生成class文件的时候这个注解就被编译器自动去掉了)。</p>
+<p>使用这个注解后，如果你传递的参数或者返回值不在指定的常量值中的话，IDE将会标记出这种情况。<br><img src="/uploads/2015/08/image06.png" alt="类型定义注解"></p>
+<p>你也可以指定一个整型是一个标记性质的类型；这样客户端代码就通过|，&amp;等操作符同时传递多个常量了：</p>
+<pre><code><span class="variable">@IntDef</span>(flag=true, value={
+        DISPLAY_USE_LOGO,
+        DISPLAY_SHOW_HOME,
+        DISPLAY_HOME_AS_UP,
+        DISPLAY_SHOW_TITLE,
+        DISPLAY_SHOW_CUSTOM
+})
+<span class="variable">@Retention</span>(RetentionPolicy.SOURCE)
+public <span class="variable">@interface</span> DisplayOptions {}
+</code></pre><p>最后，还有一个字符串版本的注解，就是@StringDef，它和@IntDef的作用基本上是一样，所不同的是它是针对字符串的。该注解一般不常用，但是有的时候非常有用，比如在限定向Activity#getSystemService方法传递的参数范围的时候。</p>
+<p>要了解关于类型注解的更多详细信息，请参考<br><a href="https://developer.android.com/tools/debugging/annotations.html#enum-annotations" target="_blank" rel="external">https://developer.android.com/tools/debugging/annotations.html#enum-annotations</a></p>
+<p>(这些都是建立在IntelliJ’s MagicConstant注解的基础上，你可以在这里找到该注解的详细信息：<a href="http://blog.jetbrains.com/idea/2012/02/new-magic-constant-inspection/" target="_blank" rel="external">http://blog.jetbrains.com/idea/2012/02/new-magic-constant-inspection/</a>)</p>
+<h3 id="线程注解:_@UiThread,_@WorkerThread,_…">线程注解: @UiThread, @WorkerThread, …</h3><p>(Support library 22.2及其之后版本支持.)</p>
+<p>如果你的方法只能在指定的线程类型中被调用，那么你就可以使用以下4个注解来标注它：</p>
+<ul>
+<li>@UiThread</li>
+<li>@MainThread</li>
+<li>@WorkerThread</li>
+<li>@BinderThread</li>
+</ul>
+<p>如果一个类中的所有方法都有相同的线程需求，那么你可以注解类本身。比如android.view.View，就被用@UiThread标注。</p>
+<p>关于线程注解使用的一个很好的例子就是AsyncTask：</p>
+<pre><code><span class="annotation">@WorkerThread</span>
+<span class="keyword">protected</span> <span class="keyword">abstract</span> <span class="function">Result <span class="title">doInBackground</span><span class="params">(Params... params)</span></span>;
+
+<span class="annotation">@MainThread</span>
+<span class="keyword">protected</span> <span class="function"><span class="keyword">void</span> <span class="title">onProgressUpdate</span><span class="params">(Progress... values)</span> </span>{
+}
+</code></pre><p>如果你在重写的doInBackground方法里尝试调用onProgressUpdate方法或者View的任何方法，IDE工具就会马上把它标记为一个错误：<br><img src="/uploads/2015/08/image04.png" alt="线程注解"></p>
+<p>@UiThread还是@MainThread?</p>
+<p>在进程里只有一个主线程。这个就是@MainThread。同时这个线程也是一个@UiThread。比如activity的主要窗口就运行在这个线程上。然而它也有能力为应用创建其他线程。这很少见，一般具备这样功能的都是系统进程。通常是把和生命周期有关的用@MainThread标注，和View层级结构相关的用@UiThread标注。但是由于@MainThread本质上是一个@UiThread，而大部分情况下@UiThread又是一个@MainThread，所以工具(lint ,Android Studio,等等)可以把他们互换，所以你能在一个可以调用@MainThread方法的地方也能调用@UiThread方法，反之亦然。</p>
+<h3 id="RGB颜色整型">RGB颜色整型</h3><p>当你的API期望一个颜色资源的时候，可以用@ColorRes标注，但是当你有一个相反的使用场景时，这种用法就不可用了，因为你并不是期望一个颜色资源id，而是一个真实的RGB或者ARGB的颜色值。</p>
+<p>在这种情况下，你可以使用@ColorInt注解，表示你期望的是一个代表颜色的整数值：</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">void</span> setTextColor(<span class="annotation">@ColorInt</span> <span class="keyword">int</span> color)
+</code></pre><p>有了这个，当你传递一个颜色id而不是颜色值的时候，lint就会标记出这段不正确的代码：<br><img src="/uploads/2015/08/image05.png" alt="颜色值注解"></p>
+<h3 id="值约束:_@Size,_@IntRange,_@FloatRange">值约束: @Size, @IntRange, @FloatRange</h3><p>如果你的参数是一个float或者double类型，并且一定要在某个范围内，你可以使用@FloatRange注解：</p>
+<pre><code><span class="tag">public</span> <span class="tag">void</span> <span class="tag">setAlpha</span>(<span class="variable">@FloatRange</span>(from=<span class="number">0.0</span>, to=<span class="number">1.0</span>) float alpha) {
+</code></pre><p>如果有人使用该API的时候传递一个0-255的值，比如尝试调用setAlpha(128)，那么工具就会捕获这一问题：</p>
+<p><img src="/uploads/2015/08/image08.png" alt="值约束注解"></p>
+<p>(你也可以指定是否包括起始值。)</p>
+<p>同样的，如果你的参数是一个int或者long类型，你可以使用@IntRange注解约束其值在一个特定的范围内：</p>
+<pre><code><span class="tag">public</span> <span class="tag">void</span> <span class="tag">setAlpha</span>(<span class="variable">@IntRange</span>(from=<span class="number">0</span>,to=<span class="number">255</span>) int alpha) { … }
+</code></pre><p>把这些注解应用到参数上是非常有用的，因为用户很有可能会提供错误范围的参数，比如上面的setAlpha例子，有的API是采用0-255的方式，而有的是采用0-1的float值的方式。</p>
+<p>最后，对于数据、集合以及字符串，你可以用@Size注解参数来限定集合的大小(当参数是字符串的时候，可以限定字符串的长度)。</p>
+<p>举几个例子</p>
+<ul>
+<li>集合不能为空: @Size(min=1)</li>
+<li>字符串最大只能有23个字符: @Size(max=23)</li>
+<li>数组只能有2个元素: @Size(2)</li>
+<li>数组的大小必须是2的倍数 (例如图形API中获取位置的x/y坐标数组: @Size(multiple=2)</li>
+</ul>
+<p><img src="/uploads/2015/08/image03.png" alt="值约束注解"></p>
+<h3 id="权限注解:_@RequiresPermission">权限注解: @RequiresPermission</h3><p>如果你的方法的调用需要调用者有特定的权限，你可以使用@RequiresPermission注解：</p>
+<pre><code><span class="annotation">@RequiresPermission</span>(Manifest.permission.SET_WALLPAPER)
+<span class="keyword">public</span> <span class="keyword">abstract</span> <span class="function"><span class="keyword">void</span> <span class="title">setWallpaper</span><span class="params">(Bitmap bitmap)</span> <span class="keyword">throws</span> IOException</span>;
+</code></pre><p>如果你至少需要权限集合中的一个，你可以使用anyOf属性：</p>
+<pre><code><span class="annotation">@RequiresPermission</span>(anyOf = {
+    Manifest.permission.ACCESS_COARSE_LOCATION,
+    Manifest.permission.ACCESS_FINE_LOCATION})
+<span class="keyword">public</span> <span class="keyword">abstract</span> <span class="function">Location <span class="title">getLastKnownLocation</span><span class="params">(String provider)</span></span>;
+</code></pre><p>如果你同时需要多个权限，你可以用allOf属性：</p>
+<pre><code><span class="annotation">@RequiresPermission</span>(allOf = {
+    Manifest.permission.READ_HISTORY_BOOKMARKS,
+    Manifest.permission.WRITE_HISTORY_BOOKMARKS})
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="function"><span class="keyword">void</span> <span class="title">updateVisitedHistory</span><span class="params">(ContentResolver cr, String url, <span class="keyword">boolean</span> real)</span> </span>{
+</code></pre><p>对于intents的权限，可以直接在定义的intent常量字符串字段上标注权限需求(他们通常都已经被@SdkConstant注解标注过了):</p>
+<pre><code><span class="annotation">@RequiresPermission</span>(android.Manifest.permission.BLUETOOTH)
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String ACTION_REQUEST_DISCOVERABLE =
+        <span class="string">"android.bluetooth.adapter.action.REQUEST_DISCOVERABLE"</span>;
+</code></pre><p>对于content providers的权限，你可能需要单独的标注读和写的权限访问，所以可以用@Read或者@Write标注每一个权限需求：</p>
+<pre><code><span class="variable">@RequiresPermission</span>.<span class="function">Read</span>(<span class="variable">@RequiresPermission</span>(READ_HISTORY_BOOKMARKS))
+<span class="variable">@RequiresPermission</span>.<span class="function">Write</span>(<span class="variable">@RequiresPermission</span>(WRITE_HISTORY_BOOKMARKS))
+public static final Uri BOOKMARKS_URI = Uri.<span class="function">parse</span>(<span class="string">"content://browser/bookmarks"</span>);
+</code></pre><p><img src="/uploads/2015/08/image01.png" alt="权限注解"></p>
+<h3 id="方法重写:_@CallSuper">方法重写: @CallSuper</h3><p>如果你的API允许使用者重写你的方法，但是呢，你又需要你自己的方法(父方法)在重写的时候也被调用，这时候你可以使用@CallSuper标注：</p>
+<pre><code><span class="variable">@CallSuper</span>
+protected void <span class="function">onCreate</span>(<span class="variable">@Nullable</span> Bundle savedInstanceState) {
+</code></pre><p>用了这个后，当重写的方法没有调用父方法时，工具就会给予标记提示：</p>
+<p><img src="/uploads/2015/08/image02.png" alt="方法重写"></p>
+<p>(Android Studio 1.3 Preview 1的lint检查有个关于这个注解的bug，这个bug就是即使是对的重写也会报错，这个bug已经在Preview 2版本修改，可以通过canary channel更新到Preview 2版本。)</p>
+<h3 id="返回值:_@CheckResult">返回值: @CheckResult</h3><p>如果你的方法返回一个值，你期望调用者用这个值做些事情，那么你可以使用@CheckResult注解标注这个方法。</p>
+<p>你并不需要微每个非空方法都进行标注。它主要的目的是帮助哪些容易被混淆，难以被理解的API的使用者。</p>
+<p>比如，可能很多开发者都对String.trim()一知半解，认为调用了这个方法，就可以让字符串改变以去掉空白字符。如果这个方法被@CheckResult标注，工具就会对那些没有使用trim()返回结果的调用者发出警告。</p>
+<p>Android中，Context#checkPermission这个方法已经被@CheckResult标注了：</p>
+<pre><code>@(suggest=<span class="string">"#enforcePermission(String,int,int,String)"</span>)
+<span class="keyword">public</span> <span class="keyword">abstract</span> <span class="function"><span class="keyword">int</span> <span class="title">checkPermission</span><span class="params">(@NonNull String permission, <span class="keyword">int</span> pid, <span class="keyword">int</span> uid)</span></span>;
+</code></pre><p>这是非常重要的，因为有些使用context.checkPermission的开发者认为他们已经执行了一个权限 —-但其实这个方法仅仅只做了检查并且反馈一个是否成功的值而已。如果开发者使用了这个方法，但是又不用其返回值，那么这个开发者真正想调用的可能是这个Context#enforcePermission方法，而不是checkPermission。</p>
+<p><img src="/uploads/2015/08/image07.png" alt="返回值"></p>
+<h3 id="@VisibleForTesting">@VisibleForTesting</h3><p>你可以把这个注解标注到类、方法或者字段上，以便你在测试的时候可以使用他们。</p>
+<h3 id="@Keep">@Keep</h3><p>我们还在注解库里添加了@Keep注解，但是Gradle插件还支持（尽管已经在进行中）。被这个注解标注的类和方法在混淆的时候将不会被混淆。</p>
+<h3 id="在你自己的库中使用注解">在你自己的库中使用注解</h3><p>如果你在你自己的库中使用了这些注解，并且是通过Gradle构建生成aar包，那么在构建的时候Android Gradle插件会提取注解信息放在AAR文件中供引用你的库的客户端使用。在AAR文件中你可以看到一个名为annotations.zip的文件，这个文件记录的就是注解信息，使用的是IntelliJ的扩展注解XML格式。这是必须的，因为.class文件不能包含足够的要处理以上@IntDef注解的信息；注意我们只需记录该常量的一个引用，而不是它的值。当且仅当你的工程依赖注解库的时候，Android Gradle插件会把提取注解的任务作为构建的一部分执行它。(说明：只有源保留注解被放置在.aar文件中；class级别的会被放在classes.jar里。)</p>
+<h3 id="IntelliJ注解">IntelliJ注解</h3><p>IntelliJ，Android Studio就是基于它开发的，IntelliJ有一套它自己的注解；IntDef分析其实重用的是MagicConstant分析的代码，IntelliJ null分析其实用的是一组配置好的null注解。如果你执行Analyze &gt; Infer Nullity…，它会试图找出所有的null约束并添加他们。这个检查有时会插入IntelliJ注解。你可以通过搜索,替换为Android注解库的注解，或者你也可以直接用IntelliJ注解。在build.gradle里或者通过Project Structure对话框的Dependencies面板都可以添加如下依赖：</p>
+<pre><code><span class="keyword">dependencies</span> {
+    <span class="keyword">compile</span> <span class="string">'com.intellij:annotations:12.0'</span>
+}
+</code></pre>]]></content>
+    <summary type="html">
+    <![CDATA[<p>以下内容由<a href="http://www.flysnow.org" target="_blank" rel="external">http://www.flysnow.org</a>(飞雪无情)提供翻译</p>
+<p>原文地址 <a href="http://too]]>
+    </summary>
+    
+      <category term="Android" scheme="http://www.flysnow.org/tags/Android/"/>
+    
+      <category term="Android" scheme="http://www.flysnow.org/categories/Android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Android技术文档翻译--工具属性(Tools Attributes)]]></title>
+    <link href="http://www.flysnow.org/2015/08/06/android-tech-docs-tools-attributes.html"/>
+    <id>http://www.flysnow.org/2015/08/06/android-tech-docs-tools-attributes.html</id>
+    <published>2015-08-06T08:54:05.000Z</published>
+    <updated>2015-08-13T14:15:05.000Z</updated>
+    <content type="html"><![CDATA[<p>以下内容由<a href="http://www.flysnow.org" target="_blank" rel="external">http://www.flysnow.org</a>(飞雪无情)提供翻译</p>
+<p>原文地址 <a href="http://tools.android.com/tech-docs/tools-attributes" target="_blank" rel="external">http://tools.android.com/tech-docs/tools-attributes</a></p>
+<p>更多翻译的Android技术文档请参考：<a href="https://github.com/rujews/android-tech-docs" target="_blank" rel="external">https://github.com/rujews/android-tech-docs</a></p>
+<h2 id="Tools_属性">Tools 属性</h2><p>为了在XML文件中记录一些信息，Android专门定义了名为tools的XML命名空间。在应用打包的时候这些信息会被自动去掉，所以不会影响运行和下载的包大小。命名空间的URI是<code>http://schemas.android.com/tools</code>，一般以tools作为前缀：</p>
+<pre><code>&lt;FrameLayout xmlns:<span class="variable">android=</span><span class="string">"http://schemas.android.com/apk/res/android"</span>
+    xmlns:<span class="variable">tools=</span><span class="string">"http://schemas.android.com/tools"</span>
+    android:<span class="variable">layout_width=</span><span class="string">"match_parent"</span>
+    android:<span class="variable">layout_height=</span><span class="string">"match_parent"</span> &gt;
+....
+</code></pre><p>该文档记录了我们当前tools属性的用法.(<strong> 注意：这可能会随时改变 </strong>)</p>
+<h3 id="tools:ignore">tools:ignore</h3><p>这个属性可以在任何XML元素上设置，其值是一个lint问题ID的逗号分割的列表，设置后该XML元素以及其子元素都将被递归的忽略。</p>
+<pre><code>&lt;<span class="type">string</span> <span class="property">name</span>=<span class="string">"show_all_apps"</span> tools:ignore=<span class="string">"MissingTranslation"</span>&gt;All&lt;/<span class="type">string</span>&gt;
+</code></pre><p>用途: Lint</p>
+<h3 id="tools:targetApi">tools:targetApi</h3><p>该属性和Java类里的 <code>@TargetApi</code> 注解的作用是一样的：它可以让你指定元素使用的API的级别，其值既可以是整数也可以是代号名称</p>
+<pre><code><span class="tag">&lt;<span class="title">GridLayout</span> <span class="attribute">tools:targetApi</span>=<span class="value">"ICE_CREAM_SANDWICH"</span> &gt;</span>
+</code></pre><p>用途: Lint</p>
+<h3 id="tools:locale">tools:locale</h3><p>该属性可以在资源文件的根元素上设置，可以设置一个合适的语言以及一个可选的地区。这样可以让tools知道资源文件里的字符串应用的是什么语言。比如，<code>values/strings.xml</code> 可以有如下根元素：</p>
+<pre><code>&lt;resources <span class="string">xmlns:</span>tools=<span class="string">"http://schemas.android.com/tools"</span> <span class="string">tools:</span>locale=<span class="string">"es"</span>&gt;
+</code></pre><p>现在我们知道，默认values文件里的字符串使用的是西班牙语，而不是英语。<br>用途: Lint, Studio (可以在非英语的资源文件中禁用拼写检查)</p>
+<h3 id="tools:context">tools:context</h3><p>该属性通常被设置在布局文件的根元素上，记录布局文件所关联的Activity（设计时，一个布局可能会被多个部门引用）。这可以用来让布局编辑器知道其默认的主题，因为主题一般都是在清单文件里和与之关联的Activity里定义，而不是在布局文件里。和在清单文件中指定activity的类一样，你也可以使用.开头设置。</p>
+<pre><code>&lt;android.support.v7.widget.GridLayout
+    xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span>
+    xmlns:tools=<span class="string">"http://schemas.android.com/tools"</span>
+    tools:context=<span class="string">".MainActivity"</span> <span class="keyword">...</span> &gt;
+</code></pre><p>用途：Studio &amp; Eclipse中的布局编辑器以及Lint。</p>
+<h4 id="tools:layout">tools:layout</h4><p>此属性通常设置在&lt;fragment&gt;标签中，用来记录在设计时，你想看到的呈现的布局（运行时，将会由标签中给出的fragment类来决定）。</p>
+<pre><code>&lt;fragment android:<span class="variable">name=</span><span class="string">"com.example.master.ItemListFragment"</span>
+    tools:<span class="variable">layout=</span><span class="string">"@android:layout/list_content"</span> /&gt;
+</code></pre><p>用途: Studio &amp; Eclipse的布局编辑器</p>
+<h3 id="tools:listitem_/_listheader_/_listfooter">tools:listitem / listheader / listfooter</h3><p>这些属性可以被用在一个&lt;ListView&gt;(或者&lt;GridView&gt;，&lt;ExpandableListView&gt;这些AdapterView的子View)上，用于在设计时指定list元素、list头、list底的布局。工具就会填充一些虚拟的数据显示一个有代表性内容的列表。</p>
+<pre><code>&lt;ListView
+    android:<span class="variable">id=</span><span class="string">"@android:id/list"</span>
+    android:<span class="variable">layout_width=</span><span class="string">"match_parent"</span>
+    android:<span class="variable">layout_height=</span><span class="string">"match_parent"</span>
+    tools:<span class="variable">listitem=</span><span class="string">"@android:layout/simple_list_item_2"</span> /&gt;
+</code></pre><p>用途: Studio &amp; Eclipse的布局编辑器</p>
+<h3 id="tools:showIn">tools:showIn</h3><p>该属性需要设置在被另外一个布局包含的一个布局的根元素中。允许你设置包含该布局的布局文件，并且在设计时，这个被包含的布局将会在其外部的布局里渲染呈现。这允许你在上下文里查看和编辑布局。需要Studio 0.5.8及其以后版本支持。更多信息请参考<a href="http://tools.android.com/recent/androidstudio058released" target="_blank" rel="external">发布公告</a></p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>
+    <span class="attribute">xmlns:tools</span>=<span class="value">"http://schemas.android.com/tools"</span>
+    <span class="attribute">android:text</span>=<span class="value">"@string/hello_world"</span>
+    <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span>
+    <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>
+    <span class="attribute">tools:showIn</span>=<span class="value">"@layout/activity_main"</span> /&gt;</span>
+</code></pre><p>用途: Studio布局编辑器</p>
+<h3 id="tools:menu">tools:menu</h3><p>该属性设置在布局的根元素上，作用是配置在Action Bar显示的菜单。Android Studio通过和该布局关联的Activity（通过tools:context找到）的onCreateOptionsMenu()方法尝试找出在Action Bar使用的菜单。者允许你覆盖搜索和已确认状态的菜单。该属性值是一个逗号分割的id列表(不需要@id和其他任何前缀)。你也可以用不带.xml扩展名的xml菜单的文件名。必须是0.8.0及其之后的Studio版本才支持。</p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>
+    <span class="attribute">xmlns:tools</span>=<span class="value">"http://schemas.android.com/tools"</span>
+    <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span>
+    <span class="attribute">android:layout_width</span>=<span class="value">"match_parent"</span>
+    <span class="attribute">android:layout_height</span>=<span class="value">"match_parent"</span>
+    <span class="attribute">tools:menu</span>=<span class="value">"menu1,menu2"</span> /&gt;</span>
+</code></pre><p>用途: Studio布局编辑器</p>
+<h3 id="tools:actionBarNavMode">tools:actionBarNavMode</h3><p>概述行设置在布局的根元素上，以配置Action Bar的导航模式。有”standard”, “list” 以及 “tabs”这三个值可供选择，需要0.8.0及其之后的Studio版本支持。</p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>
+    <span class="attribute">xmlns:tools</span>=<span class="value">"http://schemas.android.com/tools"</span>
+    <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span>
+    <span class="attribute">android:layout_width</span>=<span class="value">"match_parent"</span>
+    <span class="attribute">android:layout_height</span>=<span class="value">"match_parent"</span>
+    <span class="attribute">tools:actionBarNavMode</span>=<span class="value">"tabs"</span> /&gt;</span>
+</code></pre><p>用途: Studio布局编辑器</p>
+<h3 id="其他:_设计时属性">其他: 设计时属性</h3><p>在布局中，任何一个属性都有一个与之对应的内置的Android属性。比如，你能设置一个只在设计时显示的替代文本，但是在实际运行的时候却不显示。要了解更多相信，请参考<a href="http://tools.android.com/tips/layout-designtime-attributes" target="_blank" rel="external">设计时布局属性</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>以下内容由<a href="http://www.flysnow.org" target="_blank" rel="external">http://www.flysnow.org</a>(飞雪无情)提供翻译</p>
+<p>原文地址 <a href="http://too]]>
+    </summary>
+    
+      <category term="Android" scheme="http://www.flysnow.org/tags/Android/"/>
+    
+      <category term="Android" scheme="http://www.flysnow.org/categories/Android/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[android技术文档翻译--ant任务]]></title>
@@ -1223,31 +1484,14 @@ sudo apt-<span class="keyword">get</span> remove ibus
     <link href="http://www.flysnow.org/2013/01/28/android-layout-height-fail.html"/>
     <id>http://www.flysnow.org/2013/01/28/android-layout-height-fail.html</id>
     <published>2013-01-28T08:19:58.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
-    <content type="html"><![CDATA[<pre><code>  有的时候，我们配置好的布局文件，在加载完成添加到我们的Activity中后发现，并没有安装我们设置的属性来布局，比为我们设置了android:layout_marginTop=<span class="string">"100dip"</span>，但是运行程序后发现一点作用都没有，相似的还有layout_height等以android:layout_开头的属性设置都没有作用，这类问题以我们使用Adapter的作为数据源的时候作用居多，因为Adapter里有一个方法是getView,这个返回的VIew是一个从XML布局里加载的，一般如下：
-
-
-<span class="keyword">if</span>(convertView==<span class="keyword">null</span>){
+    <updated>2015-08-13T14:15:05.000Z</updated>
+    <content type="html"><![CDATA[<p>有的时候，我们配置好的布局文件，在加载完成添加到我们的Activity中后发现，并没有安装我们设置的属性来布局，比为我们设置了android:layout<em>marginTop=”100dip”，但是运行程序后发现一点作用都没有，相似的还有layout_height等以android:layout</em>开头的属性设置都没有作用，这类问题以我们使用Adapter的作为数据源的时候作用居多，因为Adapter里有一个方法是getView,这个返回的VIew是一个从XML布局里加载的，一般如下：</p>
+<pre><code><span class="keyword">if</span>(convertView==<span class="keyword">null</span>){
 convertView=LayoutInflater.<span class="keyword">from</span>(mContext).inflate(R.layout.main, <span class="keyword">null</span>);
 }
 <span class="keyword">return</span> convertView;
-
-
-
-
-
-
-
-  问题恰恰出在我们的LayoutInflater.<span class="keyword">from</span>(mContext).inflate(R.layout.main, <span class="keyword">null</span>);这句代码上，在使用inflate的时候，如果第二个参数(View root)为<span class="keyword">null</span>,那么将不会加载你的布局文件里的最顶层的那个布局节点的布局相关配置（就是以android:layout_开头的属性）..我们可以看下该方法的实现来说明一下，通过查找源代码，inflate的实现都在这个<span class="function"><span class="keyword">public</span> View <span class="title">inflate</span><span class="params">(XmlPullParser parser, ViewGroup root, boolean attachToRoot)</span> 方法里定义。。其中一段：
-
-
-
-
-
-
-
-
-<span class="title">if</span> <span class="params">(root != <span class="keyword">null</span>)</span> </span>{
+</code></pre><p>问题恰恰出在我们的LayoutInflater.from(mContext).inflate(R.layout.main, null);这句代码上，在使用inflate的时候，如果第二个参数(View root)为null,那么将不会加载你的布局文件里的最顶层的那个布局节点的布局相关配置（就是以android:layout_开头的属性）..我们可以看下该方法的实现来说明一下，通过查找源代码，inflate的实现都在这个public View inflate(XmlPullParser parser, ViewGroup root, boolean attachToRoot) 方法里定义。。其中一段：</p>
+<pre><code><span class="keyword">if</span> (root != <span class="keyword">null</span>) {
    <span class="keyword">if</span> (DEBUG) {
       System.<span class="keyword">out</span>.println(<span class="string">"Creating params from root: "</span> +root);
    }
@@ -1260,54 +1504,22 @@ convertView=LayoutInflater.<span class="keyword">from</span>(mContext).inflate(R
     }
 }
 </code></pre><p>可以看到，当root为null的时候是不会执行params = root.generateLayoutParams(attrs);这段代码的，这段代码就是把xml里的布局配置转为LayoutParams,换句说就是加载我们配置的布局属性，以供布局类（FrameLayout等）在onLayout的时候控制View的大小、位置、对齐等等。。以FrameLayout为例，看下它的generateLayoutParams(attrs)方法。</p>
-<pre><code><span class="keyword">public</span> LayoutParams generateLayoutParams(AttributeSet attrs) {
-        <span class="keyword">return</span> <span class="literal">new</span> FrameLayout<span class="built_in">.</span>LayoutParams(getContext(), attrs);        
+<pre><code><span class="keyword">public</span> <span class="function">LayoutParams <span class="title">generateLayoutParams</span><span class="params">(AttributeSet attrs)</span> </span>{
+        <span class="keyword">return</span> <span class="keyword">new</span> FrameLayout.LayoutParams(getContext(), attrs);        
     }
-
-
-
-
-
-
-
-  很简单，构造了一个FrameLayout<span class="built_in">.</span>LayoutParams类，该类集成了MarginParams，增加了一个gravity对其的属性配置。。。
-
-
-
-
-
-
-
-  在这里，如果要自定义自己的VIewroup，并且该ViewGroup有一些自定义控制布局的属性设置，就可以通过集成View<span class="built_in">.</span>MarginParams来扩展布局配置，然后重写generateLayoutParams方法，这样系统框架就会自动使用该布局读取我们在<span class="built_in">xml</span>中配置的布局属性来控制我们的VIew的位置。。
-
-
-
-
-
-
-
-  基于以上分析，我们在使用LayoutInflate的inflate方法的时候一定要保证root参数不能为<span class="built_in">null</span>，其实这个root就是父View的意思，就是说你把<span class="built_in">xml</span>转换为一个VIew的时候，该VIew的<span class="keyword">Parent</span>是root，如果你不想把该View添加到该root里，那么让第三个参数 attachToRoot为<span class="literal">false</span>，如果要添加则为<span class="literal">true</span><span class="built_in">.
-
-
-
-
-
-
-
-  </span>说到这个问题了，其实还有一些布局，他们的参数配置要满足一定的条件才会起作用，比如FrameLayout里的View，你要想它的leftMargin生效，必须指定它的layout_gravity为left，同理right对应rightMargin<span class="built_in">.</span>top和bottom也一样。。在使用时注意即可，多看看源代码。要不然就会莫名起名，不知道哪里的问题。
-</code></pre><p>ViewGroup的三条线:</p>
+</code></pre><p>很简单，构造了一个FrameLayout.LayoutParams类，该类集成了MarginParams，增加了一个gravity对其的属性配置。。。</p>
+<p>在这里，如果要自定义自己的VIewroup，并且该ViewGroup有一些自定义控制布局的属性设置，就可以通过集成View.MarginParams来扩展布局配置，然后重写generateLayoutParams方法，这样系统框架就会自动使用该布局读取我们在xml中配置的布局属性来控制我们的VIew的位置。。</p>
+<p>基于以上分析，我们在使用LayoutInflate的inflate方法的时候一定要保证root参数不能为null，其实这个root就是父View的意思，就是说你把xml转换为一个VIew的时候，该VIew的Parent是root，如果你不想把该View添加到该root里，那么让第三个参数 attachToRoot为false，如果要添加则为true.</p>
+<p>说到这个问题了，其实还有一些布局，他们的参数配置要满足一定的条件才会起作用，比如FrameLayout里的View，你要想它的leftMargin生效，必须指定它的layout_gravity为left，同理right对应rightMargin.top和bottom也一样。。在使用时注意即可，多看看源代码。要不然就会莫名起名，不知道哪里的问题。</p>
+<p>ViewGroup的三条线:</p>
 <ol>
 <li>onMeasure 测量View的大小</li>
-</ol>
-<ol>
 <li>onLayout 对View的布局进行控制</li>
-</ol>
-<ol>
 <li>draw绘制该View，drawChild绘制子VIew</li>
 </ol>
 ]]></content>
     <summary type="html">
-    <![CDATA[<pre><code>  有的时候，我们配置好的布局文件，在加载完成添加到我们的Activity中后发现，并没有安装我们设置的属性来布局，比为我们设置了android:layout_marginTop=<span class="string">"100dip"</span>，但是]]>
+    <![CDATA[<p>有的时候，我们配置好的布局文件，在加载完成添加到我们的Activity中后发现，并没有安装我们设置的属性来布局，比为我们设置了android:layout<em>marginTop=”100dip”，但是运行程序后发现一点作用都没有，相似的还有layout_height等以]]>
     </summary>
     
       <category term="Android" scheme="http://www.flysnow.org/tags/Android/"/>
@@ -5077,31 +5289,20 @@ export PATH JAVA_HOME ANDROID_HOME JRE_HOME CLASSPATH
     <link href="http://www.flysnow.org/2010/11/11/setup-android-for-window.html"/>
     <id>http://www.flysnow.org/2010/11/11/setup-android-for-window.html</id>
     <published>2010-11-10T22:41:25.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
-    <content type="html"><![CDATA[<blockquote>自2007年Google发布Android后，Android是越来越火，甚至有超越IPhone的势头。Android的推出，对于我们java开发人员无疑是一件值得庆幸的事情，因为Android的应用是由java开发的，因此，我们java开发人员入门Android比其他语言开发者有很大的优势。本系列教程将有浅到深系统的学习Android，这是我学习的过程，相信也会对你们有所帮助。该系列教程尽量保证每日一更。</blockquote>
-
-
-
-
+    <updated>2015-08-13T14:15:05.000Z</updated>
+    <content type="html"><![CDATA[<blockquote>
+<p>自2007年Google发布Android后，Android是越来越火，甚至有超越IPhone的势头。Android的推出，对于我们java开发人员无疑是一件值得庆幸的事情，因为Android的应用是由java开发的，因此，我们java开发人员入门Android比其他语言开发者有很大的优势。本系列教程将有浅到深系统的学习Android，这是我学习的过程，相信也会对你们有所帮助。该系列教程尽量保证每日一更。</p>
+</blockquote>
 <h3 id="一：准备工作">一：准备工作</h3><ol>
 <li>JDK1.6.0_13 下载地址<a href="http://java.sun.com/products/archive/index.html" target="_blank" rel="external">http://java.sun.com/products/archive/index.html</a></li>
-</ol>
-<ol>
 <li>Eclipse3.5.2 下载地址<a href="http://www.eclipse.org/downloads/packages/release/galileo/sr2" target="_blank" rel="external">http://www.eclipse.org/downloads/packages/release/galileo/sr2</a></li>
-</ol>
-<ol>
 <li>Android SDK2.2 下载地址<a href="http://developer.android.com/index.html" target="_blank" rel="external">http://developer.android.com/index.html</a></li>
-</ol>
-<ol>
 <li>ADT0.9.9 下载地址<a href="http://developer.android.com/sdk/installing/installing-adt.html" target="_blank" rel="external">http://developer.android.com/sdk/installing/installing-adt.html</a></li>
-</ol>
-<ol>
 <li>有一定的java基础</li>
+<li><h3 id="二：环境配置">二：环境配置</h3></li>
 </ol>
-<h3 id="二：环境配置">二：环境配置</h3><ul>
-<li>JDk配置略，不会可以参考网上，很多帖子</li>
-</ul>
 <ul>
+<li>JDk配置略，不会可以参考网上，很多帖子</li>
 <li>SDK Setup启动和设置。下载好Android SDK后，解压放到一个你常用的目录下，然后运行SDK Setup.exe将启动Android SDK and AVD Manager。这里打开后会常遇到的一个问题是“Failed to fetch URL…”，这是因为默认是使用的HTTPS的方式，我们改成HTTP方式就行了。。选择左边窗口的Settings，选中Forece Https://……即可。</li>
 </ul>
 <p><img src="/uploads/2013/10/7c61ddbf-2da7-3b62-ba2a-2bcc1d9d1587-300x156.png" alt="android manager https下载方法"></p>
@@ -5120,16 +5321,13 @@ export PATH JAVA_HOME ANDROID_HOME JRE_HOME CLASSPATH
 <h3 id="三：结束语">三：结束语</h3><p>到这里我们的开发环境就配置好了，因为我们有java开发基础，其实很简单，总结起来就三个步骤：</p>
 <ol>
 <li>下载JDK，Eclipse，SDK，ADT</li>
-</ol>
-<ol>
 <li>配置JDK，SDK</li>
-</ol>
-<ol>
 <li>配置ADT。。</li>
 </ol>
 ]]></content>
     <summary type="html">
-    <![CDATA[<blockquote>自2007年Google发布Android后，Android是越来越火，甚至有超越IPhone的势头。Android的推出，对于我们java开发人员无疑是一件值得庆幸的事情，因为Android的应用是由java开发的，因此，我们java开发人员入门Andr]]>
+    <![CDATA[<blockquote>
+<p>自2007年Google发布Android后，Android是越来越火，甚至有超越IPhone的势头。Android的推出，对于我们java开发人员无疑是一件值得庆幸的事情，因为Android的应用是由java开发的，因此，我们java开发人员入门]]>
     </summary>
     
       <category term="Android" scheme="http://www.flysnow.org/tags/Android/"/>

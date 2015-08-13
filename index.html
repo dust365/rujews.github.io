@@ -80,6 +80,317 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
+    <article id="post-android-tech-docs-support-annotations" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/08/13/android-tech-docs-support-annotations.html" class="article-date">
+  <time datetime="2015-08-13T14:16:50.000Z" itemprop="datePublished">2015-08-13</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/08/13/android-tech-docs-support-annotations.html">Android注解支持(Support Annotations)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>以下内容由<a href="http://www.flysnow.org" target="_blank" rel="external">http://www.flysnow.org</a>(飞雪无情)提供翻译</p>
+<p>原文地址 <a href="http://tools.android.com/tech-docs/support-annotations" target="_blank" rel="external">http://tools.android.com/tech-docs/support-annotations</a></p>
+<p>更多翻译的Android技术文档请参考：<a href="https://github.com/rujews/android-tech-docs" target="_blank" rel="external">https://github.com/rujews/android-tech-docs</a></p>
+<h2 id="注解支持(Support_Annotations)">注解支持(Support Annotations)</h2><p>Android support library从19.1版本开始引入了一个新的注解库，它包含很多有用的元注解，你能用它们修饰你的代码，帮助你发现bug。Support library自己本身也用到了这些注解，所以作为support library的用户，Android Studio已经基于这些注解校验了你的代码并且标注其中潜在的问题。Support library 22.2版本又新增了13个新的注解以供使用。</p>
+<h3 id="使用注解库">使用注解库</h3><p>注解默认是没有包含的；他们被包装成一个独立的库。（support library现在由一些更小的库组成：v4-support, appcompat, gridlayout, mediarouter等等）</p>
+<p>(如果你正在使用appcompat库，那么你已经可以使用这些注解了，因为appcomat它自己也依赖它。)</p>
+<p>添加使用注解最简单的方式就是打开Project Structure对话框。首先在左边选中module，然后在右边选中Dependencies标签页，点击面板底部的<code>+</code>按钮，选择Library Dependency，假设你已经把Android Support Repository安装到你的SDK中了，那么注解库将会出现在列表中，你只需点击选中它即可(这里是列表中的第一个):<br><img src="/uploads/2015/08/add-dependency.png" alt="添加依赖"></p>
+<p>点击OK完成Project Structure的编辑。这会修改你的build.gradle文件，当然你也可以手动编辑它：</p>
+<pre><code><span class="keyword">dependencies</span> {
+    <span class="keyword">compile</span> <span class="string">'com.android.support:support-annotations:22.2.0'</span>
+}
+</code></pre><p>对于Android application和Android library这两个类型的module(你应用了<code>com.android.application</code>或者<code>com.android.library</code>插件的)来说，你需要做的已经都做好了。如果你想只在Java module使用这些注解，那么你就明确的包含SDK仓库了，因为support libraries不能从jcenter获得(Android Gradle插件会自动的包含这些依赖，但是Java插件却没有。)</p>
+<pre><code><span class="xml">repositories </span><span class="expression">{
+   <span class="variable">jcenter</span>()
+   <span class="variable">maven</span> { <span class="variable">url</span> '&lt;<span class="variable">your-SDK-path</span>&gt;<span class="end-block">/extras</span><span class="end-block">/android</span><span class="end-block">/m</span>2<span class="variable">repository</span>' }</span><span class="xml">
+}</span>
+</code></pre><h3 id="执行注解">执行注解</h3><p>当你用Android Studio和IntelliJ的时候，如果给标注了这些注解的方法传递错误类型的参数，那么IDE就会实时标记出来。</p>
+<p>从Gradle插件1.3.0-beta1版本开始，并且安装了Android M Preview平台工具的情况下，通过命令行调用gradle的<code>lint</code>任务就可以执行这些检查。如果你想把标记问题作为持续集成的一部分，那么这种方式是非常有用的。说明：这并不包含nullness注解。本文中所介绍的其他注解都可以通过lint执行检查。</p>
+<h3 id="Nullness_Annotations">Nullness Annotations</h3><p>@Nullable注解能被用来标注给定的参数或者返回值可以为null。<br>类似的，@NonNull注解能被用来标注给定的参数或者返回值不能为null。</p>
+<p>如果一个本地变量的值为null(比如因为过早的代码检查它是否为null)，而你又把它作为参数传递给了一个方法，并且该方法的参数又被@NonNull标注，那么IDE会提醒你，你有一个潜在的崩溃问题。</p>
+<pre><code>v4 support <span class="keyword">library</span>中的FragmentActivity的示例代码：
+
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+<span class="keyword">...</span>
+
+/**
+ * Add support <span class="keyword">for</span> inflating the &amp;lt;fragment&gt; tag.
+ */
+@Nullable
+@Override
+public View onCreateView(String name, @NonNull Context context, @NonNull AttributeSet attrs) {
+<span class="keyword">...</span>
+</code></pre><p>(如果你执行Analyze &gt; Infer Nullity，或者你在键入时把@NonNull替换成了@NotNull，那么IDE可能会提供附加的IntelliJ注解。参考底部的“IntelliJ Annotations”段落了解更多)</p>
+<p>注意@NonNull和@Nullable并不是对立的：还有第三种可能：未指定。当你没有指定@NonNull或者@Nullable的时候，工具就不能确定，所以这个API也就不起作用。</p>
+<p>最初，我们在findViewById方法上标注@Nullable，从技术上说，这是正确的：findViewById可以返回null。但是如果你知道你在做什么的时候(如果你传递给他一个存在的id)他是不会返回null的。当我们使用@Nullable注解它的时候，就意味着源代码编辑器中会有大量的代码出现高亮警告。如果你已经意识到每次使用该方法都应该明确的进行null检查，那么就只能用@Nullable标注返回值。有个经验规则：看现有的“好的代码”(比如审查产品代码)，看看这些API是怎么被使用的。如果该代码为null检查结果，你应该为方法注解@Nullable。</p>
+<h3 id="资源类型注解">资源类型注解</h3><p>Android的资源值通常都是使用整型传递。这意味着获取一个drawable使用的参数，也能很容易的传递给一个获取string的方法；因为他们都是int类型，编译器很难区分。</p>
+<p>资源类型注解可以在这种情况下提供类型检查。比如一个被@StringRes住进诶的int类型参数，如果传递一个不是R.string类型的引用将会被IDE标注：<br><img src="/uploads/2015/08/image00.png" alt="资源类型注解"><br>以ActionBar为例:</p>
+<pre><code>import android.support.annotation.StringRes;
+<span class="keyword">...</span>
+public abstract void setTitle(@StringRes int resId);
+</code></pre><p>有很多不同资源类型的注解：如下的每一个Android资源类型：<br>@StringRes, @DrawableRes, @ColorRes, @InterpolatorRes,等等。一般情况下，如果有一个<code>foo</code>类型的资源，那么它的相应的资源类型注解就是FooRes.</p>
+<p>除此之外，还有一个名为@AnyRes特殊的资源类型注解。它被用来标注一个未知的特殊类型的资源，但是它必须是一个资源类型。比如在框架中，它被用在<code>Resources#getResourceName(@AnyRes int resId)</code>上，使用的时候，你可以这样<code>getResources().getResourceName(R.drawable.icon)</code>用，也可以<code>getResources().getResourceName(R.string.app_name)</code>这样用，但是却不能这样<code>getResources().getResourceName(42)</code>用。</p>
+<p>请注意，如果你的API支持多个资源类型，你可以使用多个注解来标注你的参数。</p>
+<h3 id="IntDef/StringDef:_类型定义注解">IntDef/StringDef: 类型定义注解</h3><p>整型除了可以作为资源的引用之外，也可以用作“枚举”类型使用。</p>
+<p>@IntDef和”typedef”作用非常类似，你可以创建另外一个注解，然后用@IntDef指定一个你期望的整型常量值列表，最后你就可以用这个定义好的注解修饰你的API了。</p>
+<p>appcompat库里的一个例子：</p>
+<pre><code><span class="keyword">import</span> android.support.annotation.IntDef;
+...
+<span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">ActionBar</span> </span>{
+...
+<span class="annotation">@IntDef</span>({NAVIGATION_MODE_STANDARD, NAVIGATION_MODE_LIST, NAVIGATION_MODE_TABS})
+<span class="annotation">@Retention</span>(RetentionPolicy.SOURCE)
+<span class="keyword">public</span> <span class="annotation">@interface</span> NavigationMode {}
+
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> NAVIGATION_MODE_STANDARD = <span class="number">0</span>;
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> NAVIGATION_MODE_LIST = <span class="number">1</span>;
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> NAVIGATION_MODE_TABS = <span class="number">2</span>;
+
+<span class="annotation">@NavigationMode</span>
+<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">getNavigationMode</span><span class="params">()</span></span>;
+
+<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">setNavigationMode</span><span class="params">(@NavigationMode <span class="keyword">int</span> mode)</span></span>;
+</code></pre><p>上面非注解的部分是现有的API。我们创建了一个新的注解(NavigationMode)并且用@IntDef标注它,通过@IntDef我们为返回值或者参数指定了可用的常量值。我们还添加了<code>@Retention(RetentionPolicy.SOURCE)</code>告诉编译器这个新定义的注解不需要被记录在生成的.class文件中(译者注：源代码级别的，生成class文件的时候这个注解就被编译器自动去掉了)。</p>
+<p>使用这个注解后，如果你传递的参数或者返回值不在指定的常量值中的话，IDE将会标记出这种情况。<br><img src="/uploads/2015/08/image06.png" alt="类型定义注解"></p>
+<p>你也可以指定一个整型是一个标记性质的类型；这样客户端代码就通过|，&amp;等操作符同时传递多个常量了：</p>
+<pre><code><span class="variable">@IntDef</span>(flag=true, value={
+        DISPLAY_USE_LOGO,
+        DISPLAY_SHOW_HOME,
+        DISPLAY_HOME_AS_UP,
+        DISPLAY_SHOW_TITLE,
+        DISPLAY_SHOW_CUSTOM
+})
+<span class="variable">@Retention</span>(RetentionPolicy.SOURCE)
+public <span class="variable">@interface</span> DisplayOptions {}
+</code></pre><p>最后，还有一个字符串版本的注解，就是@StringDef，它和@IntDef的作用基本上是一样，所不同的是它是针对字符串的。该注解一般不常用，但是有的时候非常有用，比如在限定向Activity#getSystemService方法传递的参数范围的时候。</p>
+<p>要了解关于类型注解的更多详细信息，请参考<br><a href="https://developer.android.com/tools/debugging/annotations.html#enum-annotations" target="_blank" rel="external">https://developer.android.com/tools/debugging/annotations.html#enum-annotations</a></p>
+<p>(这些都是建立在IntelliJ’s MagicConstant注解的基础上，你可以在这里找到该注解的详细信息：<a href="http://blog.jetbrains.com/idea/2012/02/new-magic-constant-inspection/" target="_blank" rel="external">http://blog.jetbrains.com/idea/2012/02/new-magic-constant-inspection/</a>)</p>
+<h3 id="线程注解:_@UiThread,_@WorkerThread,_…">线程注解: @UiThread, @WorkerThread, …</h3><p>(Support library 22.2及其之后版本支持.)</p>
+<p>如果你的方法只能在指定的线程类型中被调用，那么你就可以使用以下4个注解来标注它：</p>
+<ul>
+<li>@UiThread</li>
+<li>@MainThread</li>
+<li>@WorkerThread</li>
+<li>@BinderThread</li>
+</ul>
+<p>如果一个类中的所有方法都有相同的线程需求，那么你可以注解类本身。比如android.view.View，就被用@UiThread标注。</p>
+<p>关于线程注解使用的一个很好的例子就是AsyncTask：</p>
+<pre><code><span class="annotation">@WorkerThread</span>
+<span class="keyword">protected</span> <span class="keyword">abstract</span> <span class="function">Result <span class="title">doInBackground</span><span class="params">(Params... params)</span></span>;
+
+<span class="annotation">@MainThread</span>
+<span class="keyword">protected</span> <span class="function"><span class="keyword">void</span> <span class="title">onProgressUpdate</span><span class="params">(Progress... values)</span> </span>{
+}
+</code></pre><p>如果你在重写的doInBackground方法里尝试调用onProgressUpdate方法或者View的任何方法，IDE工具就会马上把它标记为一个错误：<br><img src="/uploads/2015/08/image04.png" alt="线程注解"></p>
+<p>@UiThread还是@MainThread?</p>
+<p>在进程里只有一个主线程。这个就是@MainThread。同时这个线程也是一个@UiThread。比如activity的主要窗口就运行在这个线程上。然而它也有能力为应用创建其他线程。这很少见，一般具备这样功能的都是系统进程。通常是把和生命周期有关的用@MainThread标注，和View层级结构相关的用@UiThread标注。但是由于@MainThread本质上是一个@UiThread，而大部分情况下@UiThread又是一个@MainThread，所以工具(lint ,Android Studio,等等)可以把他们互换，所以你能在一个可以调用@MainThread方法的地方也能调用@UiThread方法，反之亦然。</p>
+<h3 id="RGB颜色整型">RGB颜色整型</h3><p>当你的API期望一个颜色资源的时候，可以用@ColorRes标注，但是当你有一个相反的使用场景时，这种用法就不可用了，因为你并不是期望一个颜色资源id，而是一个真实的RGB或者ARGB的颜色值。</p>
+<p>在这种情况下，你可以使用@ColorInt注解，表示你期望的是一个代表颜色的整数值：</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">void</span> setTextColor(<span class="annotation">@ColorInt</span> <span class="keyword">int</span> color)
+</code></pre><p>有了这个，当你传递一个颜色id而不是颜色值的时候，lint就会标记出这段不正确的代码：<br><img src="/uploads/2015/08/image05.png" alt="颜色值注解"></p>
+<h3 id="值约束:_@Size,_@IntRange,_@FloatRange">值约束: @Size, @IntRange, @FloatRange</h3><p>如果你的参数是一个float或者double类型，并且一定要在某个范围内，你可以使用@FloatRange注解：</p>
+<pre><code><span class="tag">public</span> <span class="tag">void</span> <span class="tag">setAlpha</span>(<span class="variable">@FloatRange</span>(from=<span class="number">0.0</span>, to=<span class="number">1.0</span>) float alpha) {
+</code></pre><p>如果有人使用该API的时候传递一个0-255的值，比如尝试调用setAlpha(128)，那么工具就会捕获这一问题：</p>
+<p><img src="/uploads/2015/08/image08.png" alt="值约束注解"></p>
+<p>(你也可以指定是否包括起始值。)</p>
+<p>同样的，如果你的参数是一个int或者long类型，你可以使用@IntRange注解约束其值在一个特定的范围内：</p>
+<pre><code><span class="tag">public</span> <span class="tag">void</span> <span class="tag">setAlpha</span>(<span class="variable">@IntRange</span>(from=<span class="number">0</span>,to=<span class="number">255</span>) int alpha) { … }
+</code></pre><p>把这些注解应用到参数上是非常有用的，因为用户很有可能会提供错误范围的参数，比如上面的setAlpha例子，有的API是采用0-255的方式，而有的是采用0-1的float值的方式。</p>
+<p>最后，对于数据、集合以及字符串，你可以用@Size注解参数来限定集合的大小(当参数是字符串的时候，可以限定字符串的长度)。</p>
+<p>举几个例子</p>
+<ul>
+<li>集合不能为空: @Size(min=1)</li>
+<li>字符串最大只能有23个字符: @Size(max=23)</li>
+<li>数组只能有2个元素: @Size(2)</li>
+<li>数组的大小必须是2的倍数 (例如图形API中获取位置的x/y坐标数组: @Size(multiple=2)</li>
+</ul>
+<p><img src="/uploads/2015/08/image03.png" alt="值约束注解"></p>
+<h3 id="权限注解:_@RequiresPermission">权限注解: @RequiresPermission</h3><p>如果你的方法的调用需要调用者有特定的权限，你可以使用@RequiresPermission注解：</p>
+<pre><code><span class="annotation">@RequiresPermission</span>(Manifest.permission.SET_WALLPAPER)
+<span class="keyword">public</span> <span class="keyword">abstract</span> <span class="function"><span class="keyword">void</span> <span class="title">setWallpaper</span><span class="params">(Bitmap bitmap)</span> <span class="keyword">throws</span> IOException</span>;
+</code></pre><p>如果你至少需要权限集合中的一个，你可以使用anyOf属性：</p>
+<pre><code><span class="annotation">@RequiresPermission</span>(anyOf = {
+    Manifest.permission.ACCESS_COARSE_LOCATION,
+    Manifest.permission.ACCESS_FINE_LOCATION})
+<span class="keyword">public</span> <span class="keyword">abstract</span> <span class="function">Location <span class="title">getLastKnownLocation</span><span class="params">(String provider)</span></span>;
+</code></pre><p>如果你同时需要多个权限，你可以用allOf属性：</p>
+<pre><code><span class="annotation">@RequiresPermission</span>(allOf = {
+    Manifest.permission.READ_HISTORY_BOOKMARKS,
+    Manifest.permission.WRITE_HISTORY_BOOKMARKS})
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="function"><span class="keyword">void</span> <span class="title">updateVisitedHistory</span><span class="params">(ContentResolver cr, String url, <span class="keyword">boolean</span> real)</span> </span>{
+</code></pre><p>对于intents的权限，可以直接在定义的intent常量字符串字段上标注权限需求(他们通常都已经被@SdkConstant注解标注过了):</p>
+<pre><code><span class="annotation">@RequiresPermission</span>(android.Manifest.permission.BLUETOOTH)
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String ACTION_REQUEST_DISCOVERABLE =
+        <span class="string">"android.bluetooth.adapter.action.REQUEST_DISCOVERABLE"</span>;
+</code></pre><p>对于content providers的权限，你可能需要单独的标注读和写的权限访问，所以可以用@Read或者@Write标注每一个权限需求：</p>
+<pre><code><span class="variable">@RequiresPermission</span>.<span class="function">Read</span>(<span class="variable">@RequiresPermission</span>(READ_HISTORY_BOOKMARKS))
+<span class="variable">@RequiresPermission</span>.<span class="function">Write</span>(<span class="variable">@RequiresPermission</span>(WRITE_HISTORY_BOOKMARKS))
+public static final Uri BOOKMARKS_URI = Uri.<span class="function">parse</span>(<span class="string">"content://browser/bookmarks"</span>);
+</code></pre><p><img src="/uploads/2015/08/image01.png" alt="权限注解"></p>
+<h3 id="方法重写:_@CallSuper">方法重写: @CallSuper</h3><p>如果你的API允许使用者重写你的方法，但是呢，你又需要你自己的方法(父方法)在重写的时候也被调用，这时候你可以使用@CallSuper标注：</p>
+<pre><code><span class="variable">@CallSuper</span>
+protected void <span class="function">onCreate</span>(<span class="variable">@Nullable</span> Bundle savedInstanceState) {
+</code></pre><p>用了这个后，当重写的方法没有调用父方法时，工具就会给予标记提示：</p>
+<p><img src="/uploads/2015/08/image02.png" alt="方法重写"></p>
+<p>(Android Studio 1.3 Preview 1的lint检查有个关于这个注解的bug，这个bug就是即使是对的重写也会报错，这个bug已经在Preview 2版本修改，可以通过canary channel更新到Preview 2版本。)</p>
+<h3 id="返回值:_@CheckResult">返回值: @CheckResult</h3><p>如果你的方法返回一个值，你期望调用者用这个值做些事情，那么你可以使用@CheckResult注解标注这个方法。</p>
+<p>你并不需要微每个非空方法都进行标注。它主要的目的是帮助哪些容易被混淆，难以被理解的API的使用者。</p>
+<p>比如，可能很多开发者都对String.trim()一知半解，认为调用了这个方法，就可以让字符串改变以去掉空白字符。如果这个方法被@CheckResult标注，工具就会对那些没有使用trim()返回结果的调用者发出警告。</p>
+<p>Android中，Context#checkPermission这个方法已经被@CheckResult标注了：</p>
+<pre><code>@(suggest=<span class="string">"#enforcePermission(String,int,int,String)"</span>)
+<span class="keyword">public</span> <span class="keyword">abstract</span> <span class="function"><span class="keyword">int</span> <span class="title">checkPermission</span><span class="params">(@NonNull String permission, <span class="keyword">int</span> pid, <span class="keyword">int</span> uid)</span></span>;
+</code></pre><p>这是非常重要的，因为有些使用context.checkPermission的开发者认为他们已经执行了一个权限 —-但其实这个方法仅仅只做了检查并且反馈一个是否成功的值而已。如果开发者使用了这个方法，但是又不用其返回值，那么这个开发者真正想调用的可能是这个Context#enforcePermission方法，而不是checkPermission。</p>
+<p><img src="/uploads/2015/08/image07.png" alt="返回值"></p>
+<h3 id="@VisibleForTesting">@VisibleForTesting</h3><p>你可以把这个注解标注到类、方法或者字段上，以便你在测试的时候可以使用他们。</p>
+<h3 id="@Keep">@Keep</h3><p>我们还在注解库里添加了@Keep注解，但是Gradle插件还支持（尽管已经在进行中）。被这个注解标注的类和方法在混淆的时候将不会被混淆。</p>
+<h3 id="在你自己的库中使用注解">在你自己的库中使用注解</h3><p>如果你在你自己的库中使用了这些注解，并且是通过Gradle构建生成aar包，那么在构建的时候Android Gradle插件会提取注解信息放在AAR文件中供引用你的库的客户端使用。在AAR文件中你可以看到一个名为annotations.zip的文件，这个文件记录的就是注解信息，使用的是IntelliJ的扩展注解XML格式。这是必须的，因为.class文件不能包含足够的要处理以上@IntDef注解的信息；注意我们只需记录该常量的一个引用，而不是它的值。当且仅当你的工程依赖注解库的时候，Android Gradle插件会把提取注解的任务作为构建的一部分执行它。(说明：只有源保留注解被放置在.aar文件中；class级别的会被放在classes.jar里。)</p>
+<h3 id="IntelliJ注解">IntelliJ注解</h3><p>IntelliJ，Android Studio就是基于它开发的，IntelliJ有一套它自己的注解；IntDef分析其实重用的是MagicConstant分析的代码，IntelliJ null分析其实用的是一组配置好的null注解。如果你执行Analyze &gt; Infer Nullity…，它会试图找出所有的null约束并添加他们。这个检查有时会插入IntelliJ注解。你可以通过搜索,替换为Android注解库的注解，或者你也可以直接用IntelliJ注解。在build.gradle里或者通过Project Structure对话框的Dependencies面板都可以添加如下依赖：</p>
+<pre><code><span class="keyword">dependencies</span> {
+    <span class="keyword">compile</span> <span class="string">'com.intellij:annotations:12.0'</span>
+}
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.flysnow.org/2015/08/13/android-tech-docs-support-annotations.html" data-id="cidaaz74f00035ln1gwkzjy6a" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+  
+
+  
+    <article id="post-android-tech-docs-tools-attributes" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/08/06/android-tech-docs-tools-attributes.html" class="article-date">
+  <time datetime="2015-08-06T08:54:05.000Z" itemprop="datePublished">2015-08-06</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/08/06/android-tech-docs-tools-attributes.html">Android技术文档翻译--工具属性(Tools Attributes)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>以下内容由<a href="http://www.flysnow.org" target="_blank" rel="external">http://www.flysnow.org</a>(飞雪无情)提供翻译</p>
+<p>原文地址 <a href="http://tools.android.com/tech-docs/tools-attributes" target="_blank" rel="external">http://tools.android.com/tech-docs/tools-attributes</a></p>
+<p>更多翻译的Android技术文档请参考：<a href="https://github.com/rujews/android-tech-docs" target="_blank" rel="external">https://github.com/rujews/android-tech-docs</a></p>
+<h2 id="Tools_属性">Tools 属性</h2><p>为了在XML文件中记录一些信息，Android专门定义了名为tools的XML命名空间。在应用打包的时候这些信息会被自动去掉，所以不会影响运行和下载的包大小。命名空间的URI是<code>http://schemas.android.com/tools</code>，一般以tools作为前缀：</p>
+<pre><code>&lt;FrameLayout xmlns:<span class="variable">android=</span><span class="string">"http://schemas.android.com/apk/res/android"</span>
+    xmlns:<span class="variable">tools=</span><span class="string">"http://schemas.android.com/tools"</span>
+    android:<span class="variable">layout_width=</span><span class="string">"match_parent"</span>
+    android:<span class="variable">layout_height=</span><span class="string">"match_parent"</span> &gt;
+....
+</code></pre><p>该文档记录了我们当前tools属性的用法.(<strong> 注意：这可能会随时改变 </strong>)</p>
+<h3 id="tools:ignore">tools:ignore</h3><p>这个属性可以在任何XML元素上设置，其值是一个lint问题ID的逗号分割的列表，设置后该XML元素以及其子元素都将被递归的忽略。</p>
+<pre><code>&lt;<span class="type">string</span> <span class="property">name</span>=<span class="string">"show_all_apps"</span> tools:ignore=<span class="string">"MissingTranslation"</span>&gt;All&lt;/<span class="type">string</span>&gt;
+</code></pre><p>用途: Lint</p>
+<h3 id="tools:targetApi">tools:targetApi</h3><p>该属性和Java类里的 <code>@TargetApi</code> 注解的作用是一样的：它可以让你指定元素使用的API的级别，其值既可以是整数也可以是代号名称</p>
+<pre><code><span class="tag">&lt;<span class="title">GridLayout</span> <span class="attribute">tools:targetApi</span>=<span class="value">"ICE_CREAM_SANDWICH"</span> &gt;</span>
+</code></pre><p>用途: Lint</p>
+<h3 id="tools:locale">tools:locale</h3><p>该属性可以在资源文件的根元素上设置，可以设置一个合适的语言以及一个可选的地区。这样可以让tools知道资源文件里的字符串应用的是什么语言。比如，<code>values/strings.xml</code> 可以有如下根元素：</p>
+<pre><code>&lt;resources <span class="string">xmlns:</span>tools=<span class="string">"http://schemas.android.com/tools"</span> <span class="string">tools:</span>locale=<span class="string">"es"</span>&gt;
+</code></pre><p>现在我们知道，默认values文件里的字符串使用的是西班牙语，而不是英语。<br>用途: Lint, Studio (可以在非英语的资源文件中禁用拼写检查)</p>
+<h3 id="tools:context">tools:context</h3><p>该属性通常被设置在布局文件的根元素上，记录布局文件所关联的Activity（设计时，一个布局可能会被多个部门引用）。这可以用来让布局编辑器知道其默认的主题，因为主题一般都是在清单文件里和与之关联的Activity里定义，而不是在布局文件里。和在清单文件中指定activity的类一样，你也可以使用.开头设置。</p>
+<pre><code>&lt;android.support.v7.widget.GridLayout
+    xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span>
+    xmlns:tools=<span class="string">"http://schemas.android.com/tools"</span>
+    tools:context=<span class="string">".MainActivity"</span> <span class="keyword">...</span> &gt;
+</code></pre><p>用途：Studio &amp; Eclipse中的布局编辑器以及Lint。</p>
+<h4 id="tools:layout">tools:layout</h4><p>此属性通常设置在&lt;fragment&gt;标签中，用来记录在设计时，你想看到的呈现的布局（运行时，将会由标签中给出的fragment类来决定）。</p>
+<pre><code>&lt;fragment android:<span class="variable">name=</span><span class="string">"com.example.master.ItemListFragment"</span>
+    tools:<span class="variable">layout=</span><span class="string">"@android:layout/list_content"</span> /&gt;
+</code></pre><p>用途: Studio &amp; Eclipse的布局编辑器</p>
+<h3 id="tools:listitem_/_listheader_/_listfooter">tools:listitem / listheader / listfooter</h3><p>这些属性可以被用在一个&lt;ListView&gt;(或者&lt;GridView&gt;，&lt;ExpandableListView&gt;这些AdapterView的子View)上，用于在设计时指定list元素、list头、list底的布局。工具就会填充一些虚拟的数据显示一个有代表性内容的列表。</p>
+<pre><code>&lt;ListView
+    android:<span class="variable">id=</span><span class="string">"@android:id/list"</span>
+    android:<span class="variable">layout_width=</span><span class="string">"match_parent"</span>
+    android:<span class="variable">layout_height=</span><span class="string">"match_parent"</span>
+    tools:<span class="variable">listitem=</span><span class="string">"@android:layout/simple_list_item_2"</span> /&gt;
+</code></pre><p>用途: Studio &amp; Eclipse的布局编辑器</p>
+<h3 id="tools:showIn">tools:showIn</h3><p>该属性需要设置在被另外一个布局包含的一个布局的根元素中。允许你设置包含该布局的布局文件，并且在设计时，这个被包含的布局将会在其外部的布局里渲染呈现。这允许你在上下文里查看和编辑布局。需要Studio 0.5.8及其以后版本支持。更多信息请参考<a href="http://tools.android.com/recent/androidstudio058released" target="_blank" rel="external">发布公告</a></p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>
+    <span class="attribute">xmlns:tools</span>=<span class="value">"http://schemas.android.com/tools"</span>
+    <span class="attribute">android:text</span>=<span class="value">"@string/hello_world"</span>
+    <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span>
+    <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>
+    <span class="attribute">tools:showIn</span>=<span class="value">"@layout/activity_main"</span> /&gt;</span>
+</code></pre><p>用途: Studio布局编辑器</p>
+<h3 id="tools:menu">tools:menu</h3><p>该属性设置在布局的根元素上，作用是配置在Action Bar显示的菜单。Android Studio通过和该布局关联的Activity（通过tools:context找到）的onCreateOptionsMenu()方法尝试找出在Action Bar使用的菜单。者允许你覆盖搜索和已确认状态的菜单。该属性值是一个逗号分割的id列表(不需要@id和其他任何前缀)。你也可以用不带.xml扩展名的xml菜单的文件名。必须是0.8.0及其之后的Studio版本才支持。</p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>
+    <span class="attribute">xmlns:tools</span>=<span class="value">"http://schemas.android.com/tools"</span>
+    <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span>
+    <span class="attribute">android:layout_width</span>=<span class="value">"match_parent"</span>
+    <span class="attribute">android:layout_height</span>=<span class="value">"match_parent"</span>
+    <span class="attribute">tools:menu</span>=<span class="value">"menu1,menu2"</span> /&gt;</span>
+</code></pre><p>用途: Studio布局编辑器</p>
+<h3 id="tools:actionBarNavMode">tools:actionBarNavMode</h3><p>概述行设置在布局的根元素上，以配置Action Bar的导航模式。有”standard”, “list” 以及 “tabs”这三个值可供选择，需要0.8.0及其之后的Studio版本支持。</p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>
+    <span class="attribute">xmlns:tools</span>=<span class="value">"http://schemas.android.com/tools"</span>
+    <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span>
+    <span class="attribute">android:layout_width</span>=<span class="value">"match_parent"</span>
+    <span class="attribute">android:layout_height</span>=<span class="value">"match_parent"</span>
+    <span class="attribute">tools:actionBarNavMode</span>=<span class="value">"tabs"</span> /&gt;</span>
+</code></pre><p>用途: Studio布局编辑器</p>
+<h3 id="其他:_设计时属性">其他: 设计时属性</h3><p>在布局中，任何一个属性都有一个与之对应的内置的Android属性。比如，你能设置一个只在设计时显示的替代文本，但是在实际运行的时候却不显示。要了解更多相信，请参考<a href="http://tools.android.com/tips/layout-designtime-attributes" target="_blank" rel="external">设计时布局属性</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.flysnow.org/2015/08/06/android-tech-docs-tools-attributes.html" data-id="cidaaz74k00085ln1z8z92kx1" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+  
+
+  
     <article id="post-android-tech-docs-ant-tasks" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/08/03/android-tech-docs-ant-tasks.html" class="article-date">
@@ -281,7 +592,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.flysnow.org/2015/08/03/android-tech-docs-ant-tasks.html" data-id="cicw1g7de0003vjn11ayttsvz" class="article-share-link">Share</a>
+      <a data-url="http://www.flysnow.org/2015/08/03/android-tech-docs-ant-tasks.html" data-id="cidaaz74n000b5ln1dt34zaxh" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ant/">Ant</a></li></ul>
@@ -380,7 +691,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.flysnow.org/2015/03/30/manage-your-android-project-with-gradle.html" data-id="cicw1g7dl000avjn1z8koe2ad" class="article-share-link">Share</a>
+      <a data-url="http://www.flysnow.org/2015/03/30/manage-your-android-project-with-gradle.html" data-id="cidaaz74p000g5ln1gbsntxk5" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Gradle/">Gradle</a></li></ul>
@@ -427,7 +738,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.flysnow.org/2015/03/19/android-process-application-init-databases-problem.html" data-id="cicw1g7dn000fvjn1h5knbd3l" class="article-share-link">Share</a>
+      <a data-url="http://www.flysnow.org/2015/03/19/android-process-application-init-databases-problem.html" data-id="cidaaz74s000l5ln101kig8zi" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据库/">数据库</a></li></ul>
@@ -518,7 +829,7 @@ categories:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.flysnow.org/2015/03/10/github-page-with-hexo.html" data-id="cicw1g7dq000kvjn1vykoca5w" class="article-share-link">Share</a>
+      <a data-url="http://www.flysnow.org/2015/03/10/github-page-with-hexo.html" data-id="cidaaz74v000q5ln1xip0as9b" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Github/">Github</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/">Hexo</a></li></ul>
@@ -565,7 +876,7 @@ categories:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.flysnow.org/2015/01/12/android-gradle-plugin-translate-done.html" data-id="cicw1g7dt000rvjn1kpngxskt" class="article-share-link">Share</a>
+      <a data-url="http://www.flysnow.org/2015/01/12/android-gradle-plugin-translate-done.html" data-id="cidaaz75y000x5ln1y9na75w2" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Gradle/">Gradle</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/翻译/">翻译</a></li></ul>
@@ -714,7 +1025,7 @@ categories:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.flysnow.org/2014/07/13/effective-programming-more-than-writing-code.html" data-id="cicw1g7dw000xvjn1yual9uy7" class="article-share-link">Share</a>
+      <a data-url="http://www.flysnow.org/2014/07/13/effective-programming-more-than-writing-code.html" data-id="cidaaz76000135ln1ijwpu0st" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/软件开发/">软件开发</a></li></ul>
@@ -758,7 +1069,7 @@ categories:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.flysnow.org/2014/03/22/android-avd-not-launcher.html" data-id="cicw1g7dy0012vjn1iiqkuan4" class="article-share-link">Share</a>
+      <a data-url="http://www.flysnow.org/2014/03/22/android-avd-not-launcher.html" data-id="cidaaz76300185ln1iwq2djkt" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
@@ -826,258 +1137,10 @@ observer.addOnGlobalLayoutListener(<span class="keyword">new</span> ViewTreeObse
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.flysnow.org/2014/02/20/android-overlay-guide.html" data-id="cicw1g7e10015vjn1ic4n0nau" class="article-share-link">Share</a>
+      <a data-url="http://www.flysnow.org/2014/02/20/android-overlay-guide.html" data-id="cidaaz765001b5ln1iqzxidrt" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-  
-
-  
-    <article id="post-linux-php-server-with-nginx" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2013/12/27/linux-php-server-with-nginx.html" class="article-date">
-  <time datetime="2013-12-27T04:59:13.000Z" itemprop="datePublished">2013-12-27</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Linux/">Linux</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2013/12/27/linux-php-server-with-nginx.html">使用Nginx搭建PHP服务器</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>一般我们都是采用Apache 作为PHP的解析服务器，这次则是采用Nginx这个强大的反向代理服务器来搭建PHP服务器。下面就以Linux发行版Ubuntu为例搭建一个Nginx的PHP服务器。</p>
-<p>首先下载安装Nginx</p>
-<pre><code>sudo apt-<span class="keyword">get</span> install nginx
-</code></pre><p>安装完成后，启动Nginx</p>
-<pre><code>sudo /etc/init.d/nginx <span class="built_in">start</span>
-</code></pre><p>这时候打开浏览器里输入<a href="http://localhost/就可以看到Welcome" target="_blank" rel="external">http://localhost/就可以看到Welcome</a> to nginx!的页面了，说明我们的Nginx服务器安装成功</p>
-<p>接下来安装PHP5</p>
-<pre><code>sudo apt-<span class="keyword">get</span> install php5-fpm
-</code></pre><p>安装成功后，我们要修改Nginx的虚拟机配置，让浏览器请求的php文件可以被php cgi解析。编辑Nginx虚拟机配置文件/etc/nginx/sites-available/default</p>
-<pre><code>sudo vim <span class="regexp">/etc/</span>nginx<span class="regexp">/sites-available/</span><span class="keyword">default</span>
-</code></pre><p>然后把里面的配置修改为如下配置内容：</p>
-<pre><code><span class="comment"># You may add here your</span>
-<span class="comment"># server {</span>
-<span class="comment">#    ...</span>
-<span class="comment"># }</span>
-<span class="comment"># statements for each of your virtual hosts to this file</span>
-
-<span class="comment">##</span>
-<span class="comment"># You should look at the following URL's in order to grasp a solid understanding</span>
-<span class="comment"># of Nginx configuration files in order to fully unleash the power of Nginx.</span>
-<span class="comment"># http://wiki.nginx.org/Pitfalls</span>
-<span class="comment"># http://wiki.nginx.org/QuickStart</span>
-<span class="comment"># http://wiki.nginx.org/Configuration</span>
-<span class="comment">#</span>
-<span class="comment"># Generally, you will want to move this file somewhere, and start with a clean</span>
-<span class="comment"># file but keep this around for reference. Or just disable in sites-enabled.</span>
-<span class="comment">#</span>
-<span class="comment"># Please see /usr/share/doc/nginx-doc/examples/ for more detailed examples.</span>
-<span class="comment">##</span>
-
-<span class="title">server</span> {
-    <span class="title">listen</span>   <span class="number">80</span>; <span class="comment">## listen for ipv4; this line is default and implied</span>
-    <span class="comment">#listen   [::]:80 default ipv6only=on; ## listen for ipv6</span>
-
-    <span class="title">root</span> /usr/share/nginx/www;
-    <span class="title">index</span> index.html index.htm index.php;
-
-    <span class="comment"># Make site accessible from http://localhost/</span>
-    <span class="title">server_name</span> localhost;
-
-    <span class="title">location</span> / {
-        <span class="comment"># First attempt to serve request as file, then</span>
-        <span class="comment"># as directory, then fall back to index.html</span>
-        <span class="title">try_files</span> <span class="variable">$uri</span> <span class="variable">$uri</span>/ /index.html;
-        <span class="comment"># Uncomment to enable naxsi on this location</span>
-        <span class="comment"># include /etc/nginx/naxsi.rules</span>
-    }
-
-    <span class="title">location</span> /doc/ {
-        <span class="title">alias</span> /usr/share/doc/;
-        <span class="title">autoindex</span> <span class="built_in">on</span>;
-        <span class="title">allow</span> <span class="number">127.0.0.1</span>;
-        <span class="title">deny</span> all;
-    }
-
-    <span class="comment"># Only for nginx-naxsi : process denied requests</span>
-    <span class="comment">#location /RequestDenied {</span>
-        <span class="comment"># For example, return an error code</span>
-        <span class="comment">#return 418;</span>
-    <span class="comment"># }</span>
-
-    <span class="title">error_page</span> <span class="number">404</span> /<span class="number">404</span>.html;
-
-    <span class="comment"># redirect server error pages to the static page /50x.html</span>
-    <span class="comment">#</span>
-    <span class="title">error_page</span> <span class="number">500</span> <span class="number">502</span> <span class="number">503</span> <span class="number">504</span> /50x.html;
-    <span class="title">location</span> = /50x.html {
-        <span class="title">root</span> /usr/share/nginx/www;
-    }
-
-    <span class="comment"># pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000</span>
-    <span class="comment">#</span>
-    <span class="title">location</span> <span class="regexp">~ \.php$</span> {
-        <span class="title">fastcgi_split_path_info</span><span class="regexp"> ^(.+\.php)(/.+)$</span>;
-        <span class="comment"># NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini</span>
-
-        <span class="comment"># With php5-cgi alone:</span>
-        <span class="title">fastcgi_pass</span> <span class="number">127.0.0.1:9000</span>;
-        <span class="comment"># With php5-fpm:</span>
-        <span class="comment">#fastcgi_pass unix:/var/run/php5-fpm.sock;</span>
-        <span class="title">fastcgi_index</span> index.php;
-        <span class="title">include</span> fastcgi_params;
-    }
-
-    <span class="comment"># deny access to .htaccess files, if Apache's document root</span>
-    <span class="comment"># concurs with nginx's one</span>
-    <span class="comment">#</span>
-    <span class="title">location</span> <span class="regexp">~ /\.ht</span> {
-        <span class="title">deny</span> all;
-    }
-}
-
-<span class="comment"># another virtual host using mix of IP-, name-, and port-based configuration</span>
-<span class="comment">#</span>
-<span class="comment">#server {</span>
-<span class="comment">#    listen 8000;</span>
-<span class="comment">#    listen somename:8080;</span>
-<span class="comment">#    server_name somename alias another.alias;</span>
-<span class="comment">#    root html;</span>
-<span class="comment">#    index index.html index.htm;</span>
-<span class="comment">#</span>
-<span class="comment">#    location / {</span>
-<span class="comment">#        try_files $uri $uri/ /index.html;</span>
-<span class="comment">#    }</span>
-<span class="comment"># }</span>
-
-<span class="comment"># HTTPS server</span>
-<span class="comment">#</span>
-<span class="comment">#server {</span>
-<span class="comment">#    listen 443;</span>
-<span class="comment">#    server_name localhost;</span>
-<span class="comment">#</span>
-<span class="comment">#    root html;</span>
-<span class="comment">#    index index.html index.htm;</span>
-<span class="comment">#</span>
-<span class="comment">#    ssl on;</span>
-<span class="comment">#    ssl_certificate cert.pem;</span>
-<span class="comment">#    ssl_certificate_key cert.key;</span>
-<span class="comment">#</span>
-<span class="comment">#    ssl_session_timeout 5m;</span>
-<span class="comment">#</span>
-<span class="comment">#    ssl_protocols SSLv3 TLSv1;</span>
-<span class="comment">#    ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv3:+EXP;</span>
-<span class="comment">#    ssl_prefer_server_ciphers on;</span>
-<span class="comment">#</span>
-<span class="comment">#    location / {</span>
-<span class="comment">#        try_files $uri $uri/ /index.html;</span>
-<span class="comment">#    }</span>
-<span class="comment"># }</span>
-</code></pre><p>重新加载我们刚刚更改的Nginx配置</p>
-<pre><code>sudo <span class="regexp">/etc/i</span>nit.d<span class="regexp">/nginx reload</span>
-</code></pre><p>然后我们在/usr/share/nginx/www/目录下新建一个phpinfo.php文件，可以查看php的配置和环境信息</p>
-<pre><code>sudo vim <span class="regexp">/usr/</span>share<span class="regexp">/nginx/</span>www<span class="regexp">/phpinfo.php</span>
-</code></pre><p>在phpinfo.php中录入如下内容:</p>
-<pre><code><span class="php"><span class="preprocessor">&lt;?php</span>
-  phpinfo();
-<span class="preprocessor">?&gt;</span></span>
-</code></pre><p>我们在浏览器里输入<a href="http://localhost/phpinfo.php就可以看到PHP的信息页了，有版本等信息。" target="_blank" rel="external">http://localhost/phpinfo.php就可以看到PHP的信息页了，有版本等信息。</a></p>
-<p>PHP5还有很多支持的模块，如果需要的话可以选择安装，一般这些模块都是php5-开头，比如php5-mysql，在Ubuntu里安装他只需</p>
-<pre><code>sudo apt-<span class="keyword">get</span> install php5-mysql
-</code></pre><p>PHP的模块安装后别忘记重启PHP5哦，执行如下命令可以重启</p>
-<pre><code>sudo <span class="regexp">/etc/i</span>nit.d<span class="regexp">/php5-fpm restart</span>
-</code></pre>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://www.flysnow.org/2013/12/27/linux-php-server-with-nginx.html" data-id="cicw1g7e40018vjn17gkd2j6l" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Apache/">Apache</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nginx/">Nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ubuntu/">Ubuntu</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-  
-
-  
-    <article id="post-open-source-project-in-android-app" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2013/12/14/open-source-project-in-android-app.html" class="article-date">
-  <time datetime="2013-12-14T07:35:36.000Z" itemprop="datePublished">2013-12-14</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Android/">Android</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2013/12/14/open-source-project-in-android-app.html">Android产品开发中常用的一些开源项目</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>你在工作中可能会遇到同时给你说不要重复发明轮子，其实这个说的就是第一：不要做重复的事情，第二：站在巨人的肩膀上。现在有了互联网以及开源的精神，我们的很多在产品中需要实现的功能组件都可以在互联网上找到，我们可以直接拿来用，这样我们就不用重复做东西了，这得益于开源奉献精神。像Google、Facebook这类的大公司都在使用很多的开源产品，比如我们常见的Apache系列、我们使用的Eclipse IDE等等。</p>
-<p>在我自己的产品开发中，我也使用到了一些常用的开源项目，下面就介绍一下我使用的一些Android开源项目。</p>
-<h3 id="1-android-wheel">1.android-wheel</h3><p>还记得iPhone上经典的日期选择滑轮组件吗?这个就是android版本的实现，记得当时这种选择方式很风靡，可以用于时间、分类等一些具有选择类型功能的开发实现，非常方便。</p>
-<p>开源项目地址：<a href="https://code.google.com/p/android-wheel/" target="_blank" rel="external">https://code.google.com/p/android-wheel/</a></p>
-<h3 id="2-achartengine"><a href="/uploads/2013/12/android-wheel-cities.png"><img src="/uploads/2013/12/android-wheel-cities.png" alt="android-wheel-cities"></a>2.achartengine</h3><p>这个是android上用于报表类的组件，可以实现条形图、饼图、柱状图、折线图等等。可以在产品中用于一些报表统计类的功能，通过这些图形报表给用户一个直观的统计，比如用户的收支走势图、分类支出对比图等等。</p>
-<p>开源项目地址：<a href="https://code.google.com/p/achartengine/" target="_blank" rel="external">https://code.google.com/p/achartengine/</a></p>
-<h3 id="3-Satellite_Menu"><a href="/uploads/2013/12/android-wheel-cities.png"><img src="/uploads/2013/12/android-wheel-cities.png" alt="android-wheel-cities"></a> <a href="/uploads/2013/12/combined_chart.png"><img src="/uploads/2013/12/combined_chart-300x500.png" alt="combined_chart"></a>3.Satellite Menu</h3><p>还记得Path的弧形弹出式菜单吗？当时太风靡了，大家都在抄啊，一时间市场上所有的App的功能和菜单键全被这个设计代替了。不多说，给出地址。</p>
-<p>开源项目地址：<a href="https://github.com/siyamed/android-satellite-menu" target="_blank" rel="external">https://github.com/siyamed/android-satellite-menu</a></p>
-<h3 id="4-drag-sort-listview"><a href="/uploads/2013/12/687474703a2f2f692e696d6775722e636f6d2f3049676b6b74642e706e67.png"><img src="/uploads/2013/12/687474703a2f2f692e696d6775722e636f6d2f3049676b6b74642e706e67-489x500.png" alt="687474703a2f2f692e696d6775722e636f6d2f3049676b6b74642e706e67"></a>4.drag-sort-listview</h3><p>Android产品中ListView相信大家都用的不少，用于展示用户的数据是很不错的，不过有的时候用户需要调整一下列表项的顺序，比如用户想把好听的因为放在上面，便于选择，这时候这个组件就派上用场了，可以让用户拖动着某一项进行上下排序。</p>
-<p>开源项目地址：<a href="https://github.com/bauerca/drag-sort-listview" target="_blank" rel="external">https://github.com/bauerca/drag-sort-listview</a></p>
-<h3 id="5-SlidingMenu">5.SlidingMenu</h3><p>不知道从什么时候起侧滑又成了App设计的一个风向标，一时间全是侧滑啊，就是感觉不用侧滑这个产品就不好意思发布似的。这是一个非常经典的侧滑开源项目，都多种方式、可以灵活配置和定制。</p>
-<p>开源项目地址：<a href="https://github.com/jfeinstein10/SlidingMenu" target="_blank" rel="external">https://github.com/jfeinstein10/SlidingMenu</a></p>
-<h3 id="6-NineOldAndroids"><a href="/uploads/2013/12/2012110712582439.png"><img src="/uploads/2013/12/2012110712582439.png" alt="2012110712582439"></a>6.NineOldAndroids</h3><p>Android3.0增加了一套属性动画的框架，让开发者能更容易的完成更复杂的动画，但是为了兼容低版本的手机，我们又不能把应用升级到Android3.0,不过幸好有NineOldAndroids，我们可以在低系统版本的手机上也可以使用属性动画</p>
-<p>开源项目地址：<a href="https://github.com/JakeWharton/NineOldAndroids" target="_blank" rel="external">https://github.com/JakeWharton/NineOldAndroids</a></p>
-<h3 id="7-Android-PullToRefresh">7.Android-PullToRefresh</h3><p>下拉列表刷新，上拉加载，下拉。。。，上下拉可以做很多事情，上下拉又成了时髦的设计。这是一个非常NB的组件，可以把任何View变成具有可上下拉功能的View，并且不会对原来的View造成污染。</p>
-<p>开源项目地址：<a href="https://github.com/chrisbanes/Android-PullToRefresh" target="_blank" rel="external">https://github.com/chrisbanes/Android-PullToRefresh</a></p>
-<h3 id="8-ActionBarSherlock"><a href="/uploads/2013/12/header_graphic.png"><img src="/uploads/2013/12/header_graphic-500x254.png" alt="header_graphic"></a>8.ActionBarSherlock</h3><p>从 Android3.0开始增加了ActionBar，它能帮助开发者定制菜单，导航等，非常方便，但是低版本的用不了，所以ActionBarSherlock就出世了，它能让我们在低版本的手机上也可以使用ActionBar</p>
-<p>开源项目地址：<a href="https://github.com/JakeWharton/ActionBarSherlock" target="_blank" rel="external">https://github.com/JakeWharton/ActionBarSherlock</a></p>
-<p><a href="/uploads/2013/12/687474703a2f2f616374696f6e626172736865726c6f636b2e636f6d2f7374617469632f666561747572652e706e67.png"><img src="/uploads/2013/12/687474703a2f2f616374696f6e626172736865726c6f636b2e636f6d2f7374617469632f666561747572652e706e67-500x236.png" alt="687474703a2f2f616374696f6e626172736865726c6f636b2e636f6d2f7374617469632f666561747572652e706e67"></a></p>
-<p>开源项目林林总总很多，今天说的都是我常用的，多去一些注入GitHub，GoogleCode等网站，可以发现很多开源的优秀项目，这些我们可以先了解收集起来，等我们产品中有类似的功能了，可以拿来使用，帮你更快的完成工作。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://www.flysnow.org/2013/12/14/open-source-project-in-android-app.html" data-id="cicw1g7fc001lvjn1bcgrq5ob" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/开源/">开源</a></li></ul>
 
     </footer>
   </div>
@@ -1100,7 +1163,7 @@ observer.addOnGlobalLayoutListener(<span class="keyword">new</span> ViewTreeObse
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a><span class="category-list-count">39</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Hexo/">Hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/软件开发/">软件开发</a><span class="category-list-count">2</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a><span class="category-list-count">41</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Hexo/">Hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/软件开发/">软件开发</a><span class="category-list-count">2</span></li></ul>
     </div>
   </div>
 
@@ -1109,7 +1172,7 @@ observer.addOnGlobalLayoutListener(<span class="keyword">new</span> ViewTreeObse
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/API/">API</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">39</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ant/">Ant</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Apache/">Apache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Email/">Email</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github/">Github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gradle/">Gradle</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Http/">Http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HttpClitent/">HttpClitent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intent/">Intent</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/">Nginx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/">PHP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/">Ubuntu</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Widget/">Widget</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/goagent/">goagent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/代理/">代理</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/开源/">开源</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/敏捷/">敏捷</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库/">数据库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻墙/">翻墙</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻译/">翻译</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/软件工程/">软件工程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/软件开发/">软件开发</a><span class="tag-list-count">2</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/API/">API</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">41</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ant/">Ant</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Apache/">Apache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Email/">Email</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github/">Github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gradle/">Gradle</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Http/">Http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HttpClitent/">HttpClitent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intent/">Intent</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/">Nginx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/">PHP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/">Ubuntu</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Widget/">Widget</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/goagent/">goagent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/代理/">代理</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/开源/">开源</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/敏捷/">敏捷</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库/">数据库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻墙/">翻墙</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻译/">翻译</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/软件工程/">软件工程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/软件开发/">软件开发</a><span class="tag-list-count">2</span></li></ul>
     </div>
   </div>
 
@@ -1127,7 +1190,7 @@ observer.addOnGlobalLayoutListener(<span class="keyword">new</span> ViewTreeObse
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">十一月 2013</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">二月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">一月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/12/">十二月 2011</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/11/">十一月 2011</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/10/">十月 2011</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/07/">七月 2011</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/05/">五月 2011</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/03/">三月 2011</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/02/">二月 2011</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/01/">一月 2011</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2010/11/">十一月 2010</a><span class="archive-list-count">7</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">十一月 2013</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">二月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">一月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/12/">十二月 2011</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/11/">十一月 2011</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/10/">十月 2011</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/07/">七月 2011</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/05/">五月 2011</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/03/">三月 2011</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/02/">二月 2011</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2011/01/">一月 2011</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2010/11/">十一月 2010</a><span class="archive-list-count">7</span></li></ul>
     </div>
   </div>
 
@@ -1139,6 +1202,14 @@ observer.addOnGlobalLayoutListener(<span class="keyword">new</span> ViewTreeObse
       <ul>
         
           <li>
+            <a href="/2015/08/13/android-tech-docs-support-annotations.html">Android注解支持(Support Annotations)</a>
+          </li>
+        
+          <li>
+            <a href="/2015/08/06/android-tech-docs-tools-attributes.html">Android技术文档翻译--工具属性(Tools Attributes)</a>
+          </li>
+        
+          <li>
             <a href="/2015/08/03/android-tech-docs-ant-tasks.html">android技术文档翻译--ant任务</a>
           </li>
         
@@ -1148,14 +1219,6 @@ observer.addOnGlobalLayoutListener(<span class="keyword">new</span> ViewTreeObse
         
           <li>
             <a href="/2015/03/19/android-process-application-init-databases-problem.html">Android多进程的数据库访问问题</a>
-          </li>
-        
-          <li>
-            <a href="/2015/03/10/github-page-with-hexo.html">使用Hexo在Github上搭建自己的博客</a>
-          </li>
-        
-          <li>
-            <a href="/2015/01/12/android-gradle-plugin-translate-done.html">Android Gradle插件中文指南</a>
           </li>
         
       </ul>

@@ -2,6 +2,26 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.flysnow.org/2015/08/13/android-tech-docs-support-annotations.html</loc>
+    <lastmod>2015-08-13T14:27:45.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.flysnow.org/2013/01/28/android-layout-height-fail.html</loc>
+    <lastmod>2015-08-13T14:15:05.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.flysnow.org/2015/08/06/android-tech-docs-tools-attributes.html</loc>
+    <lastmod>2015-08-13T14:15:05.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.flysnow.org/2010/11/11/setup-android-for-window.html</loc>
+    <lastmod>2015-08-13T14:15:05.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://www.flysnow.org/2015/08/03/android-tech-docs-ant-tasks.html</loc>
     <lastmod>2015-08-03T14:50:02.000Z</lastmod>
   </url>
@@ -19,16 +39,6 @@
   <url>
     <loc>http://www.flysnow.org/2015/03/19/android-process-application-init-databases-problem.html</loc>
     <lastmod>2015-03-19T14:45:54.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.flysnow.org/about/index.html</loc>
-    <lastmod>2015-03-19T13:40:30.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.flysnow.org/2014/07/13/effective-programming-more-than-writing-code.html</loc>
-    <lastmod>2015-03-19T13:40:30.000Z</lastmod>
   </url>
   
   <url>
@@ -97,7 +107,7 @@
   </url>
   
   <url>
-    <loc>http://www.flysnow.org/2013/01/28/android-layout-height-fail.html</loc>
+    <loc>http://www.flysnow.org/2015/03/10/github-page-with-hexo.html</loc>
     <lastmod>2015-03-19T13:40:30.000Z</lastmod>
   </url>
   
@@ -122,12 +132,12 @@
   </url>
   
   <url>
-    <loc>http://www.flysnow.org/2011/11/11/android-asset-studio-integration.html</loc>
+    <loc>http://www.flysnow.org/about/index.html</loc>
     <lastmod>2015-03-19T13:40:30.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://www.flysnow.org/2015/03/10/github-page-with-hexo.html</loc>
+    <loc>http://www.flysnow.org/2011/10/22/adsl-and-vpn-config-for-ubuntu.html</loc>
     <lastmod>2015-03-19T13:40:30.000Z</lastmod>
   </url>
   
@@ -232,7 +242,7 @@
   </url>
   
   <url>
-    <loc>http://www.flysnow.org/2010/11/11/setup-android-for-window.html</loc>
+    <loc>http://www.flysnow.org/2014/07/13/effective-programming-more-than-writing-code.html</loc>
     <lastmod>2015-03-19T13:40:30.000Z</lastmod>
   </url>
   
@@ -247,7 +257,7 @@
   </url>
   
   <url>
-    <loc>http://www.flysnow.org/2011/10/22/adsl-and-vpn-config-for-ubuntu.html</loc>
+    <loc>http://www.flysnow.org/2011/11/11/android-asset-studio-integration.html</loc>
     <lastmod>2015-03-19T13:40:30.000Z</lastmod>
   </url>
   
