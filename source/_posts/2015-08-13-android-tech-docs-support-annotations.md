@@ -4,6 +4,7 @@ tags:
 - Android
 categories:
 - Android
+toc: true
 ---
 
 以下内容由[http://www.flysnow.org](http://www.flysnow.org)(飞雪无情)提供翻译
@@ -12,7 +13,7 @@ categories:
 
 更多翻译的Android技术文档请参考：<https://github.com/rujews/android-tech-docs>
 
-## 注解支持(Support Annotations)
+### 注解支持(Support Annotations)
 
 Android support library从19.1版本开始引入了一个新的注解库，它包含很多有用的元注解，你能用它们修饰你的代码，帮助你发现bug。Support library自己本身也用到了这些注解，所以作为support library的用户，Android Studio已经基于这些注解校验了你的代码并且标注其中潜在的问题。Support library 22.2版本又新增了13个新的注解以供使用。
 

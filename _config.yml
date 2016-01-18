@@ -37,8 +37,10 @@ render_drafts: false
 post_asset_folder: false
 relative_link: false
 future: true
+
 highlight:
   enable: true
+  auto_detect: true
   line_number: true
   tab_replace:
 
@@ -62,7 +64,7 @@ pagination_dir: page
 # Extensions
 ## Plugins: http://hexo.io/plugins/
 ## Themes: http://hexo.io/themes/
-theme: landscape
+theme: maupassant
 
 duoshuo_shortname: flysnow
 
