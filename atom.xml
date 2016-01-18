@@ -4,7 +4,7 @@
   <subtitle><![CDATA[专注于Android、Java、移动互联网、项目管理、软件架构]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.flysnow.org/"/>
-  <updated>2015-08-13T14:27:45.000Z</updated>
+  <updated>2016-01-18T16:59:44.000Z</updated>
   <id>http://www.flysnow.org/</id>
   
   <author>
@@ -15,15 +15,45 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[新书《Android Gradle权威指南》发布]]></title>
+    <link href="http://www.flysnow.org/2016/01/19/android-gradle-book-publish-in-baidu-yuedu.html"/>
+    <id>http://www.flysnow.org/2016/01/19/android-gradle-book-publish-in-baidu-yuedu.html</id>
+    <published>2016-01-18T16:30:50.000Z</published>
+    <updated>2016-01-18T16:59:44.000Z</updated>
+    <content type="html"><![CDATA[<p>我的新书《Android Gradle权威指南》已经在百度阅读发布了，欢迎大家试读购买，五星好评支持。目前本书在持续更新中，一周最少会有一大章的更新，如果大家有什么问题，或者有什么需要我在书中特别介绍的知识点，都可以给我留言或者发邮件，希望大家多多支持。</p>
+<h2 id="本书阅读链接">本书阅读链接</h2><p><a href="http://yuedu.baidu.com/ebook/14a722970740be1e640e9a3e" target="_blank" rel="external">Android Gradle权威指南</a></p>
+<p><a href="http://yuedu.baidu.com/ebook/14a722970740be1e640e9a3e" target="_blank" rel="external">http://yuedu.baidu.com/ebook/14a722970740be1e640e9a3e</a></p>
+<h2 id="本书概述：">本书概述：</h2><p>2014年底，随着Android Studio 1.0正式版的发布，开启了Android开发编译构建的新时代。Android放弃了基于Ant的构建系统，大胆的采用了Gradle作为其全新的构建工具。Gradle和Android Studio完美的配合，构成了全新的Android开发环境。</p>
+<p>我从10年开始做Android，也作为Android Gradle最早尝鲜的一批人，在其1.0正式版发布后，带领公司Android团队完全了从ADT向Android Studio的迁移。本书将结合作者的实际工作经验以及遇到的问题，由潜入深的介绍Gradle的入门、Gradle的任务、Android Gradle插件、Android Gradle多工程构建、Android Gradle库工程发布、Android Gradle C/C++支持、Android Gradle单元测试和代码覆盖率、Android Gradle自动化等相关知识点。读者通过阅读本书，可以全面了解Android Gradle构建，快速上手以及深入，帮助大家提高工作效率。</p>
+<h2 id="联系作者">联系作者</h2><p>作者：飞雪无情<br>博客：<a href="http://www.flysnow.org/" target="_blank" rel="external">http://www.flysnow.org/</a><br>Email：ls8707@gmail.com</p>
+<h2 id="本书示例代码下载">本书示例代码下载</h2><p>本书的示例代码已经托管到github上，大家可以直接下载导入<br><a href="https://github.com/rujews/android-gradle-book-code" target="_blank" rel="external">https://github.com/rujews/android-gradle-book-code</a></p>
+<p><a href="http://yuedu.baidu.com/ebook/14a722970740be1e640e9a3e" target="_blank" rel="external"><img src="/uploads/2016/01/2016-01-19 00-49-05.png" alt="Android Gradle权威指南"></a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>我的新书《Android Gradle权威指南》已经在百度阅读发布了，欢迎大家试读购买，五星好评支持。目前本书在持续更新中，一周最少会有一大章的更新，如果大家有什么问题，或者有什么需要我在书中特别介绍的知识点，都可以给我留言或者发邮件，希望大家多多支持。</p>
+<h2 i]]>
+    </summary>
+    
+      <category term="Android" scheme="http://www.flysnow.org/tags/Android/"/>
+    
+      <category term="新书" scheme="http://www.flysnow.org/tags/%E6%96%B0%E4%B9%A6/"/>
+    
+      <category term="Android" scheme="http://www.flysnow.org/categories/Android/"/>
+    
+      <category term="新书" scheme="http://www.flysnow.org/categories/Android/%E6%96%B0%E4%B9%A6/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[Android注解支持(Support Annotations)]]></title>
     <link href="http://www.flysnow.org/2015/08/13/android-tech-docs-support-annotations.html"/>
     <id>http://www.flysnow.org/2015/08/13/android-tech-docs-support-annotations.html</id>
     <published>2015-08-13T14:16:50.000Z</published>
-    <updated>2015-08-13T14:27:45.000Z</updated>
+    <updated>2016-01-18T16:55:07.000Z</updated>
     <content type="html"><![CDATA[<p>以下内容由<a href="http://www.flysnow.org" target="_blank" rel="external">http://www.flysnow.org</a>(飞雪无情)提供翻译</p>
 <p>原文地址 <a href="http://tools.android.com/tech-docs/support-annotations" target="_blank" rel="external">http://tools.android.com/tech-docs/support-annotations</a></p>
 <p>更多翻译的Android技术文档请参考：<a href="https://github.com/rujews/android-tech-docs" target="_blank" rel="external">https://github.com/rujews/android-tech-docs</a></p>
-<h2 id="注解支持(Support_Annotations)">注解支持(Support Annotations)</h2><p>Android support library从19.1版本开始引入了一个新的注解库，它包含很多有用的元注解，你能用它们修饰你的代码，帮助你发现bug。Support library自己本身也用到了这些注解，所以作为support library的用户，Android Studio已经基于这些注解校验了你的代码并且标注其中潜在的问题。Support library 22.2版本又新增了13个新的注解以供使用。</p>
+<h3 id="注解支持(Support_Annotations)">注解支持(Support Annotations)</h3><p>Android support library从19.1版本开始引入了一个新的注解库，它包含很多有用的元注解，你能用它们修饰你的代码，帮助你发现bug。Support library自己本身也用到了这些注解，所以作为support library的用户，Android Studio已经基于这些注解校验了你的代码并且标注其中潜在的问题。Support library 22.2版本又新增了13个新的注解以供使用。</p>
 <h3 id="使用注解库">使用注解库</h3><p>注解默认是没有包含的；他们被包装成一个独立的库。（support library现在由一些更小的库组成：v4-support, appcompat, gridlayout, mediarouter等等）</p>
 <p>(如果你正在使用appcompat库，那么你已经可以使用这些注解了，因为appcomat它自己也依赖它。)</p>
 <p>添加使用注解最简单的方式就是打开Project Structure对话框。首先在左边选中module，然后在右边选中Dependencies标签页，点击面板底部的<code>+</code>按钮，选择Library Dependency，假设你已经把Android Support Repository安装到你的SDK中了，那么注解库将会出现在列表中，你只需点击选中它即可(这里是列表中的第一个):<br><img src="/uploads/2015/08/add-dependency.png" alt="添加依赖"></p>

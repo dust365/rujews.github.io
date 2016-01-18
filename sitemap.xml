@@ -2,17 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://www.flysnow.org/2015/08/13/android-tech-docs-support-annotations.html</loc>
-    <lastmod>2015-08-13T14:27:45.000Z</lastmod>
+    <loc>http://www.flysnow.org/2016/01/19/android-gradle-book-publish-in-baidu-yuedu.html</loc>
+    <lastmod>2016-01-18T16:59:44.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://www.flysnow.org/2013/01/28/android-layout-height-fail.html</loc>
-    <lastmod>2015-08-13T14:15:05.000Z</lastmod>
+    <loc>http://www.flysnow.org/2015/08/13/android-tech-docs-support-annotations.html</loc>
+    <lastmod>2016-01-18T16:55:07.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://www.flysnow.org/2015/08/06/android-tech-docs-tools-attributes.html</loc>
+    <lastmod>2015-08-13T14:15:05.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.flysnow.org/2013/01/28/android-layout-height-fail.html</loc>
     <lastmod>2015-08-13T14:15:05.000Z</lastmod>
   </url>
   
@@ -127,12 +132,12 @@
   </url>
   
   <url>
-    <loc>http://www.flysnow.org/2011/11/15/android-4-0-api-arrange.html</loc>
+    <loc>http://www.flysnow.org/about/index.html</loc>
     <lastmod>2015-03-19T13:40:30.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://www.flysnow.org/about/index.html</loc>
+    <loc>http://www.flysnow.org/2011/11/11/android-asset-studio-integration.html</loc>
     <lastmod>2015-03-19T13:40:30.000Z</lastmod>
   </url>
   
@@ -257,7 +262,7 @@
   </url>
   
   <url>
-    <loc>http://www.flysnow.org/2011/11/11/android-asset-studio-integration.html</loc>
+    <loc>http://www.flysnow.org/2011/11/15/android-4-0-api-arrange.html</loc>
     <lastmod>2015-03-19T13:40:30.000Z</lastmod>
   </url>
   
