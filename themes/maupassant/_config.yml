@@ -13,7 +13,7 @@ menu:
     directory: .
     icon: icon-home
   - page: 新书
-    directory: 2016/01/19/android-gradle-book-publish-in-baidu-yuedu.html
+    directory: books/
     icon: icon-history
   - page: archive
     directory: archives/
