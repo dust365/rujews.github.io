@@ -4,7 +4,7 @@
   <subtitle><![CDATA[专注于Android、Java、移动互联网、项目管理、软件架构]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.flysnow.org/"/>
-  <updated>2016-01-18T16:59:44.000Z</updated>
+  <updated>2016-04-11T13:51:07.000Z</updated>
   <id>http://www.flysnow.org/</id>
   
   <author>
@@ -15,32 +15,227 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title><![CDATA[新书《Android Gradle权威指南》发布]]></title>
-    <link href="http://www.flysnow.org/2016/01/19/android-gradle-book-publish-in-baidu-yuedu.html"/>
-    <id>http://www.flysnow.org/2016/01/19/android-gradle-book-publish-in-baidu-yuedu.html</id>
-    <published>2016-01-18T16:30:50.000Z</published>
-    <updated>2016-01-18T16:59:44.000Z</updated>
-    <content type="html"><![CDATA[<p>我的新书《Android Gradle权威指南》已经在百度阅读发布了，欢迎大家试读购买，五星好评支持。目前本书在持续更新中，一周最少会有一大章的更新，如果大家有什么问题，或者有什么需要我在书中特别介绍的知识点，都可以给我留言或者发邮件，希望大家多多支持。</p>
-<h2 id="本书阅读链接">本书阅读链接</h2><p><a href="http://yuedu.baidu.com/ebook/14a722970740be1e640e9a3e" target="_blank" rel="external">Android Gradle权威指南</a></p>
-<p><a href="http://yuedu.baidu.com/ebook/14a722970740be1e640e9a3e" target="_blank" rel="external">http://yuedu.baidu.com/ebook/14a722970740be1e640e9a3e</a></p>
-<h2 id="本书概述：">本书概述：</h2><p>2014年底，随着Android Studio 1.0正式版的发布，开启了Android开发编译构建的新时代。Android放弃了基于Ant的构建系统，大胆的采用了Gradle作为其全新的构建工具。Gradle和Android Studio完美的配合，构成了全新的Android开发环境。</p>
-<p>我从10年开始做Android，也作为Android Gradle最早尝鲜的一批人，在其1.0正式版发布后，带领公司Android团队完全了从ADT向Android Studio的迁移。本书将结合作者的实际工作经验以及遇到的问题，由潜入深的介绍Gradle的入门、Gradle的任务、Android Gradle插件、Android Gradle多工程构建、Android Gradle库工程发布、Android Gradle C/C++支持、Android Gradle单元测试和代码覆盖率、Android Gradle自动化等相关知识点。读者通过阅读本书，可以全面了解Android Gradle构建，快速上手以及深入，帮助大家提高工作效率。</p>
-<h2 id="联系作者">联系作者</h2><p>作者：飞雪无情<br>博客：<a href="http://www.flysnow.org/" target="_blank" rel="external">http://www.flysnow.org/</a><br>Email：ls8707@gmail.com</p>
-<h2 id="本书示例代码下载">本书示例代码下载</h2><p>本书的示例代码已经托管到github上，大家可以直接下载导入<br><a href="https://github.com/rujews/android-gradle-book-code" target="_blank" rel="external">https://github.com/rujews/android-gradle-book-code</a></p>
-<p><a href="http://yuedu.baidu.com/ebook/14a722970740be1e640e9a3e" target="_blank" rel="external"><img src="/uploads/2016/01/2016-01-19 00-49-05.png" alt="Android Gradle权威指南"></a></p>
+    <title><![CDATA[Android Gradle 入门]]></title>
+    <link href="http://www.flysnow.org/2016/04/11/android-gradle-getting-started.html"/>
+    <id>http://www.flysnow.org/2016/04/11/android-gradle-getting-started.html</id>
+    <published>2016-04-11T13:49:50.000Z</published>
+    <updated>2016-04-11T13:51:07.000Z</updated>
+    <content type="html"><![CDATA[<p> Gradle是一款非常优秀的构建系统工具,它的DSL基于Groovy实现,可以让你很方便的通过代码控制这些DSL来达到你构建的目的，其构建的大部分功能都是通过插件的方式来实现，所以非常灵活方便，如果内置插件不能满足你的需求你可以自定义自己的插件。</p>
+<p>本章我们就介绍Gradle的入门，在介绍之前，我们先假定读者已经具备以下前提：</p>
+<ol>
+<li>了解并且会使用Java，精通最好</li>
+<li>会自己的独立的搭建Java开发环境</li>
+<li>最好会使用Linux操作系统，比如Ubuntu</li>
+</ol>
+<p>为什么会有这样的假定呢，因为这本书是介绍Android Gradle开发构建的书，所以不会花章节去讲Java的基本知识，能希望读者会用Linux操作系统的原因，是因为作者该书的所有脚本、代码、IDE等都是基于Ubuntu完成的，当然比如涉及到Gradle安装还会介绍一下Window的安装步骤，但是不会太多涉及到Window的东西，这个关于本书一章里有提到，所以呢，还是希望读者们在阅读本书前已经掌握了这些知识，Linux操作系统非必须，因为涉及到的都是Linux很基本的东西，大家很容易就看得懂。</p>
+<h3 id="配置Gradle环境">配置Gradle环境</h3><p>安装之前确保已经安装配置好Java环境，要求JDK 6以上，并且在环境变量里配置了JAVA_HOME,查看java版本可以在终端输入如下命令：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -version</span><br></pre></td></tr></table></figure></p>
+<p>我这里使用的是open jdk 1.7.0_79。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flysnow@flysnow:~$ java -version&#10;java version &#34;1.7.0_79&#34;&#10;OpenJDK Runtime Environment (IcedTea 2.5.6) (7u79-2.5.6-0ubuntu1.15.04.1)&#10;OpenJDK 64-Bit Server VM (build 24.79-b02, mixed mode)</span><br></pre></td></tr></table></figure></p>
+<h4 id="Linux下搭建Gradle构建环境">Linux下搭建Gradle构建环境</h4><p>这里以Ubuntu 15.04发行版为例介绍如何在Linux搭建Gradle构建环境，其他注入CentOS大同小异，参考下就可以了。</p>
+<p>我们这里以Gradle 2.5版本为准进行介绍，先到Gradle官网 <a href="http://gradle.org/下载好Gradle" target="_blank" rel="external">http://gradle.org/下载好Gradle</a> SDK，直接下载地址为 <a href="https://downloads.gradle.org/distributions/gradle-2.5-all.zip，我们下载的是all版本，也就是说，里面包含了Gradle" target="_blank" rel="external">https://downloads.gradle.org/distributions/gradle-2.5-all.zip，我们下载的是all版本，也就是说，里面包含了Gradle</a> SDK所有相关的内容，包括源代码、文档、示例等。下载之后进行解压，我们可以得到如何目录清单：</p>
+<ol>
+<li>docs——API、DSL、指南等文档</li>
+<li>getting-started.html——入门链接</li>
+<li>init.d——gradle的初始化脚本目录</li>
+<li>lib——相关库</li>
+<li>LICENSE</li>
+<li>media——一些icon资源</li>
+<li>NOTICE</li>
+<li>samples——示例</li>
+<li>src——源文件</li>
+</ol>
+<p>要运行Gradle，必须把GRADLE_HOME/bin目录添加到你的环境变量PATH的路径里才可以。在Linux下，如果你只想为你当前登陆的用户配置可以运行Gradle，那么可以编辑～/.bashrc文件添加以下内容：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#&#36825;&#37324;&#26159;&#20316;&#32773;&#30340;Gradle&#30446;&#24405;&#12290;&#35201;&#25442;&#25104;&#20320;&#33258;&#24049;&#30340;&#10;GRADLE_HOME=/home/flysnow/frame/gradle&#10;          &#10;PATH=$&#123;PATH&#125;:$&#123;GRADLE_HOME&#125;/bin&#10;exportGRADLE_HOME PATH</span><br></pre></td></tr></table></figure></p>
+<p>上面GRADLE_HOME是我的Gradle解压后的目录，这里要换成你自己的。以上添加后保存，然后在终端输入source ~/.bashrc回车执行让刚刚的配置生效。</p>
+<p>如果你想让所有用户都可以使用gradle，那么你就需要在/etc/profile中添加以上内容，在这里添加后，对所有用户都生效，这种方式的添加，必须要重启电脑才可以。</p>
+<p>好了，现在我们已经配置好了，要进行验证我们的配置是否正确，是否可以运行gradle，我们只需要打开终端，输入gradle -v命令查看即可，如果能正确显示gradle版本号、Groovy版本号、JVM等相关信息，那么说明你已经配置成功了，这里以我的为例：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ gradle -v&#10;          &#10;------------------------------------------------------------&#10;Gradle 2.5&#10;------------------------------------------------------------&#10;           &#10;Build time:   2015-07-08 07:38:37 UTC&#10;Build number: none&#10;Revision:     093765bccd3ee722ed5310583e5ed140688a8c2b&#10;           &#10;Groovy:       2.3.10&#10;Ant:          Apache Ant(TM) version 1.9.3 compiled on December 23 2013&#10;JVM:          1.7.0_79 (Oracle Corporation 24.79-b02)&#10;OS:           Linux 3.19.0-28-generic amd64</span><br></pre></td></tr></table></figure></p>
+<h4 id="Window下搭建Gradle构建环境">Window下搭建Gradle构建环境</h4><p>Window下搭建Gradle环境和Linux非常相似，只不过方式不同。我们通过右击我的电脑，打开属性面板，然后找到环境变量配置项，添加GRADLE_HOME环境变量，然后把GRADLE_HOME\bin添加到PATH系统变量里保存即可。完成后打开CMD运行gradle -v来进行验证，整体和Linux差不多，这里就不在一一详述。</p>
+<h3 id="Gradle版Hello_World">Gradle版Hello World</h3><p>环境搭建好了，那么我们就开始写一个Hello World版的Gradle脚本吧。</p>
+<p>新建好一个目录，我这里是android-gradle-book-code，然后在该目录下创建一个名为build.gradle的文件，打开编辑该文件，输入以下内容：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">task hello&#123;</span><br><span class="line">    doLast&#123;</span><br><span class="line">        println<span class="string">'Hello World!'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>打开终端，然后移动到android-gradle-book-code下，使用gradle -q hello命令来执行构建脚本：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ gradle -q hello&#10;Hello World!</span><br></pre></td></tr></table></figure></p>
+<p>好了，如愿以偿的打印出来我们想要的结果，下面我们一步步分析结果产生的步骤和原因。build.gradle是Gradle默认的构建脚本文件，执行Gradle命令的时候，会默认加载当前目录下的build.gradle脚本文件，熟悉Ant的同学感觉和build.xml差不多，当然你也可以通过 -b 参数指定想要加载执行的文件。</p>
+<p>这个构建脚本定义一个任务（Task），任务名字叫hello，并且给任务hello添加了一个动作，官方名字是Action，阅读Gradle源代码你会到处见到它，其实他就是一段Groovy语言实现的闭包，在这里我觉得叫业务代码逻辑或者回调实现更贴切一些，因为doLast就意味着在Task执行完毕之后要回调doLast的这部分闭包的代码实现。</p>
+<p>熟悉Ant的读者，会觉得任务(Task)和Ant里的Target(目标)非常相似，其实没错，现在可以认为他们基本上相同。</p>
+<p>再看gradle -q hello这段运行命令，意思是要执行build.gradle脚本中定义的名为hello的Task，-q参数用于控制gradle输出的日志级别，哪些日志可以输出被看到。</p>
+<p>看到println ‘Hello World!’了吗，他会输出Hello World!，通过名字相信大家已经猜出来了，它其实就是System.out.println(“Hello World!”)的简写方式。Gradle可以识别它，是因为Groovy已经把println()这个方法添加到iava.lang.Object，而在Groovy中，方法的调用可以省略签名中的括号，以一个空格分开即可，所以就有了上面的写法。还有一点要说明的就是在Groovy中，单引号和双引号所包含的内容都是字符串，不像Java中，单引号是字符，双引号才是字符串。</p>
+<h3 id="Gradle_Wrapper">Gradle Wrapper</h3><p>Wrapper，顾名思义，其实就是对Gradle的一层包装，便于在团队开发过程中统一Gradle构建的版本，这样大家都可以使用统一的Gradle版本进行构建，避免因为Gradle版本不统一带来的不必要的问题。</p>
+<p>在这里特别介绍的目的是因为我们在项目开发过程中，用的都是wrapper这种方式，而不是我们在1.1里介绍的自己下载ZIP压缩包，配置Gradle的环境的方式。Wrapper在Window下是一个批处理脚本，在Linux下是一个shell脚本，当你使用wrapper启动Gradle的时候，wrapper会检查gradle有没有被下载关联，如果没有将会从配置的地址（一般是Gradle官方库）进行下载并运行构建。这对我们每个开发人员是非常方便的，因为你不用去专门的配置环境了，只要执行wrapper命令，它会帮你搞定一切，这样方式也方便我们在服务器上做持续集成(CI)，因为我们不用在服务器上配置Gradle环境。</p>
+<h4 id="生成wrapper">生成wrapper</h4><p>Gradle提供了内置的wrapper task帮助我们自动生成wrapper所需的目录文件，在一个项目的根目录，输入gradle wrapper即可生成。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ gradle wrapper&#10;:wrapper&#10;        &#10;BUILD SUCCESSFUL&#10;        &#10;Total time: 2.804 secs&#10;        &#10;This build could be faster, please consider using the Gradle Daemon: http://gradle.org/docs/2.5/userguide/gradle_daemon.html</span><br></pre></td></tr></table></figure></p>
+<p>生成的文件如下：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#9500;&#9472;&#9472; gradle&#10;&#9474;   &#9492;&#9472;&#9472; wrapper&#10;&#9474;       &#9500;&#9472;&#9472; gradle-wrapper.jar&#10;&#9474;       &#9492;&#9472;&#9472; gradle-wrapper.properties&#10;&#9500;&#9472;&#9472; gradlew&#10;&#9492;&#9472;&#9472; gradlew.bat</span><br></pre></td></tr></table></figure></p>
+<p>gradlew和gradlew.bat分别是Linux和Window下的可执行脚本，他们的用法和gradle原生命令是一样的，gradle怎么用，他们也就可以怎么用。gradle-wrapper.jar是具体业务逻辑实现的jar包，gradlew最终还是使用java执行的这个jar包来执行相关gradle操作。gradle-wrapper.properties是配置文件，用于配置使用哪个版本的gradle等，稍后会详细讲解。</p>
+<p>这些生成的wrapper文件可以作为你项目工程的一部分提交到代码版本控制系统里(git)，这样其他开发人员就会使用这里配置好的统一的gradle进行构建开发。</p>
+<h4 id="wrapper配置">wrapper配置</h4><p>当我们在终端执行gradle wrapper生成相关文件的时候，可以为其指定一些参数，来控制wrapper的生成，比如依赖的版本等。</p>
+<table>
+<thead>
+<tr>
+<th>参数名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>—gradle-version</td>
+<td>用于指定使用的gradle版本</td>
+</tr>
+<tr>
+<td>—gradle-distribution-url</td>
+<td>用于指定下载gradle发行版的url地址</td>
+</tr>
+</tbody>
+</table>
+<p>使用方法如gradle wrapper —gradle-version 2.4这样，这样就意味着我们配置wrapper使用2.4版本的gradle，它会影响gradle-wrapper.properties中的distributionUrl的值，该值的规则是http\://services.gradle.org/distributions/gradle-${gradleVersion}-bin.zip</p>
+<p>如果我们在调用gradle wrapper的时候不添加任何参数呢，那么就会使用你当前Gradle的版本作为生成的wrapper的gradle version。例如你当前安装的gradle是2.5版本的，那么生成的wrapper也是2.5版本的。</p>
+<h4 id="gradle-wrapper-properties">gradle-wrapper.properties</h4><p>该配置文件是gradle wrapper的相关配置文件，我们上面执行该任务的任何配置都会被写进该文件中，现在我们来看看该文件的配置字段：</p>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>distributionBase</td>
+<td>下载的gradle压缩包解压后存储的主目录</td>
+</tr>
+<tr>
+<td>distributionPath</td>
+<td>相对于distributionBase的解压后的gradle压缩包的路径</td>
+</tr>
+<tr>
+<td>zipStoreBase</td>
+<td>同distributionBase，只不过是存放zip压缩包的</td>
+</tr>
+<tr>
+<td>zipStorePath</td>
+<td>同distributionPath，只不过是存放zip压缩包的</td>
+</tr>
+<tr>
+<td>distributionUrl</td>
+<td>gradle发行版压缩包的下载地址</td>
+</tr>
+</tbody>
+</table>
+<p>我们比较关注的就是distributionUrl这个字段了，这个决定你的gradle wrapper依赖哪个gradle版本，一般生成的都是这样的https\://services.gradle.org/distributions/gradle-2.5-bin.zip，我通常都会把bin改为all，这样在开发过程中，就可以看到gradle的源代码了。</p>
+<p>基于Gradle 2.5默认生成的gradle-wrapper.properties如下：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#Wed Sep 16 23:14:52 CST 2015&#10;distributionBase=GRADLE_USER_HOME&#10;distributionPath=wrapper/dists&#10;zipStoreBase=GRADLE_USER_HOME&#10;zipStorePath=wrapper/dists&#10;distributionUrl=https\://services.gradle.org/distributions/gradle-2.5-bin.zip</span><br></pre></td></tr></table></figure></p>
+<p>distributionUrl是下载gradle的路径，如果运行./gradlew的时候一直卡着不动，可能是因为官方的gradle地址被墙了，建议使用翻墙工具试试，或者把该地址换成别的镜像地址。</p>
+<h4 id="自定义Wrapper_Task">自定义Wrapper Task</h4><p>前面我们讲了，gradle-wrapper.properties是由wrapper task生成的，那么我们是否可以自定义配置该Wrapper task来达到我们配置gradle-wrapper.properties的目的呢，答案是肯定的。我们在我们的build.gradle构建文件中录入如下脚本：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">task wrapper(<span class="string">type:</span> Wrapper) &#123;</span><br><span class="line">    gradleVersion = <span class="string">'2.4'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样我们再执行gradle wrapper的时候，就会默认生成2.4版本的wrapper了，而不用使用—gradle-version 2.4进行指定了。同样你也可以配置其他参数：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">task wrapper(<span class="string">type:</span> Wrapper) &#123;</span><br><span class="line">    gradleVersion = <span class="string">'2.4'</span></span><br><span class="line">    archiveBase = <span class="string">'GRADLE_USER_HOME'</span></span><br><span class="line">    archivePath = <span class="string">'wrapper/dists'</span></span><br><span class="line">    distributionBase = <span class="string">'GRADLE_USER_HOME'</span></span><br><span class="line">    distributionPath = <span class="string">'wrapper/dists'</span></span><br><span class="line">    distributionUrl = <span class="string">'http\://services.gradle.org/distributions/gradle-2.4-all.zip'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>以上是我自己配置的一些值，也可以修改生你自己的。</p>
+<h3 id="Gradle日志">Gradle日志</h3><p>在这里介绍单独介绍Gradle日志的目的是为了便于我们在遇到问题的时候，能够根据日志信息分析和解决问题。Gradle的日志和我们自己Java、Android差不多，也分一些级别，用于分类显示日志信息，这样我们只需根据不同的情况显示不同类别的信息，不至于被大量的日志搞的晕头转向。</p>
+<h4 id="日志级别">日志级别</h4><p>上面提了Gradle的日志级别和大部分我们使用的语言的差不多，除了这些通用的之外，Gradle又增加了QUIET和LIFECYCLE两个级别，用于标记重要以及进度级别的日志信息。</p>
+<table>
+<thead>
+<tr>
+<th>级别</th>
+<th>用于</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ERROR</td>
+<td>错误消息</td>
+</tr>
+<tr>
+<td>QUIET</td>
+<td>重要消息</td>
+</tr>
+<tr>
+<td>WARNING</td>
+<td>警告消息</td>
+</tr>
+<tr>
+<td>LIFECYCLE</td>
+<td>进度消息</td>
+</tr>
+<tr>
+<td>INFO</td>
+<td>信息消息</td>
+</tr>
+<tr>
+<td>DEBUG</td>
+<td>调试信息</td>
+</tr>
+</tbody>
+</table>
+<p>上面的表列明确的列出了6种日志级别以及他们的作用，那么现在我们就看下怎么样使用他们。要使用他们，显示我们想要显示级别的日志，就要通过命令行选项中的日志开关来控制。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#&#36755;&#20986;QUIET&#32423;&#21035;&#21450;&#20854;&#20043;&#19978;&#30340;&#26085;&#24535;&#20449;&#24687;&#10;$ gradle -q tasks&#10;#&#36755;&#20986;INFO&#32423;&#21035;&#21450;&#20854;&#20043;&#19978;&#30340;&#26085;&#24535;&#20449;&#24687;&#10;$ gradle -i tasks</span><br></pre></td></tr></table></figure></p>
+<p>以下列出所有通过命令行开关选项可以控制的级别级别，在命令行里只需加上这些选项即可控制使用。</p>
+<table>
+<thead>
+<tr>
+<th>开关选项</th>
+<th>输出的日志级别</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>无选项</td>
+<td>LIFECYCLE及其更高级别</td>
+</tr>
+<tr>
+<td>-q或者 —quiet</td>
+<td>QUIET及其更高级别</td>
+</tr>
+<tr>
+<td>-i 或者 —info</td>
+<td>INFO及其更高级别</td>
+</tr>
+<tr>
+<td>-d or —debug</td>
+<td>DEBUG及其更高级别，这一般会输出所有日志</td>
+</tr>
+</tbody>
+</table>
+<h4 id="输出错误堆栈信息">输出错误堆栈信息</h4><p>在使用Gradle构建的时候，难免会有这样或者那样的问题导致你的构建失败，这时就需要你根据日志分析解决问题。除了以上的日志信息之外，Gradle还提供了堆栈信息的打印，用过Java语言的相信大家都会很熟悉错误堆栈信息，他能帮助我们很好的定位和分析问题。</p>
+<p>默认情况下，堆栈信息的输出是关闭的，需要我们通过命令行的堆栈信息开关打开它，这样在我们构建失败的时候，Gradle才会输出错误堆栈信息，便于我们定位分析和解决问题。</p>
+<table>
+<thead>
+<tr>
+<th>命令行选项</th>
+<th>用于</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>无选项</td>
+<td>没有堆栈信息输出</td>
+</tr>
+<tr>
+<td>-s 或者 —stacktrace</td>
+<td>输出关键性的堆栈信息</td>
+</tr>
+<tr>
+<td>-S 或者—full-stacktrace</td>
+<td>输出全部堆栈信息</td>
+</tr>
+</tbody>
+</table>
+<p>一般推荐使用-s而不是-S，因为-S输出的堆栈太多太长，非常不好看，而-s反而比较精简，可以定位解决我们大部分的问题。</p>
+<h4 id="自己使用日志信息调试">自己使用日志信息调试</h4><p>在编写Gradle脚本的过程中，我们有时候需要输出一些日志，来验证我们的逻辑或者一些变量的值是否正确，这时候我们就可以使用Gradle提供的日志功能。</p>
+<p>通常情况下我们一般都是使用print系列方法，把日志信息输出到标准的控制台输出流（它被Gradle定向为QUIET级别日志）。<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">println<span class="string">'输出一段日志信息'</span></span><br></pre></td></tr></table></figure></p>
+<p>除了print系列方法之外，你也可以使用内置的logger更灵活的控制输出不同级别的日志信息。<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">logger.quiet(<span class="string">'quiet日志信息.'</span>)</span><br><span class="line">logger.error(<span class="string">'error日志信息.'</span>)</span><br><span class="line">logger.warn(<span class="string">'warn日志信息.'</span>)</span><br><span class="line">logger.lifecycle(<span class="string">'lifecycle日志信息.'</span>)</span><br><span class="line">logger.info(<span class="string">'info日志信息.'</span>)</span><br><span class="line">logger.debug(<span class="string">'debug日志信息.'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>logger说是内置，这里其实是调用的Project的getLogger()方法获取的Logger对象的实例。</p>
+<h3 id="Gradle命令行">Gradle命令行</h3><p>Gradle命令行单独抽出来一小结的目的是想提倡大家尽可能的使用命令行，而不要太依赖于各种IDE，虽然IDE很方便，但是如果你换了一家公司，不适用这个IDE呢？如果让你做自动构建呢？可是没有IDE给你用的，全部都是基于命令行的。这个就像我们第一次学习变成语言时老师没说让你用IDE，而是直接用记事本或者其他文本工具写，目的就是让我们不要太依赖第三方工具，这种才能不变应万变。那么IDE该不该用，有没有必要，这个是肯定的，一定要用，因为他能提高你工作效率，但是用之前你要知道不借助IDE如果做一件事件，比如执行Gradle一个Task，在Android Studio下很简单，双击那个Task就可以执行了，但是如果没有Android Studio，你也要知道如何在命令行下如何运行它。我们要知其所以然，不然你再做几年也是这样啦。</p>
+<h4 id="记得使用帮助">记得使用帮助</h4><p>命令行下的工具都有命令，刚开始我们不会用或者不知道有什么命令或者参数，这没事，但是我们可以通过帮助来了解，基本上所有的命令行工具都有帮助，查看帮助的方式也很简单，基本上都是在命令后跟-h或者—help，有的时候会有-?,以Gradle Wrapper为例：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./gradlew -?&#10;./gradlew -h&#10;./gradlew --help</span><br></pre></td></tr></table></figure></p>
+<h4 id="查看所有可执行的Tasks">查看所有可执行的Tasks</h4><p>有时候我们不知道如何构建一个功能，不知道执行哪个Task，这时候就需要查看哪些Task可执行，都具备什么功能，通过运行./gradlew tasks命令，输出如下：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:tasks&#10;     &#10;------------------------------------------------------------&#10;All tasks runnable from root project&#10;------------------------------------------------------------&#10;     &#10;Build Setup tasks&#10;-----------------&#10;init - Initializes a new Gradle build. [incubating]&#10;wrapper - Generates Gradle wrapper files. [incubating]&#10;     &#10;Help tasks&#10;----------&#10;components - Displays the components produced by root project &#39;flysnow&#39;. [incubating]&#10;dependencies - Displays all dependencies declared in root project &#39;flysnow&#39;.&#10;dependencyInsight - Displays the insight into a specific dependency in root project &#39;flysnow&#39;.&#10;help - Displays a help message.&#10;model - Displays the configuration model of root project &#39;flysnow&#39;. [incubating]&#10;projects - Displays the sub-projects of root project &#39;flysnow&#39;.&#10;properties - Displays the properties of root project &#39;flysnow&#39;.&#10;tasks - Displays the tasks runnable from root project &#39;flysnow&#39;.&#10;     &#10;To see all tasks and more detail, run gradle tasks --all&#10;     &#10;To see more detail about a task, run gradle help --task &#60;task&#62;&#10;     &#10;BUILD SUCCESSFUL&#10;     &#10;Total time: 2.321 secs&#10;     &#10;This build could be faster, please consider using the Gradle Daemon: http://gradle.org/docs/2.5/userguide/gradle_daemon.html</span><br></pre></td></tr></table></figure></p>
+<p>从输出我们可以看到，Gradle会以分组的方式列出Task列表，比如构建类的有init，wrapper；帮助类的有help、tasks等。</p>
+<h4 id="gradle_help_任务">gradle help 任务</h4><p>除了上面我们说的每个命令行都有帮助外，Gradle还内置了一个help task，这个help可以让我们了解每一个task的使用帮助，用法是 ./gradlew help —task <task name="">，比如 ./gradlew help —task tasks，就可以显示tasks任务的帮助信息：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:help&#10;Detailed task information for tasks&#10;    &#10;Path&#10;     :tasks&#10;    &#10;Type&#10;     TaskReportTask (org.gradle.api.tasks.diagnostics.TaskReportTask)&#10;    &#10;Options&#10;     --all     Show additional tasks and detail.&#10;    &#10;Description&#10;     Displays the tasks runnable from root project &#39;android-gradle-book-code&#39; (some of the displayed tasks may belong to subprojects).&#10;    &#10;Group&#10;     help&#10;    &#10;BUILD SUCCESSFUL</span><br></pre></td></tr></table></figure></task></p>
+<p>从帮助信息我们可以看到这个task有什么用，他是什么类型，属于哪个分组，有哪些可以使用的参数，比如这里就有—all参数，可以查看很多额外的详细信息。</p>
+<h4 id="强制刷新依赖">强制刷新依赖</h4><p>我们一个功能不可避免的会依赖很多第三方库，像Maven这类工具都是有缓存的，因为不可能每次编译的时候都要重新下载第三方库，缓存就是这个目的，先使用缓存，没有再下载。默认情况下Maven这类工具会控制缓存的更新，但是也有例外，比如Version一样，但是里面的代码变了；还有就是联调测试时使用的snapshot版本。上两种情况我们在实际项目中都遇到过，最后就是通过强制刷新解决的。强制刷新很简单，只要在命令行运行的时候加上—refresh-dependencies参数就可以，这是IDE很难做到的（需要你了解配置），所以命令行的优势就体现出来了，非常简单。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./gradlew --refresh-dependencies assemble</span><br></pre></td></tr></table></figure></p>
+<p>其他还有很多有用的命令、参数以及Tasks，就不一一介绍了，大家可以通过上面讲的两种帮助方法来了解熟悉。</p>
+<h4 id="多任务调用">多任务调用</h4><p>有时候我们需要同事运行多个任务，比如在执行Jar之前先进行clean，那么我们就需要先执行clean对class文件清理，然后再执行jar生成一个jar包。通过命令行执行多个任务非常简单，只需要按顺序以空格分开即可，比如./gradlew clean jar，这样就可以了，有更多的任务时，可以继续添加。</p>
+<h4 id="通过任务名字缩写执行执行">通过任务名字缩写执行执行</h4><p>有的时候我们的任务名字很长，如果在执行的时候全部写一遍也挺费时间，为此Gradle提供了基于驼峰命名法的缩写调用，比如connectCheck，我们执行的时候可以使用./gradlew connectCheck,也可以使用./gradlew cc这样的方式来执行。</p>
 ]]></content>
     <summary type="html">
-    <![CDATA[<p>我的新书《Android Gradle权威指南》已经在百度阅读发布了，欢迎大家试读购买，五星好评支持。目前本书在持续更新中，一周最少会有一大章的更新，如果大家有什么问题，或者有什么需要我在书中特别介绍的知识点，都可以给我留言或者发邮件，希望大家多多支持。</p>
-<h2 i]]>
+    <![CDATA[<p> Gradle是一款非常优秀的构建系统工具,它的DSL基于Groovy实现,可以让你很方便的通过代码控制这些DSL来达到你构建的目的，其构建的大部分功能都是通过插件的方式来实现，所以非常灵活方便，如果内置插件不能满足你的需求你可以自定义自己的插件。</p>
+<p>本章我们就]]>
     </summary>
     
       <category term="Android" scheme="http://www.flysnow.org/tags/Android/"/>
     
-      <category term="新书" scheme="http://www.flysnow.org/tags/%E6%96%B0%E4%B9%A6/"/>
+      <category term="Gradle" scheme="http://www.flysnow.org/tags/Gradle/"/>
     
       <category term="Android" scheme="http://www.flysnow.org/categories/Android/"/>
     
-      <category term="新书" scheme="http://www.flysnow.org/categories/Android/%E6%96%B0%E4%B9%A6/"/>
+      <category term="Gradle" scheme="http://www.flysnow.org/categories/Android/Gradle/"/>
     
   </entry>
   
@@ -49,7 +244,7 @@
     <link href="http://www.flysnow.org/2015/08/13/android-tech-docs-support-annotations.html"/>
     <id>http://www.flysnow.org/2015/08/13/android-tech-docs-support-annotations.html</id>
     <published>2015-08-13T14:16:50.000Z</published>
-    <updated>2016-01-18T16:55:07.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>以下内容由<a href="http://www.flysnow.org" target="_blank" rel="external">http://www.flysnow.org</a>(飞雪无情)提供翻译</p>
 <p>原文地址 <a href="http://tools.android.com/tech-docs/support-annotations" target="_blank" rel="external">http://tools.android.com/tech-docs/support-annotations</a></p>
 <p>更多翻译的Android技术文档请参考：<a href="https://github.com/rujews/android-tech-docs" target="_blank" rel="external">https://github.com/rujews/android-tech-docs</a></p>
@@ -228,7 +423,7 @@ protected void <span class="function">onCreate</span>(<span class="variable">@Nu
     <link href="http://www.flysnow.org/2015/08/06/android-tech-docs-tools-attributes.html"/>
     <id>http://www.flysnow.org/2015/08/06/android-tech-docs-tools-attributes.html</id>
     <published>2015-08-06T08:54:05.000Z</published>
-    <updated>2015-08-13T14:15:05.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>以下内容由<a href="http://www.flysnow.org" target="_blank" rel="external">http://www.flysnow.org</a>(飞雪无情)提供翻译</p>
 <p>原文地址 <a href="http://tools.android.com/tech-docs/tools-attributes" target="_blank" rel="external">http://tools.android.com/tech-docs/tools-attributes</a></p>
 <p>更多翻译的Android技术文档请参考：<a href="https://github.com/rujews/android-tech-docs" target="_blank" rel="external">https://github.com/rujews/android-tech-docs</a></p>
@@ -310,7 +505,7 @@ protected void <span class="function">onCreate</span>(<span class="variable">@Nu
     <link href="http://www.flysnow.org/2015/08/03/android-tech-docs-ant-tasks.html"/>
     <id>http://www.flysnow.org/2015/08/03/android-tech-docs-ant-tasks.html</id>
     <published>2015-08-03T14:07:29.000Z</published>
-    <updated>2015-08-03T14:50:02.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>以下内容由<a href="http://www.flysnow.org" target="_blank" rel="external">http://www.flysnow.org</a>(飞雪无情)提供翻译</p>
 <p>原文地址 <a href="http://tools.android.com/tech-docs/ant-tasks" target="_blank" rel="external">http://tools.android.com/tech-docs/ant-tasks</a></p>
 <p>更多翻译的Android技术文档请参考：<a href="https://github.com/rujews/android-tech-docs" target="_blank" rel="external">https://github.com/rujews/android-tech-docs</a></p>
@@ -501,7 +696,7 @@ protected void <span class="function">onCreate</span>(<span class="variable">@Nu
     <link href="http://www.flysnow.org/2015/03/30/manage-your-android-project-with-gradle.html"/>
     <id>http://www.flysnow.org/2015/03/30/manage-your-android-project-with-gradle.html</id>
     <published>2015-03-30T13:49:22.000Z</published>
-    <updated>2015-04-01T14:59:14.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<h1 id="Gradle简介">Gradle简介</h1><p><strong>Gradle</strong> 是一个基于Ant和Maven概念的项目自动化建构工具。它使用一种基于Groovy的特定领域语言(DSL)来声明项目设置，这比我们的ANT使用XML构建配置要灵活的多。在编写配置时，你可以像编程一样灵活，Gradle是基于Groovy的DSL语言，完全兼容JAVA</p>
 <h1 id="Gradle入门">Gradle入门</h1><p>projects 和 tasks是Gradle中最重要的两个概念，任何一个Gradle构建都是由一个或者多个project组成，每个project可以是一个jar包，一个web应用，或者一个android app等，每个project又由多个task构成，一个task其实就是构建过程中一个原子性的操作，比如编译、拷贝等。</p>
 <p>一个build.gradle文件是一个构建脚本，当运行gradle命令的时候会从当前目录查找build.gradle文件来执行构建。下面我们来看下gradle的Hello World。在build.gradle构建文件中输入以下构建脚本：</p>
@@ -576,7 +771,7 @@ protected void <span class="function">onCreate</span>(<span class="variable">@Nu
     <link href="http://www.flysnow.org/2015/03/19/android-process-application-init-databases-problem.html"/>
     <id>http://www.flysnow.org/2015/03/19/android-process-application-init-databases-problem.html</id>
     <published>2015-03-19T13:58:45.000Z</published>
-    <updated>2015-03-19T14:45:54.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>在Android开发中，我们可能会使用单独的进程来做一些事情，比如推送服务，心跳服务等，这些不需要主应用启动，只需要一个独立的进程即可。这时候我们一般都会采用启动一个后台Service，这个Service运行在一个独立的进程中，比如在Androidmainfest.xml中配置Service的android:process=”:push”指定该Service运行在:push进程中。</p>
 <p>一般情况下这样做是没有任何问题的，但是如果你在你的Application的onCreate方法里有对数据库的操作，或者该Service里有对数据库的操作，就会有可能会有两个进程同时操作一个数据库的情况，一个是你的主应用的进程，进程名为你的包名例如org.flysnow;一个是你的Service所在的进程，进程名为你的包名+”:push”,即org.flysnow:push。这两个进程可能在同一时间访问同一个数据，同一个配置文件等。这就可能造成资源的竞争访问，造成的问题就不可预料了，比如数据库损坏，数据丢失等。</p>
 <p>多进程其实和多线程一样，并发访问的时候产生的问题很难预料，在多线程的时候我们有锁等机制控制资源的访问，但是在多进程中比较难，虽然有文件锁、排队等机制，但是在Android里很难实现，毕竟在Android里一个进程就是一个VM虚拟机，底层的东西控制不了，Java层又没有办法控制，所以在多进程中一定不要有并发增删改文件的操作。</p>
@@ -599,7 +794,7 @@ protected void <span class="function">onCreate</span>(<span class="variable">@Nu
     <link href="http://www.flysnow.org/2015/03/10/github-page-with-hexo.html"/>
     <id>http://www.flysnow.org/2015/03/10/github-page-with-hexo.html</id>
     <published>2015-03-10T14:30:04.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>以前的博客是使用Jekyll托管在github上，后来用着越来越不方便，比如没有自动生成post，不能一键部署，文件结构和配置也是比较繁琐，更重要的是有时候用markdown写一篇文章，生成的静态文件很乱，应该是有些字符解析的问题。现在下决心换成了hexo</p>
 <h1 id="Nodejs安装">Nodejs安装</h1><p>因为hexo是基于nodejs的应用，所以要先安装nodejs才可以。我这里以ubuntu为例，因为我自己一直在使用ubuntu。使用如下命令即可：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install nodejs</span><br><span class="line">sudo apt-get install npm</span><br></pre></td></tr></table></figure>
@@ -667,7 +862,7 @@ categories:
     <link href="http://www.flysnow.org/2015/01/12/android-gradle-plugin-translate-done.html"/>
     <id>http://www.flysnow.org/2015/01/12/android-gradle-plugin-translate-done.html</id>
     <published>2015-01-12T07:33:16.000Z</published>
-    <updated>2015-03-30T13:51:53.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>最近想把Android项目从Eclipse迁到Android Studio上。原因呢，Eclipse太慢了，而且经常卡死，Android Studio由于Android的大力支持，已经有很多Eclipse没有的功能，比如AAR包，并且可以使用Gradle这个强大灵活的构建工具。</p>
 <p>要迁入到Android Studio上，Gradle打包要搞懂，最近看了下Android Gradle插件指南，并且抽时间做了翻译，托管在github上。大家访问</p>
 <p><a href="https://github.com/rujews/android-tech-docs/blob/master/new-build-system/user-guide/README.md" target="_blank" rel="external">https://github.com/rujews/android-tech-docs/blob/master/new-build-system/user-guide/README.md</a></p>
@@ -692,7 +887,7 @@ categories:
     <link href="http://www.flysnow.org/2014/07/13/effective-programming-more-than-writing-code.html"/>
     <id>http://www.flysnow.org/2014/07/13/effective-programming-more-than-writing-code.html</id>
     <published>2014-07-13T14:33:15.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<h2 id="入门须知">入门须知</h2><ul>
 <li>你想成为一个程序员</li>
 <li>程序员的八种境界</li>
@@ -821,7 +1016,7 @@ categories:
     <link href="http://www.flysnow.org/2014/03/22/android-avd-not-launcher.html"/>
     <id>http://www.flysnow.org/2014/03/22/android-avd-not-launcher.html</id>
     <published>2014-03-22T05:29:02.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>新建的Android模拟器的分辨率超过一定大小的时候,就无法启动,比如超过1920<em>1080,就启动不了啦,更别说现在的2560</em>1440了.这时候只需要在新建AVD的时候,选择Use Host GPU选项然后即可正常启动..已经新建好的AVD也可以点击编辑,然后勾选Use Host GPU即可</p>
 ]]></content>
     <summary type="html">
@@ -839,7 +1034,7 @@ categories:
     <link href="http://www.flysnow.org/2014/02/20/android-overlay-guide.html"/>
     <id>http://www.flysnow.org/2014/02/20/android-overlay-guide.html</id>
     <published>2014-02-20T06:14:29.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>我们在开发产品的时候,每次发版可能会有一些新的功能需要引导用户使用,以前大部分都是使用截图,然后让设计师把引导的问题修饰好放到图上,现在这张图片就是引导图片,我们只需要用这张图片放到界面上,这样基本上就可以满足引导的作用.</p>
 <p>但是这样的情况有个缺点,那就是,手机的分辨率太多,我们不可能每个分辨率都做一张图片,这样图片就会变形,有些引导操作的位置可能就不准确了,而且使用绘图的方式绘制在图片上的文字也会模糊不清.</p>
 <p>基于如上的方式,我们可以使用另外一种方式来做引导,这样方式就是使用覆盖式的方式,主要的实现方式是</p>
@@ -882,7 +1077,7 @@ observer.addOnGlobalLayoutListener(<span class="keyword">new</span> ViewTreeObse
     <link href="http://www.flysnow.org/2013/12/27/linux-php-server-with-nginx.html"/>
     <id>http://www.flysnow.org/2013/12/27/linux-php-server-with-nginx.html</id>
     <published>2013-12-27T04:59:13.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>一般我们都是采用Apache 作为PHP的解析服务器，这次则是采用Nginx这个强大的反向代理服务器来搭建PHP服务器。下面就以Linux发行版Ubuntu为例搭建一个Nginx的PHP服务器。</p>
 <p>首先下载安装Nginx</p>
 <pre><code>sudo apt-<span class="keyword">get</span> install nginx
@@ -1051,7 +1246,7 @@ observer.addOnGlobalLayoutListener(<span class="keyword">new</span> ViewTreeObse
     <link href="http://www.flysnow.org/2013/12/14/open-source-project-in-android-app.html"/>
     <id>http://www.flysnow.org/2013/12/14/open-source-project-in-android-app.html</id>
     <published>2013-12-14T07:35:36.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>你在工作中可能会遇到同时给你说不要重复发明轮子，其实这个说的就是第一：不要做重复的事情，第二：站在巨人的肩膀上。现在有了互联网以及开源的精神，我们的很多在产品中需要实现的功能组件都可以在互联网上找到，我们可以直接拿来用，这样我们就不用重复做东西了，这得益于开源奉献精神。像Google、Facebook这类的大公司都在使用很多的开源产品，比如我们常见的Apache系列、我们使用的Eclipse IDE等等。</p>
 <p>在我自己的产品开发中，我也使用到了一些常用的开源项目，下面就介绍一下我使用的一些Android开源项目。</p>
 <h3 id="1-android-wheel">1.android-wheel</h3><p>还记得iPhone上经典的日期选择滑轮组件吗?这个就是android版本的实现，记得当时这种选择方式很风靡，可以用于时间、分类等一些具有选择类型功能的开发实现，非常方便。</p>
@@ -1090,7 +1285,7 @@ observer.addOnGlobalLayoutListener(<span class="keyword">new</span> ViewTreeObse
     <link href="http://www.flysnow.org/2013/11/21/android-httpclitent-session-keep.html"/>
     <id>http://www.flysnow.org/2013/11/21/android-httpclitent-session-keep.html</id>
     <published>2013-11-21T06:39:11.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>现在单机版本的App已经不多了，基本上都会和服务器进行通信。Android提供Http访问的方式有两种，一种是HttpClient，一种是UrlConnection.这里要说的是HttpClient。</p>
 <p>在Http访问中，我们可能会遇到一些这样的场景，比如服务端要求几次Http请求组成一次完整的客户端服务器通信，比如同步。现在的App很多有有账号系统，会提供把用户数据备份的功能，那么这么在线备份功能就是这样的一个场景，它包括登陆、数据上传，结果返回、提交确认或者终止等这样的顺序步骤，每一步都是一次Http访问请求。服务器的设计(负载均衡等)需要要求客户端在这依次完整的数据备份的几次Http访问请求中保持同一个Session.便于服务器的协调和操作，就和用户用浏览器打开网页去完整一件事情一样，这就需要我们在每次Http请求的时候保持Session。</p>
 <p>其实保持HttpClient的请求Session，就是保证在每次Http请求访问的请求头信息的Cookie参数中，携带同一个JSESSIONID，只要保证每次是一样的，服务器就认为是同一Session，这就保持了Seesion会话。那么这个JSESSIONID是怎么来的呢，是服务器通过响应头信息给的，服务器在给客户端设置Cookie时，会通过响应头信息中的Set-Cookie参数传递回来，只要有新设置的Cookie，就是通过这个传递过来，如果没有则是null，那么我们就可以在请求完之后返回的信息里读取这个Set-Cookie头信息，然后保存起来，在下次请求的时候给服务器发送过去，就实现了保持Seesion的目的。代码如下：</p>
@@ -1155,7 +1350,7 @@ observer.addOnGlobalLayoutListener(<span class="keyword">new</span> ViewTreeObse
     <link href="http://www.flysnow.org/2013/11/07/goagent-403-not-have-permiss.html"/>
     <id>http://www.flysnow.org/2013/11/07/goagent-403-not-have-permiss.html</id>
     <published>2013-11-07T06:48:52.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>今天上班，像往常一样打开Google，咦，竟然提示</p>
 <blockquote>403. That’s an error.<br>Your client does not have permission to get URL /2 from this server. That’s all we know.</blockquote>
 
@@ -1190,7 +1385,7 @@ observer.addOnGlobalLayoutListener(<span class="keyword">new</span> ViewTreeObse
     <link href="http://www.flysnow.org/2013/11/07/unsupportedoperationexception-gles20canvas-clippath.html"/>
     <id>http://www.flysnow.org/2013/11/07/unsupportedoperationexception-gles20canvas-clippath.html</id>
     <published>2013-11-07T06:27:21.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>今天自定义控件使用Canvas绘图的时候遇到的这个错误，看错误的描述，是不支持这个clipPath方法的。而且在2.3的机器上没有问题，是一部4.0的机器报了这个问题。查看这个Canvas的子类实现GLES20Canvas，发现这是在开启硬件加速时使用的。看来还是和硬件加速有关。打开手机的开发者选项，发现硬件加速没有被开启，应用里也没有开启，有点奇怪了，可能是手机优化自动开启了硬件加速。</p>
 <p>硬件加速这个特性是从API 11加入的，可以大大加快View的绘制，是个很不错的功能，所以我们不可能在我们的程序里直接关闭这个功能这样我们的应用就使用不了这个特性了，所以在Application标签里设置android:hardwareAccelerated=”false’不可行。所以可以在用到这个自定义View里的Activity里使用android:hardwareAccelerated=“false”来配置，这样其他的Activity可以继续使用同步加速的特性。不过你的自定义View用到的地方比较多，一个个Activity配置也不太方便，所以最好的办法是在你的自定义View里禁用View级别的硬件加速。可以通过以下代码来实现</p>
 <pre><code><span class="keyword">if</span><span class="comment">(Build.VERSION.SDK_INT&gt;=Build.VERSION_CODES.HONEYCOMB)</span>{<span class="comment">//API 11及其之上</span>
@@ -1216,7 +1411,7 @@ observer.addOnGlobalLayoutListener(<span class="keyword">new</span> ViewTreeObse
     <link href="http://www.flysnow.org/2013/11/02/android-4-4-alarm-manager-changed.html"/>
     <id>http://www.flysnow.org/2013/11/02/android-4-4-alarm-manager-changed.html</id>
     <published>2013-11-02T07:46:47.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>Android4.4在前天发布了，随着Android4.4的源代码的放出，相信会有更多的手机会慢慢的升级到Android4.4,作为苦逼的Android开发人员，我们需要保证我们的应用在Android4.4的兼容性，也就是可用性。现在这里就有一个比较大的更新会影响到我们的应用功能，他就是AlarmManager。</p>
 <p>Android宣称为了电源的使用效率，在Android4.4上位所有应用的Alarm服务使用批量启动的方式来处理相似的时间以激活设备。</p>
 <p>以前呢，是set一个Alarm，系统在到点的时候给你单独一个去激活设备启动你设置的服务;现在呢，不是这样了，而是按批的啦，一批激活那个时间点周围设置的差不多的Tigger Time的Alarm，比如你以前设置的是18：00准备自动备份数据，现在手机正好在18：05进行了一次批量的Alarm启动操作，而你设置的Alarm正好在这个时间点周围，那么你的Alarm也被启动了，比你预想的晚了5分钟。</p>
@@ -1239,7 +1434,7 @@ observer.addOnGlobalLayoutListener(<span class="keyword">new</span> ViewTreeObse
     <link href="http://www.flysnow.org/2013/10/11/android-bool-preferences-storage-optimization.html"/>
     <id>http://www.flysnow.org/2013/10/11/android-bool-preferences-storage-optimization.html</id>
     <published>2013-10-10T21:23:02.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>在Android开发的过程中，我们基本上都会遇到是否开启自动备份、是否保存账号、是否自动登陆、是否开启向导等这样的选项功能，对于这类功能，我们一般的做法是采用SharedPreferences类存储Boolean类型的配置文件来实现，比如是否第一次打开，我们会使用SharedPreferences存储Key为firset_time_open的Boolean值，在使用的时候我们取出该值进行判断即可。那么这么做有什么问题呢？问题就在于随着我们的Android产品越来越大，越来越复杂，你会发现我们使用了很多个这样的Boolean类型的配置，每一个配置对应一个key，会有很多个key值声明，并且存储的xml文件中也会有很多个bool的节点来保存我们的配置，这样一来我们会不太好维护，二来xml存储文件会越来越大，读写操作速度就会降低。</p>
 <p>其实Boolean值对于计算机来说就是0或者1,所以我们储存的boolean值就可以用位来表示，0代表false，1代表true。这样一个Long型的值就可以表示63个Boolean类型值的存储，而如果使用Boolean就需要63个Key，使用Long存储只需要1个Key就可以搞定。下面让我们看下Long最大值的二进制表示：</p>
 <pre><code><span class="comment">//最高位表示正负</span>
@@ -1384,7 +1579,7 @@ observer.addOnGlobalLayoutListener(<span class="keyword">new</span> ViewTreeObse
     <link href="http://www.flysnow.org/2013/10/07/ubuntu-sougou-pinyin-input-method.html"/>
     <id>http://www.flysnow.org/2013/10/07/ubuntu-sougou-pinyin-input-method.html</id>
     <published>2013-10-06T18:24:25.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>对于经常使用Ubuntu操作系统并且不会使用五笔输入法的屌丝来说，选择一种好的拼音输入法能让你事半功倍。在window下我们都知道搜狗的输入法比较好用，更有一些用习惯了搜狗输入法的朋友想在Ubuntu等其他Linux发行版下也想使用搜狗输入法，这是完全可行的，通过Fcitx这个输入法框架就可以实现。</p>
 <p>Fcitx [ˈfaɪtɪks] 是一个支持扩展的输入法框架。当前它支持 Linux 和 Unix 系统，例如 freebsd。它包括了三个内置的输入法引擎，拼音，区位和基于码表的输入法。详细介绍参见<a href="http://fcitx-im.org" target="_blank" rel="external">fcitx-im.org</a>。</p>
 <p>下面以Ubuntu为例介绍如何安装Fcitx，并且配置使用搜狗输入法，其他的Linux发行版的安装可以参考Fcitx官方网站。</p>
@@ -1421,7 +1616,7 @@ sudo apt-<span class="keyword">get</span> remove ibus
     <link href="http://www.flysnow.org/2013/10/06/resolve-android-sdk-manager-can-not-update.html"/>
     <id>http://www.flysnow.org/2013/10/06/resolve-android-sdk-manager-can-not-update.html</id>
     <published>2013-10-05T23:11:56.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>今天打算更新到Android4.3,看看里面的新的API，DOC什么的，但是打开Android SDK Manager后发现不能更新，fetching更新配置文件的时候，都不能获取最新的更新信息。以前还可以以呢，看来这个十一又屏蔽了google拉。</p>
 <p>针对这个情况，我第一反应就是使用代理，我本机做的有goagent,想直接用。点击Android SDK Manager的Tools，选中Options，配置里面的代理ip和端口，然后重新启动打开，这时候可以正常fetch了，但是在下载的提示<em>SSL hostname in certificate didn’t match: <dl-ssl.google.com> != <www.google.com> OR <www.google.com></www.google.com></www.google.com></dl-ssl.google.com></em>，看说明提示是ssl证书的hostname不匹配，不能用，这个情况不知道是怎么回事，应该是本机里的证书匹配不上，又没有dl-ssl.google.com的证书，所以不能使用https下载。</p>
 <p>不能使用https下载，我们还可以使用http下载。Android doc里也说了，如果使用https下载不了，可以选择使用http下载，只需要在Options里勾选Fore Https…那一个选项即可。。然后重新下载，发现还是下载不了。提示downloading interupt，下载被中断了，这个估计是google对goagent代理有些什么限制或者goagent配置的哪里不对。</p>
@@ -1454,7 +1649,7 @@ sudo apt-<span class="keyword">get</span> remove ibus
     <link href="http://www.flysnow.org/2013/03/29/ubuntu-saned-disabled.html"/>
     <id>http://www.flysnow.org/2013/03/29/ubuntu-saned-disabled.html</id>
     <published>2013-03-28T20:06:37.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>昨天Ubuntu 12.04LTS 64位版本升级内核后，发现图形界面启动不了。</p>
 <p>然后重启，按上下键查看启动信息，发现卡在了saned disabled edit /etc/default/saned。。</p>
 <p>Goole了一把，发现是没有gnome-shell.于是就使用CTRL+ALT+F1进入tty1，通过</p>
@@ -1483,7 +1678,7 @@ sudo apt-<span class="keyword">get</span> remove ibus
     <link href="http://www.flysnow.org/2013/02/22/android-holo-theme-cts.html"/>
     <id>http://www.flysnow.org/2013/02/22/android-holo-theme-cts.html</id>
     <published>2013-02-22T07:47:39.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<pre><code>Android曾经为了优化用户体验，把原生的Holo主题作为Android CTS兼容性测试的一部分，这样每家手机厂商在生产手机的时候都将保留该主题，便于开发者开发出在各个分辨率和机型上兼容的应用。。
 </code></pre><p>但是在我们最近产品的使用Holo主题的时候发现并非如此，有的用户的手机使用该主题后应用Crash，提示有个别资源找不到，还有的手机在使用后整个界面黑屏，还有的就是样式等搭配不合理无法使用。</p>
 <ol>
@@ -1514,7 +1709,7 @@ sudo apt-<span class="keyword">get</span> remove ibus
     <link href="http://www.flysnow.org/2013/01/28/android-layout-height-fail.html"/>
     <id>http://www.flysnow.org/2013/01/28/android-layout-height-fail.html</id>
     <published>2013-01-28T08:19:58.000Z</published>
-    <updated>2015-08-13T14:15:05.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>有的时候，我们配置好的布局文件，在加载完成添加到我们的Activity中后发现，并没有安装我们设置的属性来布局，比为我们设置了android:layout<em>marginTop=”100dip”，但是运行程序后发现一点作用都没有，相似的还有layout_height等以android:layout</em>开头的属性设置都没有作用，这类问题以我们使用Adapter的作为数据源的时候作用居多，因为Adapter里有一个方法是getView,这个返回的VIew是一个从XML布局里加载的，一般如下：</p>
 <pre><code><span class="keyword">if</span>(convertView==<span class="keyword">null</span>){
 convertView=LayoutInflater.<span class="keyword">from</span>(mContext).inflate(R.layout.main, <span class="keyword">null</span>);
@@ -1563,7 +1758,7 @@ convertView=LayoutInflater.<span class="keyword">from</span>(mContext).inflate(R
     <link href="http://www.flysnow.org/2013/01/05/android-viewgroup-setdescendantfocusability.html"/>
     <id>http://www.flysnow.org/2013/01/05/android-viewgroup-setdescendantfocusability.html</id>
     <published>2013-01-04T20:15:14.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>这个函数是在ViewGroup里定义的，主要用于控制child View获取焦点的能力，比如是否阻止child View获取焦点。</p>
 <p>他有三个常量可供设置</p>
 <ol>
@@ -1642,7 +1837,7 @@ convertView=LayoutInflater.<span class="keyword">from</span>(mContext).inflate(R
     <link href="http://www.flysnow.org/2011/12/10/android-float-widget.html"/>
     <id>http://www.flysnow.org/2011/12/10/android-float-widget.html</id>
     <published>2011-12-10T01:12:00.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<h2 id="前言">前言</h2><p>在开发Android应用时,加新功能是必不可少的，我们加入了新的功能，有的一看界面就可以看出来，但是有的新功能就比较隐蔽，也就是用户很难知道你添加了这个新功能，这个时候就需要用户在打开我们的应用时给出一些提示，说明我们在哪里添加了新功能，点击哪里可以看到这个新功能。这时我们第一时间想到的可能是Toast，因为它用法简单，又不影响用户操作，但是它有个缺点，就是不能明确的指示是哪里添加了新功能，除非你用文字描述出来。为此，我基于Toast编写了一个小组件FloatTextToast（下面遇到的这个名字代替我写的这个组件），他和Toast的用法一样简单，并且弥补了Toast的缺点，也更显得更好看。</p>
 <h2 id="效果图">效果图</h2><p><img src="http://hi.csdn.net/attachment/201112/10/0_13234942045Irb.gif" alt=""></p>
 <h2 id="你可以学到">你可以学到</h2><ol>
@@ -1880,7 +2075,7 @@ convertView=LayoutInflater.<span class="keyword">from</span>(mContext).inflate(R
     <link href="http://www.flysnow.org/2011/11/15/android-4-0-api-arrange.html"/>
     <id>http://www.flysnow.org/2011/11/15/android-4-0-api-arrange.html</id>
     <published>2011-11-14T22:06:48.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>提取出的Android4.0 API 的源代码，也就是android.jar源代码，这样在Eclipse关联到该源代码，就可以在项目中查看Android API 的实现了。</p>
 <p>下载地址 <a href="http://download.csdn.net/detail/michael__li/3802305" target="_blank" rel="external">http://download.csdn.net/detail/michael__li/3802305</a></p>
 <p>Android4.0 全部源代码下载方法 ：<a href="http://blog.csdn.net/michael__li/article/details/6971765" target="_blank" rel="external">http://blog.csdn.net/michael__li/article/details/6971765</a></p>
@@ -1903,7 +2098,7 @@ convertView=LayoutInflater.<span class="keyword">from</span>(mContext).inflate(R
     <link href="http://www.flysnow.org/2011/11/15/download-android-4-0-sources.html"/>
     <id>http://www.flysnow.org/2011/11/15/download-android-4-0-sources.html</id>
     <published>2011-11-14T17:41:00.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>这时刚刚整理好的最新的，包含所有的API的源代码，第一次上传的那个Android4.0 API 源代码有部分API没有包含，请点击下面的链接下载最新的。</p>
 <p>附Android4.0 API 源代码下载<a href="http://download.csdn.net/detail/michael__li/3802305" target="_blank" rel="external">http://download.csdn.net/detail/michael__li/3802305</a></p>
 <p>昨日凌晨Android放出4.0源代码，已经托管到GoogleSource上，大家可以下载了，这次放出的branch为Android-4.0.0_r1。</p>
@@ -1941,7 +2136,7 @@ $ cdAndroid-<span class="number">4.0</span><span class="number">.0</span>_<span 
     <link href="http://www.flysnow.org/2011/11/11/android-asset-studio-integration.html"/>
     <id>http://www.flysnow.org/2011/11/11/android-asset-studio-integration.html</id>
     <published>2011-11-11T08:18:00.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p><a href="http://android-ui-utils.googlecode.com/hg/asset-studio/dist/index.html" target="_blank" rel="external">Android Asset Studio</a>Web版是一个非常好用的Andrid图标资源设计工具，它是由RomanNurik开发的。现在我们已经在ADT14里支持同样的功能。首先，你要打开新建向导（Ctrl-N）,选择Android分类，然后在其下找到名字为“Android Icon Set”的这一项：</p>
 <p><img src="http://hi.csdn.net/attachment/201111/10/0_13209351362229.gif" alt=""></p>
 <p>然后，将会弹出“资源选择器”（这些资源其实就是你在布局文件用到的那些图片，比如对于上下文菜单自定义的背景图片，就需要一个为“Background”属性设置一个@drawable的引用）对话框，该对话框里有个按钮(Create New Icon…)，点击它.</p>
@@ -1995,7 +2190,7 @@ $ cdAndroid-<span class="number">4.0</span><span class="number">.0</span>_<span 
     <link href="http://www.flysnow.org/2011/10/22/adsl-and-vpn-config-for-ubuntu.html"/>
     <id>http://www.flysnow.org/2011/10/22/adsl-and-vpn-config-for-ubuntu.html</id>
     <published>2011-10-22T08:06:17.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<h2 id="1-更新NetworkManager">1.更新NetworkManager</h2><p>添加更新源：deb <a href="http://ppa.launchpad.net/network-manager/trunk/ubuntu" target="_blank" rel="external">http://ppa.launchpad.net/network-manager/trunk/ubuntu</a> maverick main</p>
 <p>deb-src <a href="http://ppa.launchpad.net/network-manager/trunk/ubuntu" target="_blank" rel="external">http://ppa.launchpad.net/network-manager/trunk/ubuntu</a> maverick main</p>
 <p>执行sudo apt-get update更新，然后打开更新管理器进行更新软件。</p>
@@ -2017,7 +2212,7 @@ $ cdAndroid-<span class="number">4.0</span><span class="number">.0</span>_<span 
     <link href="http://www.flysnow.org/2011/07/19/android-send-email-intro.html"/>
     <id>http://www.flysnow.org/2011/07/19/android-send-email-intro.html</id>
     <published>2011-07-19T06:50:52.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>Android中我为什么发不了邮件？？？我手机里明明有邮件客户端的，可我为什么不能调用它发送邮件？？？相信这是很多人会问的问题，手机里有Email客户端，可是偏偏在自己的应用里调用不了，抑或是不知道怎么调用，还有的是一直认为自己写对了，可是偏偏不能调用，无奈之下只能却网上找段代码粘贴上，ok，可以了。。可是你知道别人的代码为什么可以？你知道调用Email是怎么工作的吗？如果你又像给多人发邮件，还想发送附件，怎么做？又迷糊了吧？所以需要搞懂原理才能一通百通，举一反三，而这就是这篇博文要写的，也是你可以在这篇博文中学到的。</p>
 <p>在这里你可以学到：</p>
 <ol>
@@ -2312,7 +2507,7 @@ startActivity(<span class="built_in">data</span>);
     <link href="http://www.flysnow.org/2011/07/17/practices-of-an-agile-developer.html"/>
     <id>http://www.flysnow.org/2011/07/17/practices-of-an-agile-developer.html</id>
     <published>2011-07-17T02:09:52.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>笔者 写道<br>在去年就在豆瓣上看到这本不错的书，近来才拿到这本书好好的研读一下。读了之后又对本书有了更深的认识。我如此推崇她，因为我觉得她不像有些书那样的长篇大论，讲的都是大道理，看了云里雾里的。而这本书呢，讲的都是我们项目开发中实实在在遇到的，只是平时不太注意，作者只是用更朴素易懂的语言组织总结出来的一个个好习惯。</p>
 <p>本书的文字言简意赅，写作方式采用坏习惯和好习惯的对比方式，当时也许你觉得这些习惯有点偏激，不过不要烦恼，因为每个习惯的最后作者都给出了中庸平衡之道。</p>
 <p>相信很多人都有这本书，但是也有没有的，或者还不知道这本书，为了加深我自己对这45个习惯的理解和为了让更多的人知道、了解这45个习惯，所以我在这篇博客中记录下这45个习惯。前面我也提了，这本书言简意赅，所以对于习惯的总结更是如此，让我们可以一看到习惯的标题，就知道这个习惯的精髓所在。</p>
@@ -2473,7 +2668,7 @@ startActivity(<span class="built_in">data</span>);
     <link href="http://www.flysnow.org/2011/05/21/android-thread-notice-item.html"/>
     <id>http://www.flysnow.org/2011/05/21/android-thread-notice-item.html</id>
     <published>2011-05-21T06:43:55.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>我们都知道Android是单线程模型，这意味着Android UI操作并不是线程安全的并且这些操作必须在UI线程中执行，所以你单纯的new一个Thrad并且start()不行的，因为这违背了Android的单线程模型。</p>
 <p>很幸运的是Android为我们提供了在其他线程中访问UI线程的方法，相信大家都见过，这几个就是Activity的runOnUiThread方法，View的post和postDelayed方法，以及最常用的Hanlder和AsyncTask，这里我推荐使用Hanlder和AsyncTask，尤其是AsyncTask，因为使用他们你会发现你的代码很容易被理解，因为他们都有一些具有特定职责的方法，尤其是AsyncTask，有预处理的方法onPreExecute，有后台执行任务的方法doInBackground，有更新进度的方法publishProgress，有返回结果的方法onPostExecute等等，这就不像post这些方法，把所有的操作都一大坨的写在一个Runnable里。</p>
 <p>有了Android为我们提供了这些方法我们就可以很好的解决一些长时间处理的任务了，但是在使用的时候我们还必须注意以下几点：</p>
@@ -2504,7 +2699,7 @@ startActivity(<span class="built_in">data</span>);
     <link href="http://www.flysnow.org/2011/03/29/android-intents-and-intent-filters-three.html"/>
     <id>http://www.flysnow.org/2011/03/29/android-intents-and-intent-filters-three.html</id>
     <published>2011-03-28T18:02:48.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<h2 id="数据(data)检测">数据(data)检测</h2><p>data标记也是在intent-filter中定义的，大致格式如下:</p>
 <pre><code><span class="tag">&lt;<span class="title">intent-filter</span>&gt;</span>
                 <span class="tag">&lt;<span class="title">action</span> <span class="attribute">android:name</span>=<span class="value">"android.intent.action.VIEW"</span>&gt;</span><span class="tag">&lt;/<span class="title">action</span>&gt;</span>
@@ -2714,7 +2909,7 @@ startActivity(<span class="built_in">data</span>);
     <link href="http://www.flysnow.org/2011/03/28/do-you-know-android-resource.html"/>
     <id>http://www.flysnow.org/2011/03/28/do-you-know-android-resource.html</id>
     <published>2011-03-27T19:22:31.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>如何访问平时APK文件Res目录下的内容呢? 如果直接访问Apk下的assets目录可以使用AssetManager类处理，而需要访问<br>res/raw这样的文件夹怎么办呢? 这里Android123可以告诉大家APK在安装时已经解压缩，部分资源存放在/data/data<br>/package_name/这里， 比如我们想访问res/raw/android123.cwj文件，可以使用android.resource:<br>//package_name/“ + R.raw.android123 这个Uri，其中package_name是你工程的包名。<br>完整的处理代码为 Uri uri = Uri.parse(“android.resource://com.android123.Sample/raw/android123.cwj”); 即可使用工程res/raw目录下的文件了。</p>
 <p>转自：<a href="http://www.android123.com.cn/androidkaifa/827.html" target="_blank" rel="external">http://www.android123.com.cn/androidkaifa/827.html</a></p>
 ]]></content>
@@ -2733,7 +2928,7 @@ startActivity(<span class="built_in">data</span>);
     <link href="http://www.flysnow.org/2011/03/17/android-intents-and-intent-filters-two.html"/>
     <id>http://www.flysnow.org/2011/03/17/android-intents-and-intent-filters-two.html</id>
     <published>2011-03-17T00:41:02.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<h2 id="Category（类别）检测">Category（类别）检测</h2><p>类别在中是通过标记定义的,Category和Action一样，他们的名字都是一个字符串定义，但是我们在代码中可以使用对应的类别常量，在xml文件定义中只能使用定义好的字符串。Android的Intent类中提供了很多内置的类别定义，一中类别代表一个意思，可以参考说明使用。。比如android.intent.category.LAUNCHER标表示你的应用会展示在启动列表页面，经常和android.intent.action.MAIN搭配使用</p>
 <p>下面通过一个例子来说明Category的检测,项目名为Intents,应用名为Intents and Filters，运行在Android2.2版本上.主启动Activity为IntentsTestList。</p>
 <p>IntentsTestList代码如下:</p>
@@ -2898,7 +3093,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
     <link href="http://www.flysnow.org/2011/03/14/android-intents-and-intent-filters-one.html"/>
     <id>http://www.flysnow.org/2011/03/14/android-intents-and-intent-filters-one.html</id>
     <published>2011-03-14T02:01:05.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>看过前面的几节教程的应该都会留意到一个很重要的东西，那就是Intent。Intent是什么呢？我们都知道Android有四大核心组件 Activity、Service、Broadcast Receiver和Content Provider，略去Content Provider不提，那么剩下的三个组件之间的通信考什么？这就是Intent！！它不仅可以在同一个应用中起传递信息的作用，还是可以在不同的应用进行传递信息。这就使得我们的应用和系统中的其他应用进行交互有了可能，进而使得整个Android开发变得更加精彩。想想吧，我们自己的应用可以调用系统中的通话应用进行拨号、可以调用短信应用发短信，这是多么美妙的一件事情啊！！！</p>
 <h2 id="在这里你将会学到：">在这里你将会学到：</h2><ol>
 <li>什么是Intent和Intent Filter</li>
@@ -3069,7 +3264,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
     <link href="http://www.flysnow.org/2011/03/08/android-bottom-tool-bar-demo.html"/>
     <id>http://www.flysnow.org/2011/03/08/android-bottom-tool-bar-demo.html</id>
     <published>2011-03-08T00:31:54.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>前几天看到一篇很好的文章《新浪微博布局学习——妙用TabHost》，已经转载到我的博客里<a href="/2011/03/02/sina-weibo-tool-bar-tabhost.html">新浪微博布局学习——妙用TabHost </a><br>里面详细的介绍了怎么妙用TabHost构建底部的工具栏，有兴趣的可以看一下。因为那边文章没有Demo，工作之余，我写了一个Demo，供朋友们参考，欢迎拍砖讨论。。附件中提供下载。</p>
 <p><img src="http://dl.iteye.com/upload/attachment/431685/f7fbcca0-7830-37a9-8caa-cfa908809cd4.png" alt=""><br>本文附件下载:</p>
 <p><a href="/uploads/2013/10/sina-weibo-tool-bar-demo.zip">sina-weibo-tool-bar-demo</a></p>
@@ -3089,7 +3284,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
     <link href="http://www.flysnow.org/2011/03/02/sina-weibo-tool-bar-tabhost.html"/>
     <id>http://www.flysnow.org/2011/03/02/sina-weibo-tool-bar-tabhost.html</id>
     <published>2011-03-01T23:44:21.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>前言</p>
 <p>为了更好的开发Android应用程序，除了熟练掌握基本的UI组件和API外，还需要掌握一些技巧，而这些技巧可以通过阅读一些代码来提高，本系列将与大家分享一些新浪微博布局方面的收获，欢迎交流！</p>
 <p>声明</p>
@@ -3274,7 +3469,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
     <link href="http://www.flysnow.org/2011/02/22/writing-efficient-android-code.html"/>
     <id>http://www.flysnow.org/2011/02/22/writing-efficient-android-code.html</id>
     <published>2011-02-21T18:38:51.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>毫无疑问，基于Android平台的设备一定是嵌入式设备。现代的手持设备不仅仅是一部电话那么简单，它还是一个小型的手持电脑，但是，即使是最快的最高端的手持设备也远远比不上一个中等性能的桌面机。</p>
 <p>这就是为什么在编写Android程序时要时刻考虑执行的效率，这些系统不是想象中的那么快，并且你还要考虑它电池的续航能力。这就意味着没有多少剩余空间给你去浪费了，因此，在你写Android程序的时候，要尽可能的使你的代码优化而提高效率。</p>
 <p>本页介绍了几种可以让开发者的Android程序运行的更加有效率的方法。通过下面的一些跳转的连接，你可以学会怎么让你的程序更加有效运行</p>
@@ -3531,7 +3726,7 @@ MyItem items = <span class="keyword">list</span>.items();
     <link href="http://www.flysnow.org/2011/02/15/android-icon-with-number.html"/>
     <id>http://www.flysnow.org/2011/02/15/android-icon-with-number.html</id>
     <published>2011-02-14T21:48:01.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>在我们开发一些如短消息、应用商店等应用时，会考虑在短消息的图标上加上未读短信的数量，在应用商店上加上可以升级的应用数量，这样不占太大空间还能达到提示的目的。</p>
 <p>本节就以一个展示手机内联系人数量的例子来演示怎么在一个图标的上面加上数字的例子，也就是一个数字overlay..做过google map开发的知道overlay这个东西。。</p>
 <h2 id="一：你可学到">一：你可学到</h2><ol>
@@ -3750,7 +3945,7 @@ MyItem items = <span class="keyword">list</span>.items();
     <link href="http://www.flysnow.org/2011/01/20/android-gridview-tutorial.html"/>
     <id>http://www.flysnow.org/2011/01/20/android-gridview-tutorial.html</id>
     <published>2011-01-20T01:41:53.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>GridView是一个网络布局的视图，他能让你的元素显示在一个个的格子里。我们的桌面就是一个GridView。。</p>
 <ol>
 <li>新建一个HelloGridView的工程</li>
@@ -3883,7 +4078,7 @@ MyItem items = <span class="keyword">list</span>.items();
     <link href="http://www.flysnow.org/2011/01/10/android-sources-directory-structure.html"/>
     <id>http://www.flysnow.org/2011/01/10/android-sources-directory-structure.html</id>
     <published>2011-01-10T01:11:57.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>这是Android2.1的源代码的目录结构，可以帮助我们研究Android的源代码。Android源代码的下载请参考官网</p>
 <p>Android 2.1<br>|— Makefile<br>|— bionic                        （bionic C库）</p>
 <p>|— bootable                （启动引导相关代码）<br>|— build<br>（存放系统编译规则及generic等基础开发包配置）<br>|— cts                        （Android兼容性测试套件标准）</p>
@@ -4199,7 +4394,7 @@ qcom                           （里面基本是空的）</code>— sample<br>�
     <link href="http://www.flysnow.org/2011/01/08/android-listview-tutorials.html"/>
     <id>http://www.flysnow.org/2011/01/08/android-listview-tutorials.html</id>
     <published>2011-01-08T00:59:56.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>ListView是Android开发中非常常用的组件，ListView可以用来显示一个列表，我们可以对这个列表操作，比如点击列表要做什么等等。这篇文章主要通过一个示例来展示ListView的用法。</p>
 <p>请加入，大家一块学习。</p>
 <h2 id="一、不使用xml布局文件创建一个ListView">一、不使用xml布局文件创建一个ListView</h2><ol>
@@ -4390,7 +4585,7 @@ qcom                           （里面基本是空的）</code>— sample<br>�
     <link href="http://www.flysnow.org/2010/11/29/android-edittext-tutorials.html"/>
     <id>http://www.flysnow.org/2010/11/29/android-edittext-tutorials.html</id>
     <published>2010-11-29T00:51:00.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>标题有点大，说是详解，其实就是对EditText的一些常用功能的介绍，包括密码框，电话框，空白提示文字等等的讲解，尽量的介绍详细一点，也就是所谓的详解了。。呵呵</p>
 <h2 id="一：新建HelloEditText工程">一：新建HelloEditText工程</h2><p>新建一个Hello world详细步骤可以参见</p>
 <p><a href="/2010/11/13/android-helloworld.html">Android 第一个Android应用，HelloWorld</a></p>
@@ -4749,7 +4944,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
     <link href="http://www.flysnow.org/2010/11/24/android-textview-tutorials.html"/>
     <id>http://www.flysnow.org/2010/11/24/android-textview-tutorials.html</id>
     <published>2010-11-24T08:19:03.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>这节主要介绍一下TextView的简单用法，以及超链接文本、跑马灯等实例。</p>
 <h2 id="一：新建HelloTextView_工程">一：新建HelloTextView 工程</h2><p>新建一个Hello world详细步骤可以参见</p>
 <h3 id="Android第一个Android应用，HelloWorld"><a href="/2010/11/13/android-helloworld.html">Android第一个Android应用，HelloWorld</a></h3><p>创建设置如下：</p>
@@ -4889,7 +5084,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
     <link href="http://www.flysnow.org/2010/11/17/android-activity-statement-cycle-tutorials.html"/>
     <id>http://www.flysnow.org/2010/11/17/android-activity-statement-cycle-tutorials.html</id>
     <published>2010-11-16T17:02:20.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>通过上一节“Android系列之四：Android项目的目录结构”我们已经知道了什么是Activity，那么为什么我们创建一个Activity的导出类的时候为什么都要覆盖Activity的onCreate方法呢，为什么会在onPause()方法中保存一些当前Activity中的变化，要弄明白这些就要先了解Activity的生命周期，也就是一个Activity才开始到结束都要经过那些状态，下面通过一个例子了解Activity的<br>声明周期.</p>
 <h2 id="一：Activity的生命周期方法">一：Activity的生命周期方法</h2><p>Android提供了很多Activity的生命周期方法，比如我们常用的onCreate、onPause、onResume等。这里主要介绍粗粒度的周期方法，诸如onPostCreate、onPostResume等这些细粒度的周期方法可以参考Android的API文档，在你需要更细层次的控制的时候可以使用这些细粒度的方法。粗粒度的周期方法有以下几个：onCreate()、onStart()、onResume()、onPause()、onStop()、onDestroy()，从名字上就可以看出来这些方法在什么时候执行。</p>
 <h2 id="二：测试Activity的生命周期方法的执行顺序">二：测试Activity的生命周期方法的执行顺序</h2><p>为了能更明白上这几个周期放的执行顺序，我们新建一个HelloWorld项目，在Activity中覆盖这几个方法，打印出日志就可以看出来执行顺序了</p>
@@ -5077,7 +5272,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
     <link href="http://www.flysnow.org/2010/11/16/android-project-directory-structure.html"/>
     <id>http://www.flysnow.org/2010/11/16/android-project-directory-structure.html</id>
     <published>2010-11-15T17:12:19.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>这两天家里晚上断网，不能晚上写了，请各位读官见谅。上一次我们使用ADT创建了一个Android的HelloWorld项目，并且介绍了模拟器以及模拟器的配置，这节就重点讲讲Android项目的目录结构，看看和我们常见的Java项目的目录结构有什么不同。</p>
 <h2 id="一：Android项目的目录结构">一：Android项目的目录结构</h2><ol>
 <li>Android项目结构概览。其实Android项目的目录结构和Java的差不多，没有太大变化，如下图：<br><img src="http://dl.iteye.com/upload/attachment/348966/4a17123a-21bf-335f-8d0a-3e81b69531b1.png" alt=""></li>
@@ -5204,7 +5399,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
     <link href="http://www.flysnow.org/2010/11/13/android-helloworld.html"/>
     <id>http://www.flysnow.org/2010/11/13/android-helloworld.html</id>
     <published>2010-11-13T06:01:04.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>这节主要内容是使用ADT创建一个Helloword实例，并进行概要分析，中间会有AVD的创建。</p>
 <h2 id="一：使用ADT创建Helloword应用">一：使用ADT创建Helloword应用</h2><p>使用ADT我们能很方便的创建一个Android的Helloworld应用，关于ADT的配置请看<a href="/2010/11/11/setup-android-for-window.html">
 </a></p>
@@ -5260,7 +5455,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
     <link href="http://www.flysnow.org/2010/11/12/android-setup-config-for-linux.html"/>
     <id>http://www.flysnow.org/2010/11/12/android-setup-config-for-linux.html</id>
     <published>2010-11-12T01:26:54.000Z</published>
-    <updated>2015-03-19T13:40:30.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<p>上一次说到在window下搭建Android开发环境，总体比较简单。这一次就说说在Linux搭建Android开发环境，这里主要以很流行的Ubuntu 操作系统为例，其他的大同小异。</p>
 <h2 id="一：准备工作">一：准备工作</h2><pre><code>其实准备工作和上一篇的window下搭建的差不多，这里不再进行说明，请参见[<span class="link_label">Window下搭建Android开发环境</span>](<span class="link_url">/2010/11/11/setup-android-for-window.html</span>)
 </code></pre><p>需要注意的是JDK以及Eclipse要下载Linux版本的.</p>
@@ -5319,7 +5514,7 @@ export PATH JAVA_HOME ANDROID_HOME JRE_HOME CLASSPATH
     <link href="http://www.flysnow.org/2010/11/11/setup-android-for-window.html"/>
     <id>http://www.flysnow.org/2010/11/11/setup-android-for-window.html</id>
     <published>2010-11-10T22:41:25.000Z</published>
-    <updated>2015-08-13T14:15:05.000Z</updated>
+    <updated>2016-04-11T13:37:35.000Z</updated>
     <content type="html"><![CDATA[<blockquote>
 <p>自2007年Google发布Android后，Android是越来越火，甚至有超越IPhone的势头。Android的推出，对于我们java开发人员无疑是一件值得庆幸的事情，因为Android的应用是由java开发的，因此，我们java开发人员入门Android比其他语言开发者有很大的优势。本系列教程将有浅到深系统的学习Android，这是我学习的过程，相信也会对你们有所帮助。该系列教程尽量保证每日一更。</p>
 </blockquote>
