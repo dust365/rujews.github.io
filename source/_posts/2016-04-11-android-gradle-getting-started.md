@@ -360,3 +360,5 @@ BUILD SUCCESSFUL
 
 有的时候我们的任务名字很长，如果在执行的时候全部写一遍也挺费时间，为此Gradle提供了基于驼峰命名法的缩写调用，比如connectCheck，我们执行的时候可以使用./gradlew connectCheck,也可以使用./gradlew cc这样的方式来执行。
 
+以上内容节选自《Android Gradle权威指南》，更多关于《Android Gradle权威指南》的内容请参见[http://yuedu.baidu.com/ebook/14a722970740be1e640e9a3e](http://yuedu.baidu.com/ebook/14a722970740be1e640e9a3e)
+
